@@ -11,4 +11,10 @@
     <ProjectReference Include="..\Farinv.Domain\Farinv.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="FluentAssertions" Version="6.12.0" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="8.0.2" />
+    <PackageReference Include="Moq" Version="4.20.70" />
+  </ItemGroup>
+
 </Project>

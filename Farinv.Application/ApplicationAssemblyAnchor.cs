@@ -1,6 +1,6 @@
 ﻿namespace Farinv.Application;
 
-public class Class1
+public class ApplicationAssemblyAnchor
 {
 
 }
