@@ -14,10 +14,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="SalesContext\PenjualanFeature\" />
-    <Folder Include="SalesContext\PricingPolicyFeature\" />
-    <Folder Include="SalesContext\ResepFeature\" />
-    <Folder Include="SalesContext\ReturJualFeature\" />
     <Folder Include="Shared\" />
   </ItemGroup>
 
