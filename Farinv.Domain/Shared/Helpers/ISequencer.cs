@@ -1,4 +1,4 @@
-﻿namespace Farinv.Domain.Helpers;
+﻿namespace Farinv.Domain.Shared.Helpers;
 
 public interface ISequencer
 {

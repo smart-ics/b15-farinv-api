@@ -1,6 +1,6 @@
 ﻿using System.Runtime.CompilerServices;
 
-namespace Farinv.Domain.Helpers;
+namespace Farinv.Domain.Shared.Helpers;
 
 public static class JaroWinklerDistance
 {

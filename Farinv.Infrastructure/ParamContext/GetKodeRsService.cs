@@ -1,5 +1,5 @@
 ﻿using Farinv.Application.ParamContext.ParamSistemAgg;
-using Farinv.Domain.ParamContext;
+using Farinv.Domain.Shared.Param;
 using Farinv.Infrastructure.Helpers;
 
 namespace Farinv.Infrastructure.ParamContext;

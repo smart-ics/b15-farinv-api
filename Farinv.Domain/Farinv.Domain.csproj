@@ -13,4 +13,12 @@
     <PackageReference Include="Ulid" Version="1.3.4" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="SalesContext\PenjualanFeature\" />
+    <Folder Include="SalesContext\PricingPolicyFeature\" />
+    <Folder Include="SalesContext\ResepFeature\" />
+    <Folder Include="SalesContext\ReturJualFeature\" />
+    <Folder Include="Shared\" />
+  </ItemGroup>
+
 </Project>

@@ -1,6 +1,6 @@
 ﻿using System.Data.SqlClient;
 using Dapper;
-using Farinv.Domain.Helpers;
+using Farinv.Domain.Shared.Helpers;
 using Farinv.Infrastructure.Helpers;
 using Microsoft.Extensions.Options;
 

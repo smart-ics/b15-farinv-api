@@ -1,7 +1,7 @@
 ﻿using Ardalis.GuardClauses;
 using Nuna.Lib.ValidationHelper;
 
-namespace Farinv.Domain.Helpers;
+namespace Farinv.Domain.Shared.Helpers;
 
 public static class GuardExtensions
 {

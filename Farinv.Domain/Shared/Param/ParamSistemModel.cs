@@ -1,4 +1,4 @@
-﻿namespace Farinv.Domain.ParamContext;
+﻿namespace Farinv.Domain.Shared.Param;
 
 public class ParamSistemModel(string id, string name, string value)
     :IParamSistemKey

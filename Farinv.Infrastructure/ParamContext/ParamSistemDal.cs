@@ -2,7 +2,7 @@
 using System.Data.SqlClient;
 using Dapper;
 using Farinv.Application.ParamContext.ParamSistemAgg;
-using Farinv.Domain.ParamContext;
+using Farinv.Domain.Shared.Param;
 using Farinv.Infrastructure.Helpers;
 using Microsoft.Extensions.Options;
 using Nuna.Lib.DataAccessHelper;

@@ -1,4 +1,4 @@
-﻿using Farinv.Domain.ParamContext;
+﻿using Farinv.Domain.Shared.Param;
 using Nuna.Lib.DataAccessHelper;
 
 namespace Farinv.Application.ParamContext.ParamSistemAgg;

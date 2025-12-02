@@ -1,4 +1,4 @@
-﻿using Farinv.Domain.Helpers;
+﻿using Farinv.Domain.Shared.Helpers;
 using Farinv.Infrastructure.ParamContext;
 
 namespace Farinv.Api.Configurations;

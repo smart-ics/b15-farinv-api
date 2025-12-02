@@ -1,4 +1,4 @@
-﻿namespace Farinv.Domain.Helpers.CommonValueObjects;
+﻿namespace Farinv.Domain.Shared.Helpers.CommonValueObjects;
 
 public class AuditTrailType
 {
