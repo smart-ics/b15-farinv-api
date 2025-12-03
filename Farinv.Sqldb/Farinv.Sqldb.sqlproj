@@ -56,5 +56,10 @@
   <Import Condition="'$(SQLDBExtensionsRefPath)' == ''" Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
   <ItemGroup>
     <Folder Include="Properties" />
+    <Folder Include="BrgContext" />
+    <Folder Include="BrgContext\StandardFeature" />
+  </ItemGroup>
+  <ItemGroup>
+    <Build Include="BrgContext\StandardFeature\tb_formularium.sql" />
   </ItemGroup>
 </Project>
