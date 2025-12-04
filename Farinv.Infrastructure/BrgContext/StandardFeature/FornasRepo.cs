@@ -13,14 +13,6 @@ public class FornasRepo : IFornasRepo
         _fornasDal = fornasDal;
     }
 
-    public void SaveChanges(FornasType model)
-    {
-        LoadEntity(model)
-            .Match(
-                onSome: _ => _fornasDal.Update(FornasDto.FromModel(model)),
-                onNone: () => _fornasDal.Insert(FornasDto.FromModel(model)));
-    }
-
     public MayBe<FornasType> LoadEntity(IFornasKey key)
     {
         var dto = _fornasDal.GetData(key);
@@ -28,11 +20,6 @@ public class FornasRepo : IFornasRepo
             return MayBe<FornasType>.None;
         var model = dto.ToModel();
         return MayBe.From(model);
-    }
-
-    public void DeleteEntity(IFornasKey key)
-    {
-        _fornasDal.Delete(key);
     }
 
     public IEnumerable<FornasType> ListData()

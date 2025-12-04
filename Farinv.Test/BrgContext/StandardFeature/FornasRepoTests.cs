@@ -17,42 +17,7 @@ public class FornasRepoTests
     }
 
     [Fact]
-    public void UT1_GivenExistingEntity_WhenSaveChanges_ThenUpdateIsCalled()
-    {
-        // Arrange
-        var existingModel = CreateTestModel();
-        _fornasDalMock
-            .Setup(x => x.GetData(It.IsAny<IFornasKey>()))
-            .Returns(CreateTestDto());
-
-        // Act
-        _repository.SaveChanges(existingModel);
-
-        // Assert
-        _fornasDalMock.Verify(x => x.Update(It.IsAny<FornasDto>()), Times.Once);
-        _fornasDalMock.Verify(x => x.Insert(It.IsAny<FornasDto>()), Times.Never);
-    }
-
-    [Fact]
-    public void UT2_GivenNewEntity_WhenSaveChanges_ThenInsertIsCalled()
-    {
-        // Arrange
-        var newModel = CreateTestModel();
-        var key = CreateTestKey();
-        _fornasDalMock
-            .Setup(x => x.GetData(key))
-            .Returns((FornasDto)null!);
-
-        // Act
-        _repository.SaveChanges(newModel);
-
-        // Assert
-        _fornasDalMock.Verify(x => x.Insert(It.IsAny<FornasDto>()), Times.Once);
-        _fornasDalMock.Verify(x => x.Update(It.IsAny<FornasDto>()), Times.Never);
-    }
-
-    [Fact]
-    public void UT3_GivenExistingEntity_WhenLoadEntity_ThenEntityIsReturned()
+    public void UT1_GivenExistingEntity_WhenLoadEntity_ThenEntityIsReturned()
     {
         // Arrange
         var expectedDto = CreateTestDto();
@@ -72,7 +37,7 @@ public class FornasRepoTests
     }
 
     [Fact]
-    public void UT4_GivenNonExistingEntity_WhenLoadEntity_ThenNoneIsReturned()
+    public void UT2_GivenNonExistingEntity_WhenLoadEntity_ThenNoneIsReturned()
     {
         // Arrange
         var key = CreateTestKey();
@@ -91,20 +56,7 @@ public class FornasRepoTests
     }
 
     [Fact]
-    public void UT5_GivenKey_WhenDeleteEntity_ThenDeleteIsCalled()
-    {
-        // Arrange
-        var key = CreateTestKey();
-
-        // Act
-        _repository.DeleteEntity(key);
-
-        // Assert
-        _fornasDalMock.Verify(x => x.Delete(key), Times.Once);
-    }
-
-    [Fact]
-    public void UT6_GivenEmptyList_WhenListData_ThenEmptyListIsReturned()
+    public void UT3_GivenEmptyList_WhenListData_ThenEmptyListIsReturned()
     {
         // Arrange
         _fornasDalMock
@@ -121,7 +73,7 @@ public class FornasRepoTests
     }
 
     [Fact]
-    public void UT7_GivenListWithItems_WhenListData_ThenListWithModelsIsReturned()
+    public void UT4_GivenListWithItems_WhenListData_ThenListWithModelsIsReturned()
     {
         // Arrange
         var dtos = new List<FornasDto> { CreateTestDto(), CreateTestDto() };
@@ -137,9 +89,6 @@ public class FornasRepoTests
         fornasTypes.Should().NotBeNull();
         fornasTypes.Count.Should().Be(2);
     }
-
-    private static FornasType CreateTestModel()
-        => FornasType.Default;
 
     private static FornasDto CreateTestDto()
         => FornasDto.FromModel(FornasType.Default);

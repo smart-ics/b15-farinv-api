@@ -30,24 +30,6 @@ public record FornasType : IFornasKey
         RestriksiSediaan = restriksiSediaan;
     }
 
-    public static FornasType Create(
-        string fornasId, string fornasName,
-        string kelasTerapi, string kelasTerapi1,
-        string kelasTerapi2, string kelasTerapi3,
-        string namaObat, string sediaan,
-        string kekuatan, string satuan,
-        string maksPeresepan, string restriksiKelasTerapi,
-        string restriksiObat, string restriksiSediaan)
-    {
-        Guard.Against.NullOrWhiteSpace(fornasId, nameof(fornasId));
-        Guard.Against.NullOrWhiteSpace(fornasName, nameof(fornasName));
-
-        return new FornasType(fornasId, fornasName,
-            kelasTerapi, kelasTerapi1, kelasTerapi2, kelasTerapi3,
-            namaObat, sediaan, kekuatan, satuan,
-            maksPeresepan, restriksiKelasTerapi, restriksiObat, restriksiSediaan);
-    }
-
     public static FornasType Default => new( fornasId: "-", fornasName: "-",
         kelasTerapi: "-", kelasTerapi1: "-", kelasTerapi2: "-", kelasTerapi3: "-",
         namaObat: "-", sediaan: "-", kekuatan: "-", satuan: "-",
@@ -72,9 +54,15 @@ public record FornasType : IFornasKey
     public string RestriksiObat { get; init; }
     public string RestriksiSediaan { get; init; }
     #endregion
+
+    #region BEHAVIOUR
+    public FornasReff ToReff() => new(FornasId, FornasName);
+    #endregion
 }
 
 public interface IFornasKey
 {
     string FornasId { get; }
 }
+
+public record FornasReff(string FornasId, string FornasName);
