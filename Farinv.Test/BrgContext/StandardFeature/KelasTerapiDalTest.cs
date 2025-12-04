@@ -6,15 +6,15 @@ using Nuna.Lib.TransactionHelper;
 
 namespace Farinv.Test.BrgContext.StandardFeature;
 
-public class FormulariumDalTests
+public class KelasTerapiDalTest
 {
-    private readonly FormulariumDal _sut = new(ConnStringHelper.GetTestEnv());
+    private readonly KelasTerapiDal _sut = new(ConnStringHelper.GetTestEnv());
 
-    private static FormulariumDto Faker()
-        => new("A","B");
+    private static KelasTerapiDto Faker()
+        => new KelasTerapiDto("KT01", "Kelas Terapi A");
 
-    private static IFormulariumKey FakerKey()
-        => FormulariumType.Default with { FormulariumId = "A" };
+    private static IKelasTerapiKey FakerKey()
+        => KelasTerapiType.Default with { KelasTerapiId = "KT01" };
 
     [Fact]
     public void InsertTest()

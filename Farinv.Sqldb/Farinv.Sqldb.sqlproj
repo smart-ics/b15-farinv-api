@@ -62,4 +62,9 @@
   <ItemGroup>
     <Build Include="BrgContext\StandardFeature\tb_formularium.sql" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="BrgContext\StandardFeature\tb_gol_terapi.sql" />
+    <None Include="BrgContext\StandardFeature\tb_original.sql" />
+    <None Include="BrgContext\StandardFeature\tb_kelas_terapi.sql" />
+  </ItemGroup>
 </Project>
