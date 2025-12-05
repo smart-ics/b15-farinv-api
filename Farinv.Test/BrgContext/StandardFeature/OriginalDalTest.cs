@@ -11,10 +11,10 @@ public class OriginalDalTest
     private readonly OriginalDal _sut = new(ConnStringHelper.GetTestEnv());
 
     private static OriginalDto Faker()
-        => new OriginalDto("ORG01", "Original A");
+        => new OriginalDto("OR1", "Original A");
 
     private static IOriginalKey FakerKey()
-        => OriginalType.Default with { OriginalId = "ORG01" };
+        => OriginalType.Default with { OriginalId = "OR1" };
 
     [Fact]
     public void InsertTest()

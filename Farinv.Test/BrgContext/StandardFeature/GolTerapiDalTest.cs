@@ -11,10 +11,10 @@ public class GolTerapiDalTest
     private readonly GolTerapiDal _sut = new(ConnStringHelper.GetTestEnv());
 
     private static GolTerapiDto Faker()
-        => new GolTerapiDto("GT01", "Golongan Terapi A");
+        => new GolTerapiDto("GT1", "Golongan Terapi A");
 
     private static IGolTerapiKey FakerKey()
-        => GolTerapiType.Default with { GolTerapiId = "GT01" };
+        => GolTerapiType.Default with { GolTerapiId = "GT1" };
 
     [Fact]
     public void InsertTest()
