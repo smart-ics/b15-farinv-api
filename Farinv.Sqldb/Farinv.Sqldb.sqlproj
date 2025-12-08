@@ -59,6 +59,7 @@
     <Folder Include="BrgContext" />
     <Folder Include="BrgContext\StandardFeature" />
     <Folder Include="BrgContext\StandardFeature\Kfa" />
+    <Folder Include="BrgContext\PricingPolicyFeature" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="BrgContext\StandardFeature\tb_formularium.sql" />
@@ -80,5 +81,6 @@
     <None Include="BrgContext\StandardFeature\Kfa\FARPU_KfaIngredient.dataseed.sql" />
     <None Include="BrgContext\StandardFeature\Kfa\FARPU_KfaPackaging.dataseed.sql" />
     <None Include="BrgContext\StandardFeature\Kfa\FARPU_KfaReplacement.dataseed.sql" />
+    <None Include="BrgContext\PricingPolicyFeature\ta_tipe_barang.sql" />
   </ItemGroup>
 </Project>
