@@ -84,5 +84,6 @@
     <None Include="BrgContext\StandardFeature\Kfa\FARPU_KfaReplacement.dataseed.sql" />
     <None Include="BrgContext\PricingPolicyFeature\ta_tipe_barang.sql" />
     <None Include="BrgContext\KlasifikasiFeature\tb_pabrik.sql" />
+    <None Include="BrgContext\KlasifikasiFeature\tb_jenis_barang.sql" />
   </ItemGroup>
 </Project>
