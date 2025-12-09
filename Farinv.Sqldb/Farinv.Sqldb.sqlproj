@@ -86,5 +86,6 @@
     <None Include="BrgContext\KlasifikasiFeature\tb_pabrik.sql" />
     <None Include="BrgContext\KlasifikasiFeature\tb_jenis_barang.sql" />
     <None Include="BrgContext\KlasifikasiFeature\tb_bentuk.sql" />
+    <None Include="BrgContext\KlasifikasiFeature\tb_sifat.sql" />
   </ItemGroup>
 </Project>
