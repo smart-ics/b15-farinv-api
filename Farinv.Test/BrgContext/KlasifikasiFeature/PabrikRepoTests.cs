@@ -1,19 +1,19 @@
-﻿using Farinv.Domain.BrgContext.PricingPolicyFeature;
-using Farinv.Infrastructure.BrgContext.PricingPolicyFeature;
+﻿using Farinv.Domain.BrgContext.KlasifikasiFeature;
+using Farinv.Infrastructure.BrgContext.KlasifikasiFeature;
 using FluentAssertions;
 using Moq;
 
-namespace Farinv.Test.BrgContext.PricingPolicyFeature;
+namespace Farinv.Test.BrgContext.KlasifikasiFeature;
 
-public class TipeBrgRepoTests
+public class PabrikRepoTests
 {
-    private readonly Mock<ITipeBrgDal> _tipeBrgDalMock;
-    private readonly TipeBrgRepo _repository;
+    private readonly Mock<IPabrikDal> _pabrikDalMock;
+    private readonly PabrikRepo _repository;
 
-    public TipeBrgRepoTests()
+    public PabrikRepoTests()
     {
-        _tipeBrgDalMock = new Mock<ITipeBrgDal>();
-        _repository = new TipeBrgRepo(_tipeBrgDalMock.Object);
+        _pabrikDalMock = new Mock<IPabrikDal>();
+        _repository = new PabrikRepo(_pabrikDalMock.Object);
     }
 
     [Fact]
@@ -21,16 +21,16 @@ public class TipeBrgRepoTests
     {
         // Arrange
         var existingModel = CreateTestModel();
-        _tipeBrgDalMock
-            .Setup(x => x.GetData(It.IsAny<ITipeBrgKey>()))
+        _pabrikDalMock
+            .Setup(x => x.GetData(It.IsAny<IPabrikKey>()))
             .Returns(CreateTestDto());
 
         // Act
         _repository.SaveChanges(existingModel);
 
         // Assert
-        _tipeBrgDalMock.Verify(x => x.Update(It.IsAny<TipeBrgDto>()), Times.Once);
-        _tipeBrgDalMock.Verify(x => x.Insert(It.IsAny<TipeBrgDto>()), Times.Never);
+        _pabrikDalMock.Verify(x => x.Update(It.IsAny<PabrikDto>()), Times.Once);
+        _pabrikDalMock.Verify(x => x.Insert(It.IsAny<PabrikDto>()), Times.Never);
     }
 
     [Fact]
@@ -39,16 +39,16 @@ public class TipeBrgRepoTests
         // Arrange
         var newModel = CreateTestModel();
         var key = CreateTestKey();
-        _tipeBrgDalMock
+        _pabrikDalMock
             .Setup(x => x.GetData(key))
-            .Returns((TipeBrgDto)null!);
+            .Returns((PabrikDto)null!);
 
         // Act
         _repository.SaveChanges(newModel);
 
         // Assert
-        _tipeBrgDalMock.Verify(x => x.Insert(It.IsAny<TipeBrgDto>()), Times.Once);
-        _tipeBrgDalMock.Verify(x => x.Update(It.IsAny<TipeBrgDto>()), Times.Never);
+        _pabrikDalMock.Verify(x => x.Insert(It.IsAny<PabrikDto>()), Times.Once);
+        _pabrikDalMock.Verify(x => x.Update(It.IsAny<PabrikDto>()), Times.Never);
     }
 
     [Fact]
@@ -57,7 +57,7 @@ public class TipeBrgRepoTests
         // Arrange
         var expectedDto = CreateTestDto();
         var key = CreateTestKey();
-        _tipeBrgDalMock
+        _pabrikDalMock
             .Setup(x => x.GetData(key))
             .Returns(expectedDto);
 
@@ -76,9 +76,9 @@ public class TipeBrgRepoTests
     {
         // Arrange
         var key = CreateTestKey();
-        _tipeBrgDalMock
+        _pabrikDalMock
             .Setup(x => x.GetData(key))
-            .Returns((TipeBrgDto)null!);
+            .Returns((PabrikDto)null!);
 
         // Act
         var result = _repository.LoadEntity(key);
@@ -100,32 +100,32 @@ public class TipeBrgRepoTests
         _repository.DeleteEntity(key);
 
         // Assert
-        _tipeBrgDalMock.Verify(x => x.Delete(key), Times.Once);
+        _pabrikDalMock.Verify(x => x.Delete(key), Times.Once);
     }
 
     [Fact]
     public void UT6_GivenEmptyList_WhenListData_ThenEmptyListIsReturned()
     {
         // Arrange
-        _tipeBrgDalMock
+        _pabrikDalMock
             .Setup(x => x.ListData())
-            .Returns((IEnumerable<TipeBrgDto>)null!);
+            .Returns((IEnumerable<PabrikDto>)null!);
 
         // Act
         var result = _repository.ListData();
 
         // Assert
-        var tipeBrgTypes = result.ToList();
-        tipeBrgTypes.Should().NotBeNull();
-        tipeBrgTypes.Should().BeEmpty();
+        var pabrikTypes = result.ToList();
+        pabrikTypes.Should().NotBeNull();
+        pabrikTypes.Should().BeEmpty();
     }
 
     [Fact]
     public void UT7_GivenListWithItems_WhenListData_ThenListWithModelsIsReturned()
     {
         // Arrange
-        var dtos = new List<TipeBrgDto> { CreateTestDto(), CreateTestDto() };
-        _tipeBrgDalMock
+        var dtos = new List<PabrikDto> { CreateTestDto(), CreateTestDto() };
+        _pabrikDalMock
             .Setup(x => x.ListData())
             .Returns(dtos);
 
@@ -133,17 +133,17 @@ public class TipeBrgRepoTests
         var result = _repository.ListData();
 
         // Assert
-        var tipeBrgTypes = result.ToList();
-        tipeBrgTypes.Should().NotBeNull();
-        tipeBrgTypes.Count.Should().Be(2);
+        var pabrikTypes = result.ToList();
+        pabrikTypes.Should().NotBeNull();
+        pabrikTypes.Count.Should().Be(2);
     }
 
-    private static TipeBrgType CreateTestModel()
-        => TipeBrgType.Default;
+    private static PabrikType CreateTestModel()
+        => PabrikType.Default;
 
-    private static TipeBrgDto CreateTestDto()
-        => TipeBrgDto.FromModel(TipeBrgType.Default);
+    private static PabrikDto CreateTestDto()
+        => PabrikDto.FromModel(PabrikType.Default);
 
-    private static ITipeBrgKey CreateTestKey()
-        => TipeBrgType.Key("T1");
+    private static IPabrikKey CreateTestKey()
+        => PabrikType.Key("PB001");
 }
