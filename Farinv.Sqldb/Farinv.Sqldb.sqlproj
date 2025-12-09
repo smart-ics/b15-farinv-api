@@ -88,5 +88,6 @@
     <None Include="BrgContext\KlasifikasiFeature\tb_bentuk.sql" />
     <None Include="BrgContext\KlasifikasiFeature\tb_sifat.sql" />
     <None Include="BrgContext\KlasifikasiFeature\tb_kelompok.sql" />
+    <None Include="BrgContext\KlasifikasiFeature\tb_gol_obat_dk.sql" />
   </ItemGroup>
 </Project>
