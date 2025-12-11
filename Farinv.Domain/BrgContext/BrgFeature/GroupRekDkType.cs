@@ -13,15 +13,18 @@ public record GroupRekDkType : IGroupRekDkKey
         GroupRekDkId = groupRekDkId;
         GroupRekDkName = groupRekDkName;
     }
-
     public static GroupRekDkType Create(string groupRekDkId, string groupRekDkName)
-    {
-        return new GroupRekDkType(groupRekDkId, groupRekDkName);
-    }
+        =>new GroupRekDkType(groupRekDkId, groupRekDkName);
+    public static GroupRekDkType Default 
+        => new("-", "-");
+    public static IGroupRekDkKey Key(string id) 
+        => Default with { GroupRekDkId = id };
 
-    public static GroupRekDkType Default => new("-", "-");
-
-    public static IGroupRekDkKey Key(string id) => Default with { GroupRekDkId = id };
+    public static GroupRekDkType Obat => new GroupRekDkType("OBT", "Obat");
+    public static GroupRekDkType Bhp => new GroupRekDkType("BHP", "Alkes dan Bhp");
+    public static GroupRekDkType Atk => new GroupRekDkType("ATK", "Alat Tulis Kantor");
+    
+    public static GroupRekDkType Gizi => new GroupRekDkType("GIZ", "Gizi");
     #endregion
 
     #region PROPERTIES

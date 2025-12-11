@@ -1,26 +1,19 @@
-﻿using Farinv.Domain.BrgContext.BrgFeature;
+using Farinv.Domain.BrgContext.BrgFeature;
 
 namespace Farinv.Infrastructure.BrgContext.BrgFeature;
 
-public record BrgSatuanDto(
-    string fs_kd_barang,
-    string fs_kd_satuan,
-    decimal fn_nilai
-)
+public record BrgSatuanDto(string fs_kd_barang, string fs_kd_satuan, decimal fn_nilai, string fs_nm_satuan)
 {
     public static BrgSatuanDto FromModel(string brgId, BrgSatuanType model)
     {
-        // Karena BrgSatuanType hanya menyimpan satu satuan utama, kita ambil dari DosisSatuan
-        return new BrgSatuanDto(
-            fs_kd_barang: brgId,
-            fs_kd_satuan: model.DosisSatuan.SatuanId,
-            fn_nilai: model.Dosis
-        );
+        var result = new BrgSatuanDto(brgId, model.Satuan.SatuanId, model.Konversi, model.Satuan.SatuanName);
+        return result;
     }
 
-    public BrgSatuanType ToModel(IEnumerable<BrgSatuanKonversiType> konversi)
+    public BrgSatuanType ToModel()
     {
-        var satuan = new SatuanReff(fs_kd_satuan, "-"); // Nama satuan bisa diambil dari repo
-        return BrgSatuanType.Create(fs_kd_barang, fn_nilai, satuan, konversi);
+        var satuan = new SatuanType(fs_kd_satuan, fs_nm_satuan);
+        var result = new BrgSatuanType(satuan, Convert.ToInt32(fn_nilai));
+        return result;
     }
 }

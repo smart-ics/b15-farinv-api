@@ -34,7 +34,7 @@ app
 app
     .MapScalarApiReference(opt =>
     {
-        opt.Title = "BilReg API - Documentation By Scalar";
+        opt.Title = "Pharmacy-Inventory API - Documentation By Scalar";
         opt.Theme = ScalarTheme.Kepler;
         opt.DarkMode = true;
     });

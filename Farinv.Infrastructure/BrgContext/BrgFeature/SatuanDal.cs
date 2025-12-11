@@ -43,7 +43,6 @@ public class SatuanDal : ISatuanDal
         var dp = new DynamicParameters();
         dp.AddParam("@fs_kd_satuan", dto.fs_kd_satuan, SqlDbType.VarChar);
         dp.AddParam("@fs_nm_satuan", dto.fs_nm_satuan, SqlDbType.VarChar);
-        dp.AddParam("@fb_satuan_racik", dto.fb_satuan_racik, SqlDbType.Bit);
 
         using var conn = new SqlConnection(ConnStringHelper.Get(_opt));
         conn.Execute(sql, dp);
@@ -63,7 +62,6 @@ public class SatuanDal : ISatuanDal
         var dp = new DynamicParameters();
         dp.AddParam("@fs_kd_satuan", dto.fs_kd_satuan, SqlDbType.VarChar);
         dp.AddParam("@fs_nm_satuan", dto.fs_nm_satuan, SqlDbType.VarChar);
-        dp.AddParam("@fb_satuan_racik", dto.fb_satuan_racik, SqlDbType.Bit);
 
         using var conn = new SqlConnection(ConnStringHelper.Get(_opt));
         conn.Execute(sql, dp);

@@ -19,7 +19,6 @@ public record PabrikDto(
     {
         return PabrikType.Create(
             fs_kd_pabrik,
-            fs_nm_pabrik,
-            fn_koef_formula);
+            fs_nm_pabrik);
     }
 }

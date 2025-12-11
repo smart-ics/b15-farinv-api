@@ -6,21 +6,20 @@ namespace Farinv.Domain.BrgContext.BrgFeature;
 public record SatuanType : ISatuanKey
 {
     #region CREATION
-    public SatuanType(string satuanId, string satuanName, bool isSatuanRacik)
+    public SatuanType(string satuanId, string satuanName)
     {
         SatuanId = satuanId;
         SatuanName = satuanName;
-        IsSatuanRacik = isSatuanRacik;
     }
 
-    public static SatuanType Create(string satuanId, string satuanName, bool isSatuanRacik)
+    public static SatuanType Create(string satuanId, string satuanName)
     {
-        Guard.Against.NullOrWhiteSpace(satuanId, nameof(satuanId));
-        Guard.Against.NullOrWhiteSpace(satuanName, nameof(satuanName));
-        return new SatuanType(satuanId, satuanName, isSatuanRacik);
+        Guard.Against.NullOrWhiteSpace(satuanId);
+        Guard.Against.NullOrWhiteSpace(satuanName);
+        return new SatuanType(satuanId, satuanName);
     }
 
-    public static SatuanType Default => new("-", "-", false);
+    public static SatuanType Default => new("-", "-");
 
     public static ISatuanKey Key(string id) => Default with { SatuanId = id };
     #endregion
@@ -28,7 +27,6 @@ public record SatuanType : ISatuanKey
     #region PROPERTIES
     public string SatuanId { get; init; }
     public string SatuanName { get; init; }
-    public bool IsSatuanRacik { get; init; }
     #endregion
 
     #region BEHAVIOUR

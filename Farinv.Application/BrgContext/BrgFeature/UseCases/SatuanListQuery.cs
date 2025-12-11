@@ -4,7 +4,7 @@ namespace Farinv.Application.BrgContext.BrgFeature.UseCases;
 
 public record SatuanListQuery() : IRequest<IEnumerable<SatuanListResponse>>;
 
-public record SatuanListResponse(string SatuanId, string SatuanName, bool IsSatuanRacik);
+public record SatuanListResponse(string SatuanId, string SatuanName);
 
 public class SatuanListHandler : IRequestHandler<SatuanListQuery, IEnumerable<SatuanListResponse>>
 {
@@ -20,7 +20,7 @@ public class SatuanListHandler : IRequestHandler<SatuanListQuery, IEnumerable<Sa
         var listSatuan = _satuanRepo.ListData()?.ToList() ?? [];
         var response = listSatuan
             .OrderBy(x => x.SatuanName)
-            .Select(x => new SatuanListResponse(x.SatuanId, x.SatuanName, x.IsSatuanRacik));
+            .Select(x => new SatuanListResponse(x.SatuanId, x.SatuanName));
 
         return Task.FromResult(response);
     }

@@ -11,7 +11,7 @@ public class SatuanDalTest
     private readonly SatuanDal _sut = new(ConnStringHelper.GetTestEnv());
 
     private static SatuanDto Faker()
-        => new SatuanDto("S01", "Satuan A", false);
+        => new SatuanDto("S01", "Satuan A");
 
     private static ISatuanKey FakerKey()
         => SatuanType.Default with { SatuanId = "S01" };
