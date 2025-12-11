@@ -61,6 +61,7 @@
     <Folder Include="BrgContext\StandardFeature\Kfa" />
     <Folder Include="BrgContext\PricingPolicyFeature" />
     <Folder Include="BrgContext\KlasifikasiFeature" />
+    <Folder Include="BrgContext\BrgFeature" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="BrgContext\StandardFeature\tb_formularium.sql" />
@@ -71,6 +72,7 @@
     <None Include="BrgContext\StandardFeature\Kfa\FARPU_KfaIngredient.sql" />
     <None Include="BrgContext\StandardFeature\Kfa\FARPU_KfaPackaging.sql" />
     <None Include="BrgContext\StandardFeature\Kfa\FARPU_KfaReplacement.sql" />
+    <None Include="BrgContext\BrgFeature\tb_satuan.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="BrgContext\StandardFeature\tb_gol_terapi.sql" />
