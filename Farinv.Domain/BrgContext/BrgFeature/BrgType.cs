@@ -46,7 +46,7 @@ public record BrgType : IBrgKey
     public string BrgName { get; init; }
     public bool IsAktif { get; init; }
     public string KetBarang { get; init; }
-    public string Barcode { get; init; }
+    public GroupRekDkType GroupRekDk { get; init; }
 
     public BrgSatuanType Satuan { get; init; }
     #endregion
