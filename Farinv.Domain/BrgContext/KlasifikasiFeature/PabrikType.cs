@@ -7,31 +7,24 @@ public record PabrikType : IPabrikKey
     #region CREATION
     public PabrikType(
         string pabrikId,
-        string pabrikName,
-        decimal koefFormula)
+        string pabrikName)
     {
         PabrikId = pabrikId;
         PabrikName = pabrikName;
-        KoefFormula = koefFormula;
     }
 
     public static PabrikType Create(
         string pabrikId,
-        string pabrikName,
-        decimal koefFormula)
+        string pabrikName)
     {
         Guard.Against.NullOrWhiteSpace(pabrikId, nameof(pabrikId));
         Guard.Against.NullOrWhiteSpace(pabrikName, nameof(pabrikName));
         return new PabrikType(
             pabrikId,
-            pabrikName,
-            koefFormula);
+            pabrikName);
     }
 
-    public static PabrikType Default => new(
-        pabrikId: "-",
-        pabrikName: "-",
-        koefFormula: 0);
+    public static PabrikType Default => new("-", "-");
 
     public static IPabrikKey Key(string id) => Default with { PabrikId = id };
     #endregion

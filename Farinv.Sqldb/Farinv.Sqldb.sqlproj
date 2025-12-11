@@ -60,9 +60,14 @@
     <Folder Include="BrgContext\StandardFeature" />
     <Folder Include="BrgContext\StandardFeature\Kfa" />
     <Folder Include="BrgContext\PricingPolicyFeature" />
-    <Folder Include="BrgContext\KlasifikasiFeature" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="BrgContext\BrgFeature\tb_grup_rek_dk.dataseed.sql" />
+    <Build Include="BrgContext\BrgFeature\tb_barang.sql" />
+    <Build Include="BrgContext\BrgFeature\tb_barang_satuan.sql" />
+    <Build Include="BrgContext\BrgFeature\tb_grup_rek.sql" />
+    <Build Include="BrgContext\BrgFeature\tb_grup_rek_dk.sql" />
+    <Build Include="BrgContext\KlasifikasiFeature\tb_generik.sql" />
     <Build Include="BrgContext\StandardFeature\tb_formularium.sql" />
     <None Include="BrgContext\StandardFeature\Kfa\FARPU_Kfa.dataseed.sql" />
     <None Include="BrgContext\StandardFeature\Kfa\FARPU_Kfa.sql" />
@@ -71,6 +76,7 @@
     <None Include="BrgContext\StandardFeature\Kfa\FARPU_KfaIngredient.sql" />
     <None Include="BrgContext\StandardFeature\Kfa\FARPU_KfaPackaging.sql" />
     <None Include="BrgContext\StandardFeature\Kfa\FARPU_KfaReplacement.sql" />
+    <None Include="BrgContext\BrgFeature\tb_satuan.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="BrgContext\StandardFeature\tb_gol_terapi.sql" />
