@@ -1,5 +1,6 @@
 ﻿using Ardalis.GuardClauses;
 using Farinv.Domain.BrgContext.KlasifikasiFeature;
+using Farinv.Domain.BrgContext.StandardFeature;
 
 namespace Farinv.Domain.BrgContext.BrgFeature;
 
@@ -10,15 +11,11 @@ public record BrgType : IBrgKey
         string brgId,
         string brgName,
         bool isAktif,
-        BrgKlasifikasiType klasifikasi,
-        BrgStandardType standart,
         BrgSatuanType satuan)
     {
         BrgId = brgId;
         BrgName = brgName;
         IsAktif = isAktif;
-        Klasifikasi = klasifikasi;
-        Standart = standart;
         Satuan = satuan;
     }
 
@@ -26,25 +23,19 @@ public record BrgType : IBrgKey
         string brgId,
         string brgName,
         bool isAktif,
-        BrgKlasifikasiType klasifikasi,
-        BrgStandardType standart,
         BrgSatuanType satuan)
     {
         Guard.Against.NullOrWhiteSpace(brgId, nameof(brgId));
         Guard.Against.NullOrWhiteSpace(brgName, nameof(brgName));
-        Guard.Against.Null(klasifikasi, nameof(klasifikasi));
-        Guard.Against.Null(standart, nameof(standart));
         Guard.Against.Null(satuan, nameof(satuan));
 
-        return new BrgType(brgId, brgName, isAktif, klasifikasi, standart, satuan);
+        return new BrgType(brgId, brgName, isAktif, satuan);
     }
 
     public static BrgType Default => new(
         brgId: "-",
         brgName: "-",
         isAktif: false,
-        klasifikasi: BrgKlasifikasiType.Default,
-        standart: BrgStandardType.Default,
         satuan: BrgSatuanType.Default);
 
     public static IBrgKey Key(string id) => Default with { BrgId = id };
@@ -54,9 +45,9 @@ public record BrgType : IBrgKey
     public string BrgId { get; init; }
     public string BrgName { get; init; }
     public bool IsAktif { get; init; }
+    public string KetBarang { get; init; }
+    public string Barcode { get; init; }
 
-    public BrgKlasifikasiType Klasifikasi { get; init; }
-    public BrgStandardType Standart { get; init; }
     public BrgSatuanType Satuan { get; init; }
     #endregion
 
@@ -83,4 +74,13 @@ public interface IKlasifikasiUmum
 
 public interface IKlasifikasiObat
 {
+    GenerikType Generik { get; }
+    KelasTerapiType KelasTerapi { get; }
+    GolTerapiType GolTerapi { get; }
+    OriginalType Original { get; }
+}
+
+public interface IPabrik
+{
+    PabrikType Pabrik { get; }
 }
