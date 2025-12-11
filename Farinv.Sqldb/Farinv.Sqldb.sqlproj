@@ -84,5 +84,11 @@
     <None Include="BrgContext\StandardFeature\Kfa\FARPU_KfaReplacement.dataseed.sql" />
     <None Include="BrgContext\PricingPolicyFeature\ta_tipe_barang.sql" />
     <None Include="BrgContext\KlasifikasiFeature\tb_pabrik.sql" />
+    <None Include="BrgContext\KlasifikasiFeature\tb_jenis_barang.sql" />
+    <None Include="BrgContext\KlasifikasiFeature\tb_bentuk.sql" />
+    <None Include="BrgContext\KlasifikasiFeature\tb_sifat.sql" />
+    <None Include="BrgContext\KlasifikasiFeature\tb_kelompok.sql" />
+    <None Include="BrgContext\KlasifikasiFeature\tb_gol_obat_dk.sql" />
+    <None Include="BrgContext\KlasifikasiFeature\tb_golongan.sql" />
   </ItemGroup>
 </Project>
