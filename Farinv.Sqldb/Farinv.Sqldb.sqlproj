@@ -63,6 +63,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="BrgContext\BrgFeature\tb_grup_rek_dk.dataseed.sql" />
+    <Build Include="BrgContext\BrgFeature\tb_grup_rek.sql" />
     <Build Include="BrgContext\BrgFeature\tb_grup_rek_dk.sql" />
     <Build Include="BrgContext\KlasifikasiFeature\tb_generik.sql" />
     <Build Include="BrgContext\StandardFeature\tb_formularium.sql" />
