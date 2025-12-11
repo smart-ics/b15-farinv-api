@@ -60,10 +60,10 @@
     <Folder Include="BrgContext\StandardFeature" />
     <Folder Include="BrgContext\StandardFeature\Kfa" />
     <Folder Include="BrgContext\PricingPolicyFeature" />
-    <Folder Include="BrgContext\KlasifikasiFeature" />
     <Folder Include="BrgContext\BrgFeature" />
   </ItemGroup>
   <ItemGroup>
+    <Build Include="BrgContext\KlasifikasiFeature\tb_generik.sql" />
     <Build Include="BrgContext\StandardFeature\tb_formularium.sql" />
     <None Include="BrgContext\StandardFeature\Kfa\FARPU_Kfa.dataseed.sql" />
     <None Include="BrgContext\StandardFeature\Kfa\FARPU_Kfa.sql" />

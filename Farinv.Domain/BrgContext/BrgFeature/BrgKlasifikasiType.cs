@@ -34,7 +34,7 @@ public record BrgKlasifikasiType
         SifatType sifat,
         BentukType bentuk,
         JenisType jenis,
-        PabrikReff pabrik)
+        PabrikType pabrik)
     {
         Guard.Against.NullOrWhiteSpace(brgId, nameof(brgId));
         Guard.Against.Null(golongan, nameof(golongan));
@@ -45,7 +45,7 @@ public record BrgKlasifikasiType
         Guard.Against.Null(jenis, nameof(jenis));
         Guard.Against.Null(pabrik, nameof(pabrik));
 
-        return new BrgKlasifikasiType(brgId, golongan, groupObatDk, kelompok, sifat, bentuk, jenis, pabrik);
+        return new BrgKlasifikasiType(brgId, golongan, groupObatDk, kelompok, sifat, bentuk, jenis, pabrik.ToReff());
     }
 
     public static BrgKlasifikasiType Default => new(

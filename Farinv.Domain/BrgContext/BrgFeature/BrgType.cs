@@ -1,4 +1,5 @@
 ﻿using Ardalis.GuardClauses;
+using Farinv.Domain.BrgContext.KlasifikasiFeature;
 
 namespace Farinv.Domain.BrgContext.BrgFeature;
 
@@ -70,3 +71,16 @@ public interface IBrgKey
 }
 
 public record BrgReff(string BrgId, string BrgName);
+
+public interface IKlasifikasiUmum
+{
+    GolonganType Golongan { get; }
+    GroupObatDkType GroupObatDk { get; }
+    KelompokType Kelompok { get; }
+    SifatType Sifat { get; }
+    BentukType Bentuk { get; }
+}
+
+public interface IKlasifikasiObat
+{
+}
