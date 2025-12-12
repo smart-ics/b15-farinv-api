@@ -62,6 +62,8 @@
     <Folder Include="BrgContext\PricingPolicyFeature" />
   </ItemGroup>
   <ItemGroup>
+    <Build Include="InventoryContext\StokFeature\FARIN_JenisLokasi.dataseed.sql" />
+    <Build Include="InventoryContext\StokFeature\FARIN_JenisLokasi.sql" />
     <None Include="BrgContext\BrgFeature\tb_grup_rek_dk.dataseed.sql" />
     <Build Include="BrgContext\BrgFeature\tb_barang.sql" />
     <Build Include="BrgContext\BrgFeature\tb_barang_satuan.sql" />
