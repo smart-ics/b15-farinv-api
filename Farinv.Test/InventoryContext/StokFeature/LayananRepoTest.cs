@@ -1,9 +1,7 @@
-using Farinv.Application.InventoryContext.StokFeature;
 using Farinv.Domain.InventoryContext.StokFeature;
 using Farinv.Infrastructure.InventoryContext.StokFeature;
 using FluentAssertions;
 using Moq;
-using Nuna.Lib.PatternHelper;
 
 namespace Farinv.Test.InventoryContext.StokFeature;
 
