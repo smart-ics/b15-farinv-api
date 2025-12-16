@@ -27,8 +27,6 @@ public class StokModelTests
     private static StokLotType CreateLot(DateOnly expDate)
         => new StokLotType("PO-1", "RCV-1", expDate);
 
-    // ------------------------------------------------------------------
-
     [Fact]
     public void UT01_GivenEmptyStock_WhenAddStock_ThenNewLayerCreatedAndQtyUpdated()
     {
@@ -56,8 +54,6 @@ public class StokModelTests
         layer.ListMovement.Should().HaveCount(1);
     }
 
-    // ------------------------------------------------------------------
-
     [Fact]
     public void UT02_GivenStockWithSingleLayer_WhenRemovePartialQty_ThenQtySisaReduced()
     {
@@ -77,8 +73,6 @@ public class StokModelTests
         layer.ListMovement.Should().HaveCount(2);
     }
 
-    // ------------------------------------------------------------------
-
     [Fact]
     public void UT03_GivenStock_WhenRemoveQtyExceedTotal_ThenThrowException()
     {
@@ -95,8 +89,6 @@ public class StokModelTests
         act.Should().Throw<ArgumentException>()
             .WithMessage("*Qty tidak boleh melebihi Qty Stok*");
     }
-
-    // ------------------------------------------------------------------
 
     [Fact]
     public void UT04_GivenMultipleLayersWithDifferentExpDate_WhenRemoveStock_ThenUseFEFO()
@@ -122,8 +114,6 @@ public class StokModelTests
 
         firstLayer.QtySisa.Should().Be(20);
     }
-
-    // ------------------------------------------------------------------
 
     [Fact]
     public void UT05_GivenRemoveQtyCrossingLayers_WhenRemoveStock_ThenConsumeMultipleLayers()
@@ -151,8 +141,6 @@ public class StokModelTests
         layers[1].QtySisa.Should().Be(50);
     }
 
-    // ------------------------------------------------------------------
-
     [Fact]
     public void UT06_GivenReturnStock_WhenAddStock_ThenCreateNewLayer()
     {
@@ -170,8 +158,6 @@ public class StokModelTests
         stok.ListLayer.Should().HaveCount(2);
         stok.Qty.Should().Be(115);
     }
-
-    // ------------------------------------------------------------------
 
     [Fact]
     public void UT07_GivenLayer_WhenRemoveStock_ThenMovementRecordedCorrectly()
