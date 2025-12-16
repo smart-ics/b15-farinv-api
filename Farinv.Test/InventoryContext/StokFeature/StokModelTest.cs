@@ -51,7 +51,7 @@ public class StokModelTests
         stok.ListLayer.Should().HaveCount(1);
 
         var layer = stok.ListLayer.Single();
-        layer.Qty.Should().Be(100);
+        layer.QtyIn.Should().Be(100);
         layer.QtySisa.Should().Be(100);
         layer.ListMovement.Should().HaveCount(1);
     }
