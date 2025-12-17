@@ -1,9 +1,14 @@
 using Farinv.Domain.InventoryContext.StokFeature;
+using Farinv.Domain.Shared.Helpers;
+using Nuna.Lib.ValidationHelper;
 
 // resharper disable inconsistentnaming
 namespace Farinv.Infrastructure.InventoryContext.StokFeature;
 
 public record StokBukuDto(
+    string StokLayerId,
+    int NoUrut,
+
     string fs_kd_trs, 
     string fs_kd_barang,
     string fs_kd_layanan,
@@ -27,6 +32,8 @@ public record StokBukuDto(
     public static StokBukuDto FromModel(StokModel header, StokLayerModel layer, StokBukuType buku)
     {
         var result = new StokBukuDto(
+            layer.StokLayerId,
+            buku.NoUrut,
             buku.StokBukuId,
             header.BrgId,
             header.LayananId,
@@ -43,6 +50,26 @@ public record StokBukuDto(
             header.Satuan,
             header.Brg.BrgName,
             header.Layanan.LayananName);
+        return result;
     }
-    
+
+    public (StokBukuType buku, string stokLayerId) ToModel()
+    {
+        var reffDate = fd_tgl_jam_mutasi.ToDate();
+        var trsReff = new TrsReffType(fs_kd_mutasi, reffDate);
+
+        var buku = new StokBukuType(
+            fs_kd_trs,
+            NoUrut,
+            trsReff,
+            fs_kd_jenis_mutasi,
+            fn_stok_in,
+            fn_stok_out,
+            reffDate,
+            ModelStateEnum.Unchange
+        );
+
+        return (buku, StokLayerId);
+    }
+
 }

@@ -60,6 +60,10 @@
     <Folder Include="BrgContext\StandardFeature" />
     <Folder Include="BrgContext\StandardFeature\Kfa" />
     <Folder Include="BrgContext\PricingPolicyFeature" />
+    <Folder Include="InventoryContext\" />
+    <Folder Include="InventoryContext\StokFeature\" />
+    <Folder Include="BrgContext\BrgFeature\" />
+    <Folder Include="BrgContext\KlasifikasiFeature\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="InventoryContext\StokFeature\FARIN_Stok.sql" />

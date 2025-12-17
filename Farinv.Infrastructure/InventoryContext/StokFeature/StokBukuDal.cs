@@ -8,7 +8,7 @@ using Nuna.Lib.DataAccessHelper;
 
 namespace Farinv.Infrastructure.InventoryContext.StokFeature;
 
-public interface IStokBukuDal:
+public interface IStokBukuDal :
     IInsertBulk<StokBukuDto>,
     IDelete<IStokKey>,
     IListData<StokBukuDto, IStokKey>
@@ -18,74 +18,127 @@ public interface IStokBukuDal:
 public class StokBukuDal : IStokBukuDal
 {
     private readonly DatabaseOptions _opt;
+
     public StokBukuDal(IOptions<DatabaseOptions> opt)
     {
         _opt = opt.Value;
     }
-    
+
     public void Insert(IEnumerable<StokBukuDto> listModel)
+    {
+        var list = listModel.ToList();
+        InsertTbBuku(list);
+        InsertFarinStokBuku(list);
+    }
+
+    private void InsertTbBuku(List<StokBukuDto> list)
     {
         using var conn = new SqlConnection(ConnStringHelper.Get(_opt));
         using var bcp = new SqlBulkCopy(conn);
         conn.Open();
-        bcp.AddMap("StokBukuId", "StokBukuId");
-        bcp.AddMap("StokLayerId", "StokLayerId");
-        bcp.AddMap("NoUrut", "NoUrut");
-        bcp.AddMap("BrgId", "BrgId");
-        bcp.AddMap("LayananId", "LayananId");
-        bcp.AddMap("TrsReffId", "TrsReffId");
-        bcp.AddMap("TrsReffDate", "TrsReffDate");
-        bcp.AddMap("PurchaseId", "PurchaseId");
-        bcp.AddMap("ReceiveId", "ReceiveId");
-        bcp.AddMap("ExpDate", "ExpDate");
-        bcp.AddMap("BatchNo", "BatchNo");
-        bcp.AddMap("UseCase", "UseCase");
-        bcp.AddMap("QtyIn", "QtyIn");
-        bcp.AddMap("QtyOut", "QtyOut");
-        bcp.AddMap("Hpp", "Hpp");
-        bcp.AddMap("EntryDate", "EntryDate");
-        var fetched = listModel.ToList();
-        bcp.BatchSize = fetched.Count;
-        bcp.DestinationTableName = "FARIN_StokBuku";
-        bcp.WriteToServer(fetched.AsDataTable());
+
+        bcp.AddMap("fs_kd_trs", "fs_kd_trs");
+        bcp.AddMap("fs_kd_barang", "fs_kd_barang");
+        bcp.AddMap("fs_kd_layanan", "fs_kd_layanan");
+        bcp.AddMap("fs_kd_mutasi", "fs_kd_mutasi");
+        bcp.AddMap("fd_tgl_jam_mutasi", "fd_tgl_jam_mutasi");
+        bcp.AddMap("fd_tgl_mutasi", "fd_tgl_mutasi");
+        bcp.AddMap("fs_jam_mutasi", "fs_jam_mutasi");
+        bcp.AddMap("fs_kd_po", "fs_kd_po");
+        bcp.AddMap("fs_kd_do", "fs_kd_do");
+        bcp.AddMap("fd_tgl_ed", "fd_tgl_ed");
+        bcp.AddMap("fs_no_batch", "fs_no_batch");
+        bcp.AddMap("fn_stok_in", "fn_stok_in");
+        bcp.AddMap("fn_stok_out", "fn_stok_out");
+        bcp.AddMap("fn_hpp", "fn_hpp");
+        bcp.AddMap("fs_kd_jenis_mutasi", "fs_kd_jenis_mutasi");
+        bcp.AddMap("fs_kd_satuan", "fs_kd_satuan");
+
+        var mappedList = list.Select(dto =>
+        {
+            var dt = DateTime.Parse(dto.fd_tgl_jam_mutasi);
+            return new
+            {
+                dto.fs_kd_trs,
+                dto.fs_kd_barang,
+                dto.fs_kd_layanan,
+                dto.fs_kd_jenis_mutasi,
+                dto.fs_kd_mutasi,
+                dto.fd_tgl_jam_mutasi,
+                fd_tgl_mutasi = dt.ToString("yyyy-MM-dd"),
+                fs_jam_mutasi = dt.ToString("HH:mm:ss"),
+                dto.fs_kd_po,
+                dto.fs_kd_do,
+                dto.fd_tgl_ed,
+                dto.fs_no_batch,
+                dto.fn_stok_in,
+                dto.fn_stok_out,
+                dto.fn_hpp,
+                dto.fs_kd_satuan
+            };
+        }).ToList();
+
+        bcp.BatchSize = mappedList.Count;
+        bcp.DestinationTableName = "tb_buku";
+        bcp.WriteToServer(mappedList.AsDataTable());
     }
-    
+
+    private void InsertFarinStokBuku(List<StokBukuDto> list)
+    {
+        using var conn = new SqlConnection(ConnStringHelper.Get(_opt));
+        using var bcp = new SqlBulkCopy(conn);
+        conn.Open();
+
+        bcp.AddMap("StokLayerId", "StokLayerId");
+        bcp.AddMap("StokBukuId", "fs_kd_trs");
+        bcp.AddMap("NoUrut", "NoUrut");
+
+        bcp.BatchSize = list.Count;
+        bcp.DestinationTableName = "FARIN_StokBuku";
+        bcp.WriteToServer(list.AsDataTable());
+    }
+
     public void Delete(IStokKey key)
     {
         const string sql = """
-            DELETE FROM
-                FARIN_StokBuku
-            WHERE
-                BrgId = @BrgId AND LayananId = @LayananId
+            DELETE FROM FARIN_StokBuku
+            WHERE StokBukuId IN (
+                SELECT fs_kd_trs FROM tb_buku
+                WHERE fs_kd_barang = @BrgId AND fs_kd_layanan = @LayananId
+            );
+            DELETE FROM tb_buku
+            WHERE fs_kd_barang = @BrgId AND fs_kd_layanan = @LayananId;
             """;
         var dp = new DynamicParameters();
         dp.AddParam("@BrgId", key.BrgId, SqlDbType.VarChar);
         dp.AddParam("@LayananId", key.LayananId, SqlDbType.VarChar);
         using var conn = new SqlConnection(ConnStringHelper.Get(_opt));
-        conn.Execute(sql, dp);    
+        conn.Execute(sql, dp);
     }
-    
-    public IEnumerable<StokBukuDto> ListData(IStokKey filter)
+
+    public IEnumerable<StokBukuDto> ListData(IStokKey key)
     {
         const string sql = """
             SELECT 
-                aa.StokBukuId, aa.StokLayerId, aa.NoUrut,
-                aa.BrgId, aa.LayananId,
-                aa.TrsReffId, aa.TrsReffDate,
-                aa.PurchaseId, aa.ReceiveId, aa.ExpDate, aa.BatchNo,
-                aa.UseCase, aa.QtyIn, aa.QtyOut, aa.Hpp, aa.EntryDate,
-                ISNULL(bb.fs_nm_barang, '') BrgName,
-                ISNULL(cc.fs_nm_layanan, '') LayananName
+                ISNULL(bb.StokLayerId, '') AS StokLayerId, 
+                ISNULL(bb.NoUrut, 0) AS NoUrut,
+                aa.fs_kd_trs, aa.fs_kd_barang, 
+                aa.fs_kd_layanan, aa.fd_tgl_jam_mutasi,
+                aa.fs_kd_po, aa.fs_kd_do, aa.fd_tgl_ed, aa.fs_no_batch,
+                aa.fn_stok_in, aa.fn_stok_out, aa.fn_hpp, aa.fs_kd_satuan,
+                ISNULL(cc.fs_nm_barang, '') AS fs_nm_barang,
+                ISNULL(dd.fs_nm_layanan, '') AS fs_nm_layanan
             FROM 
-                FARIN_StokBuku aa
-                LEFT JOIN tb_barang bb ON aa.BrgId = bb.fs_kd_barang
-                LEFT JOIN ta_layanan cc ON aa.LayananId = cc.fs_kd_layanan
-            WHERE
-                aa.BrgId = @BrgId AND aa.LayananId = @LayananId
+                tb_buku aa
+                LEFT JOIN FARIN_StokBuku bb ON aa.fs_kd_trs = bb.StokBukuId
+                LEFT JOIN tb_barang cc ON aa.fs_kd_barang = cc.fs_kd_barang
+                LEFT JOIN ta_layanan dd ON aa.fs_kd_layanan = dd.fs_kd_layanan
+            WHERE 
+                aa.fs_kd_barang = @BrgId AND aa.fs_kd_layanan = @LayananId
             """;
         var dp = new DynamicParameters();
-        dp.AddParam("@BrgId", filter.BrgId, SqlDbType.VarChar);
-        dp.AddParam("@LayananId", filter.LayananId, SqlDbType.VarChar);
+        dp.AddParam("@BrgId", key.BrgId, SqlDbType.VarChar);
+        dp.AddParam("@LayananId", key.LayananId, SqlDbType.VarChar);
         using var conn = new SqlConnection(ConnStringHelper.Get(_opt));
         return conn.Read<StokBukuDto>(sql, dp);
     }
