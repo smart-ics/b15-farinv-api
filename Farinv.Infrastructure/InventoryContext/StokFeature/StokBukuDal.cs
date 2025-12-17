@@ -9,9 +9,9 @@ using Nuna.Lib.DataAccessHelper;
 namespace Farinv.Infrastructure.InventoryContext.StokFeature;
 
 public interface IStokBukuDal :
-    IInsertBulk<StokBukuDto>,
+    IInsertBulk<tb_buku_dto>,
     IDelete<IStokKey>,
-    IListData<StokBukuDto, IStokKey>
+    IListData<tb_buku_dto, IStokKey>
 {
 }
 
@@ -24,14 +24,14 @@ public class StokBukuDal : IStokBukuDal
         _opt = opt.Value;
     }
 
-    public void Insert(IEnumerable<StokBukuDto> listModel)
+    public void Insert(IEnumerable<tb_buku_dto> listModel)
     {
         var list = listModel.ToList();
         InsertTbBuku(list);
         InsertFarinStokBuku(list);
     }
 
-    private void InsertTbBuku(List<StokBukuDto> list)
+    private void InsertTbBuku(List<tb_buku_dto> list)
     {
         using var conn = new SqlConnection(ConnStringHelper.Get(_opt));
         using var bcp = new SqlBulkCopy(conn);
@@ -54,36 +54,12 @@ public class StokBukuDal : IStokBukuDal
         bcp.AddMap("fs_kd_jenis_mutasi", "fs_kd_jenis_mutasi");
         bcp.AddMap("fs_kd_satuan", "fs_kd_satuan");
 
-        var mappedList = list.Select(dto =>
-        {
-            var dt = DateTime.Parse(dto.fd_tgl_jam_mutasi);
-            return new
-            {
-                dto.fs_kd_trs,
-                dto.fs_kd_barang,
-                dto.fs_kd_layanan,
-                dto.fs_kd_jenis_mutasi,
-                dto.fs_kd_mutasi,
-                dto.fd_tgl_jam_mutasi,
-                fd_tgl_mutasi = dt.ToString("yyyy-MM-dd"),
-                fs_jam_mutasi = dt.ToString("HH:mm:ss"),
-                dto.fs_kd_po,
-                dto.fs_kd_do,
-                dto.fd_tgl_ed,
-                dto.fs_no_batch,
-                dto.fn_stok_in,
-                dto.fn_stok_out,
-                dto.fn_hpp,
-                dto.fs_kd_satuan
-            };
-        }).ToList();
-
-        bcp.BatchSize = mappedList.Count;
+        bcp.BatchSize = list.Count;
         bcp.DestinationTableName = "tb_buku";
-        bcp.WriteToServer(mappedList.AsDataTable());
+        bcp.WriteToServer(list.AsDataTable());
     }
 
-    private void InsertFarinStokBuku(List<StokBukuDto> list)
+    private void InsertFarinStokBuku(List<tb_buku_dto> list)
     {
         using var conn = new SqlConnection(ConnStringHelper.Get(_opt));
         using var bcp = new SqlBulkCopy(conn);
@@ -116,7 +92,7 @@ public class StokBukuDal : IStokBukuDal
         conn.Execute(sql, dp);
     }
 
-    public IEnumerable<StokBukuDto> ListData(IStokKey key)
+    public IEnumerable<tb_buku_dto> ListData(IStokKey key)
     {
         const string sql = """
             SELECT 
@@ -140,6 +116,6 @@ public class StokBukuDal : IStokBukuDal
         dp.AddParam("@BrgId", key.BrgId, SqlDbType.VarChar);
         dp.AddParam("@LayananId", key.LayananId, SqlDbType.VarChar);
         using var conn = new SqlConnection(ConnStringHelper.Get(_opt));
-        return conn.Read<StokBukuDto>(sql, dp);
+        return conn.Read<tb_buku_dto>(sql, dp);
     }
 }
