@@ -13,13 +13,13 @@ public class tb_stok_dalTest
     private readonly tb_stok_dal _sut = new(ConnStringHelper.GetTestEnv());
 
     private static tb_stok_dto Faker()
-        => new tb_stok_dto("A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P");
+        => new tb_stok_dto("A", "B", "C", "D", "E", "F", "G", 1, 2, 3, "H", "I", "J", "K", "L", "M");
 
     private static IBrgKey FakerBrgKey()
-        => BrgObatType.Default with { BrgId = "B" };
+        => BrgObatType.Key("B");
 
     private static ILayananKey FakerLayananKey()
-        => LayananType.Default with { LayananId = "C" };
+        => LayananType.Key("C");
 
     [Fact]
     public void InsertTest()

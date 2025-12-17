@@ -35,12 +35,16 @@ public class tb_stok_dal : Itb_stok_dal
                 fs_kd_trs, fs_kd_barang, fs_kd_layanan,
                 fs_kd_po, fs_kd_do, fd_tgl_ed, fs_no_batch,
                 fn_qty, fn_qty_in, fn_hpp,
-                fd_tgl_do, fs_jam_do, fs_kd_mutasi, fd_tgl_mutasi, fs_jam_mutasi, fs_kd_satuan)
+                fd_tgl_do, fs_jam_do,
+                fs_kd_mutasi, fd_tgl_mutasi, fs_jam_mutasi,
+                fs_kd_satuan)
             VALUES( 
                 @fs_kd_trs, @fs_kd_barang, @fs_kd_layanan,
                 @fs_kd_po, @fs_kd_do, @fd_tgl_ed, @fs_no_batch,
                 @fn_qty, @fn_qty_in, @fn_hpp,
-                @fd_tgl_do, @fs_jam_do, @fs_kd_mutasi, @fd_tgl_mutasi, @fs_jam_mutasi, @fs_kd_satuan)
+                @fd_tgl_do, @fs_jam_do,
+                @fs_kd_mutasi, @fd_tgl_mutasi, @fs_jam_mutasi,
+                @fs_kd_satuan)
             """;
         var dp = new DynamicParameters();
         dp.AddParam("@fs_kd_trs", dto.fs_kd_trs, SqlDbType.VarChar);
@@ -50,9 +54,9 @@ public class tb_stok_dal : Itb_stok_dal
         dp.AddParam("@fs_kd_do", dto.fs_kd_do, SqlDbType.VarChar);
         dp.AddParam("@fd_tgl_ed", dto.fd_tgl_ed, SqlDbType.VarChar);
         dp.AddParam("@fs_no_batch", dto.fs_no_batch, SqlDbType.VarChar);
-        dp.AddParam("@fn_qty", dto.fn_qty, SqlDbType.VarChar);
-        dp.AddParam("@fn_qty_in", dto.fn_qty_in, SqlDbType.VarChar);
-        dp.AddParam("@fn_hpp", dto.fn_hpp, SqlDbType.VarChar);
+        dp.AddParam("@fn_qty", dto.fn_qty, SqlDbType.Decimal);
+        dp.AddParam("@fn_qty_in", dto.fn_qty_in, SqlDbType.Decimal);
+        dp.AddParam("@fn_hpp", dto.fn_hpp, SqlDbType.Decimal);
         dp.AddParam("@fd_tgl_do", dto.fd_tgl_do, SqlDbType.VarChar);
         dp.AddParam("@fs_jam_do", dto.fs_jam_do, SqlDbType.VarChar);
         dp.AddParam("@fs_kd_mutasi", dto.fs_kd_mutasi, SqlDbType.VarChar);
@@ -95,9 +99,9 @@ public class tb_stok_dal : Itb_stok_dal
         dp.AddParam("@fs_kd_do", dto.fs_kd_do, SqlDbType.VarChar);
         dp.AddParam("@fd_tgl_ed", dto.fd_tgl_ed, SqlDbType.VarChar);
         dp.AddParam("@fs_no_batch", dto.fs_no_batch, SqlDbType.VarChar);
-        dp.AddParam("@fn_qty", dto.fn_qty, SqlDbType.VarChar);
-        dp.AddParam("@fn_qty_in", dto.fn_qty_in, SqlDbType.VarChar);
-        dp.AddParam("@fn_hpp", dto.fn_hpp, SqlDbType.VarChar);
+        dp.AddParam("@fn_qty", dto.fn_qty, SqlDbType.Decimal);
+        dp.AddParam("@fn_qty_in", dto.fn_qty_in, SqlDbType.Decimal);
+        dp.AddParam("@fn_hpp", dto.fn_hpp, SqlDbType.Decimal);
         dp.AddParam("@fd_tgl_do", dto.fd_tgl_do, SqlDbType.VarChar);
         dp.AddParam("@fs_jam_do", dto.fs_jam_do, SqlDbType.VarChar);
         dp.AddParam("@fs_kd_mutasi", dto.fs_kd_mutasi, SqlDbType.VarChar);
@@ -144,7 +148,7 @@ public class tb_stok_dal : Itb_stok_dal
         return result;
     }
     
-    public IEnumerable<tb_stok_dto> ListData(IBrgKey brgKey, ILayananKey lynKey)
+    public IEnumerable<tb_stok_dto> ListData(IBrgKey brgFilter, ILayananKey layananFilter)
     {
         const string sql = """
             SELECT
@@ -156,21 +160,14 @@ public class tb_stok_dal : Itb_stok_dal
                 fs_kd_satuan
             FROM 
                 tb_stok
+            WHERE
+                fs_kd_barang = @fs_kd_barang
+                AND fs_kd_layanan = @fs_kd_layanan
             """;
-        
         var dp = new DynamicParameters();
-        dp.AddParam("@fs_kd_barang", brgKey.BrgId, SqlDbType.VarChar);
-        dp.AddParam("@fs_kd_layanan", lynKey.LayananId, SqlDbType.VarChar);
-        
+        dp.AddParam("@fs_kd_barang", brgFilter.BrgId, SqlDbType.VarChar);
+        dp.AddParam("@fs_kd_layanan", layananFilter.LayananId, SqlDbType.VarChar);
         using var conn = new SqlConnection(ConnStringHelper.Get(_opt));
-        return conn.Read<tb_stok_dto>(sql);
+        return conn.Read<tb_stok_dto>(sql, dp);
     }
 }
-
-public record tb_stok_dto(
-    string fs_kd_trs, string fs_kd_barang, string fs_kd_layanan,
-    string fs_kd_po, string fs_kd_do, string fd_tgl_ed, string fs_no_batch,
-    int fn_qty, decimal fn_qty_in, decimal fn_hpp,
-    string fd_tgl_do, string fs_jam_do,
-    string fs_kd_mutasi, string fd_tgl_mutasi, string fs_jam_mutasi,
-    string fs_kd_satuan);

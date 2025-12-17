@@ -20,6 +20,10 @@ public class StokLayerModel : IStokLayerKey
         _listMovement = listBuku?.ToList() ?? [];
         ModelState = ModelStateEnum.Unchange;
     }
+    public static IStokLayerKey Key(string id)
+        => new StokLayerModel(id, TrsReffType.Default, StokLotType.Default, 0, 0, 0, []);
+    public static StokLayerModel Default
+        => new StokLayerModel("-", TrsReffType.Default, StokLotType.Default, 0, 0, 0, []);
 
     public static StokLayerModel Create(TrsReffType trsReffIn,
         StokLotType stokLot, int qty, decimal hpp, string useCase)

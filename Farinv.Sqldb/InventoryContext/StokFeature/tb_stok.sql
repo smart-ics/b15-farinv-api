@@ -16,7 +16,6 @@ CREATE TABLE tb_stok
     fd_tgl_do VARCHAR(10) NOT NULL CONSTRAINT DF_tb_stok_fd_tgl_do DEFAULT('3000-01-01'),
     fs_jam_do VARCHAR(8) NOT NULL CONSTRAINT DF_tb_stok_fs_jam_do DEFAULT('00:00:00'),
     fs_kd_mutasi VARCHAR(10) NOT NULL CONSTRAINT DF_tb_stok_fs_kd_mutasi DEFAULT(''),
-
     fd_tgl_mutasi VARCHAR(10) NOT NULL CONSTRAINT DF_tb_stok_fd_tgl_mutasi DEFAULT('3000-01-01'),
     fs_jam_mutasi VARCHAR(8) NOT NULL CONSTRAINT DF_tb_stok_fs_jam_mutasi DEFAULT('00:00:00'),
 
