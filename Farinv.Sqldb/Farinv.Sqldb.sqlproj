@@ -62,10 +62,10 @@
     <Folder Include="BrgContext\PricingPolicyFeature" />
   </ItemGroup>
   <ItemGroup>
+    <Build Include="InventoryContext\StokFeature\FARIN_Stok.sql" />
+    <Build Include="InventoryContext\StokFeature\FARIN_StokBuku.sql" />
+    <Build Include="InventoryContext\StokFeature\FARIN_StokLayer.sql" />
     <None Include="InventoryContext\StokFeature\FARIN_JenisLokasi.dataseed.sql" />
-    <Build Include="BrgContext\BrgFeature\FARIN_Stok.sql" />
-    <Build Include="BrgContext\BrgFeature\FARIN_StokBuku.sql" />
-    <Build Include="BrgContext\BrgFeature\FARIN_StokLayer.sql" />
     <Build Include="InventoryContext\StokFeature\FARIN_JenisLokasi.sql" />
     <None Include="InventoryContext\StokFeature\ta_layanan.sql" />
     <None Include="BrgContext\BrgFeature\tb_grup_rek_dk.dataseed.sql" />
