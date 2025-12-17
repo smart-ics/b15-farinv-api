@@ -1,55 +1,48 @@
 using Farinv.Domain.InventoryContext.StokFeature;
 
+// resharper disable inconsistentnaming
 namespace Farinv.Infrastructure.InventoryContext.StokFeature;
 
 public record StokBukuDto(
-    string StokBukuId,
-    string StokLayerId,
-    int NoUrut,
-    string BrgId,
-    string LayananId,
-    string TrsReffId,
-    DateTime TrsReffDate,
-    string PurchaseId,
-    string ReceiveId,
-    DateTime ExpDate,
-    string BatchNo,
-    string UseCase,
-    int QtyIn,
-    int QtyOut,
-    decimal Hpp,
-    DateTime EntryDate,
-    string BrgName,
-    string LayananName)
+    string fs_kd_trs, 
+    string fs_kd_barang,
+    string fs_kd_layanan,
+    string fs_kd_mutasi,
+    string fd_tgl_jam_mutasi,
+    
+    string fs_kd_po,
+    string fs_kd_do,
+    string fd_tgl_ed,
+    string fs_no_batch,
+
+    int fn_stok_in,
+    int fn_stok_out,
+    decimal fn_hpp,
+    
+    string fs_kd_jenis_mutasi,
+    string fs_kd_satuan,
+    string fs_nm_barang, 
+    string fs_nm_layanan)
 {
-    public static StokBukuDto FromModel(StokModel header, StokLayerModel detilLv1, StokBukuType model)
+    public static StokBukuDto FromModel(StokModel header, StokLayerModel layer, StokBukuType buku)
     {
         var result = new StokBukuDto(
-            model.StokBukuId,
-            detilLv1.StokLayerId,
-            model.NoUrut,
-            header.Brg.BrgId,
-            header.Layanan.LayananId,
-            model.TrsReff.ReffId,
-            model.TrsReff.ReffDate,
-            detilLv1.StokLot.PurchaseId,
-            detilLv1.StokLot.ReceiveId,
-            detilLv1.StokLot.ExpDate.ToDateTime(TimeOnly.MinValue),
-            detilLv1.StokLot.BatchNo,
-            model.UseCase,
-            model.QtyIn,
-            model.QtyOut,
-            detilLv1.Hpp,
-            model.EntryDate, 
+            buku.StokBukuId,
+            header.BrgId,
+            header.LayananId,
+            buku.TrsReff.ReffId,
+            $"{buku.TrsReff.ReffDate:yyyy-MM-dd HH:mm:ss}",
+            layer.StokLot.PurchaseId,
+            layer.StokLot.ReceiveId,
+            $"{layer.StokLot.ExpDate:yyyy-MM-dd}",
+            layer.StokLot.BatchNo,
+            buku.QtyIn,
+            buku.QtyOut,
+            layer.Hpp,
+            buku.UseCase,
+            header.Satuan,
             header.Brg.BrgName,
             header.Layanan.LayananName);
-        return result;
     }
-
-    public StokBukuType ToModel()
-    {
-        var trsReff = new TrsReffType(TrsReffId, TrsReffDate);
-        var result = new StokBukuType(StokBukuId, NoUrut, trsReff, UseCase, QtyIn, QtyOut, EntryDate);
-        return result;
-    }
+    
 }
