@@ -1,0 +1,11 @@
+CREATE TABLE FARIN_StokBukuMap(
+    StokLayerId VARCHAR(26) NOT NULL CONSTRAINT DF_FARIN_StokBukuMap_StokLayerId DEFAULT(''),
+    StokBukuId VARCHAR(10) NOT NULL CONSTRAINT DF_FARIN_StokBukuMap_StokBukuId DEFAULT(''),
+    
+    CONSTRAINT PK_FARIN_StokBukuMap PRIMARY KEY CLUSTERED (StokBukuId)
+)
+GO
+
+CREATE INDEX IX_FARIN_StokBukuMap_StokLayerId 
+    ON FARIN_StokBukuMap(StokLayerId, StokBukuId);
+GO

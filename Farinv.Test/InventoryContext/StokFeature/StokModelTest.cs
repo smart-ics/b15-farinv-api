@@ -25,7 +25,7 @@ public class StokModelTests
     }
 
     private static StokLotType CreateLot(DateOnly expDate)
-        => new StokLotType("PO-1", "RCV-1", expDate);
+        => new StokLotType("PO-1", "RCV-1", expDate, "BATCH");
 
     [Fact]
     public void UT01_GivenEmptyStock_WhenAddStock_ThenNewLayerCreatedAndQtyUpdated()
@@ -35,14 +35,7 @@ public class StokModelTests
         var lot = CreateLot(new DateOnly(2025, 12, 31));
 
         // Act
-        stok.AddStok(
-            qty: 100,
-            stokLot: lot,
-            hpp: 1000,
-            trsReffId: "PO-001",
-            trsReffDate: DateTime.Today,
-            jenisMutasi: "PURCHASE"
-        );
+        stok.AddStok(100, lot, 1000, new TrsReffType("PO-001", DateTime.Today), "PURCHASE");
 
         // Assert
         stok.Qty.Should().Be(100);
@@ -51,7 +44,7 @@ public class StokModelTests
         var layer = stok.ListLayer.Single();
         layer.QtyIn.Should().Be(100);
         layer.QtySisa.Should().Be(100);
-        layer.ListMovement.Should().HaveCount(1);
+        layer.ListBuku.Should().HaveCount(1);
     }
 
     [Fact]
@@ -60,17 +53,17 @@ public class StokModelTests
         // Arrange
         var stok = CreateEmptyStok();
         stok.AddStok(100, CreateLot(new DateOnly(2025, 12, 31)), 1000,
-            "PO-001", DateTime.Today, "PURCHASE");
+            new TrsReffType("PO-001", DateTime.Today), "PURCHASE");
 
         // Act
-        stok.RemoveStok(30, "USE-001", DateTime.Today, "PAKAI");
+        stok.RemoveStok(30,new TrsReffType("USE-001", DateTime.Today), "PAKAI");
 
         // Assert
         stok.Qty.Should().Be(70);
 
         var layer = stok.ListLayer.Single();
         layer.QtySisa.Should().Be(70);
-        layer.ListMovement.Should().HaveCount(2);
+        layer.ListBuku.Should().HaveCount(2);
     }
 
     [Fact]
@@ -79,11 +72,11 @@ public class StokModelTests
         // Arrange
         var stok = CreateEmptyStok();
         stok.AddStok(50, CreateLot(new DateOnly(2025, 12, 31)), 1000,
-            "PO-001", DateTime.Today, "PURCHASE");
+            new TrsReffType("PO-001", DateTime.Today), "PURCHASE");
 
         // Act
         Action act = () =>
-            stok.RemoveStok(60, "USE-001", DateTime.Today, "PAKAI");
+            stok.RemoveStok(60, new TrsReffType("USE-001", DateTime.Today), "PAKAI");
 
         // Assert
         act.Should().Throw<ArgumentException>()
@@ -97,13 +90,13 @@ public class StokModelTests
         var stok = CreateEmptyStok();
 
         stok.AddStok(50, CreateLot(new DateOnly(2024, 12, 31)), 1000,
-            "PO-OLD", DateTime.Today, "PURCHASE");
+            new TrsReffType("PO-OLD", DateTime.Today), "PURCHASE");
 
         stok.AddStok(50, CreateLot(new DateOnly(2025, 12, 31)), 1100,
-            "PO-NEW", DateTime.Today, "PURCHASE");
+            new TrsReffType("PO-NEW", DateTime.Today), "PURCHASE");
 
         // Act
-        stok.RemoveStok(30, "USE-001", DateTime.Today, "PAKAI");
+        stok.RemoveStok(30, new TrsReffType("USE-001", DateTime.Today), "PAKAI");
 
         // Assert
         stok.Qty.Should().Be(70);
@@ -122,13 +115,13 @@ public class StokModelTests
         var stok = CreateEmptyStok();
 
         stok.AddStok(40, CreateLot(new DateOnly(2024, 12, 31)), 1000,
-            "PO-1", DateTime.Today, "PURCHASE");
+            new TrsReffType("PO-1", DateTime.Today), "PURCHASE");
 
         stok.AddStok(60, CreateLot(new DateOnly(2025, 12, 31)), 1100,
-            "PO-2", DateTime.Today, "PURCHASE");
+            new TrsReffType("PO-2", DateTime.Today), "PURCHASE");
 
         // Act
-        stok.RemoveStok(50, "USE-001", DateTime.Today, "PAKAI");
+        stok.RemoveStok(50, new TrsReffType("USE-001", DateTime.Today), "PAKAI");
 
         // Assert
         stok.Qty.Should().Be(50);
@@ -148,11 +141,11 @@ public class StokModelTests
         var stok = CreateEmptyStok();
         var stokLot = CreateLot(DateOnly.FromDateTime(new DateTime(2025, 12, 15)));
         stok.AddStok(100, stokLot, 1000,
-            "PO-001", DateTime.Today, "PURCHASE");
+            new TrsReffType("PO-001", DateTime.Today), "PURCHASE");
 
         // Act
         stok.AddStok(15, CreateLot(new DateOnly(2025, 12, 31)), 1000,
-            "RET-001", DateTime.Today, "RETURN");
+            new TrsReffType("RET-001", DateTime.Today), "RETURN");
 
         // Assert
         stok.ListLayer.Should().HaveCount(2);
@@ -165,15 +158,15 @@ public class StokModelTests
         // Arrange
         var stok = CreateEmptyStok();
         stok.AddStok(20, CreateLot(new DateOnly(2025, 12, 31)), 1000,
-            "PO-001", DateTime.Today, "PURCHASE");
+            new TrsReffType("PO-001", DateTime.Today), "PURCHASE");
 
         var layer = stok.ListLayer.Single();
 
         // Act
-        stok.RemoveStok(5, "USE-001", DateTime.Today, "PAKAI");
+        stok.RemoveStok(5, new TrsReffType("USE-001", DateTime.Today), "PAKAI");
 
         // Assert
-        var movements = layer.ListMovement.ToList();
+        var movements = layer.ListBuku.ToList();
 
         movements.Should().HaveCount(2);
         movements.Sum(x => x.QtyIn - x.QtyOut).Should().Be(15);

@@ -60,12 +60,17 @@
     <Folder Include="BrgContext\StandardFeature" />
     <Folder Include="BrgContext\StandardFeature\Kfa" />
     <Folder Include="BrgContext\PricingPolicyFeature" />
+    <Folder Include="InventoryContext\" />
+    <Folder Include="BrgContext\BrgFeature\" />
+    <Folder Include="BrgContext\KlasifikasiFeature\" />
   </ItemGroup>
   <ItemGroup>
+    <Build Include="InventoryContext\StokFeature\FARIN_Stok.sql" />
+    <None Include="InventoryContext\StokFeature\FARIN_StokBukuMap.sql" />
+    <Build Include="InventoryContext\StokFeature\FARIN_StokLayer.sql" />
+    <Build Include="InventoryContext\StokFeature\tb_buku.sql" />
+    <Build Include="InventoryContext\StokFeature\tb_stok.sql" />
     <None Include="InventoryContext\StokFeature\FARIN_JenisLokasi.dataseed.sql" />
-    <Build Include="BrgContext\BrgFeature\FARIN_Stok.sql" />
-    <Build Include="BrgContext\BrgFeature\FARIN_StokBuku.sql" />
-    <Build Include="BrgContext\BrgFeature\FARIN_StokLayer.sql" />
     <Build Include="InventoryContext\StokFeature\FARIN_JenisLokasi.sql" />
     <None Include="InventoryContext\StokFeature\ta_layanan.sql" />
     <None Include="BrgContext\BrgFeature\tb_grup_rek_dk.dataseed.sql" />

@@ -36,14 +36,14 @@ public class StokModel : IStokKey
     #endregion
 
     public void AddStok(int qty, StokLotType stokLot, decimal hpp, 
-        string trsReffId, DateTime trsReffDate, string jenisMutasi)
+        TrsReffType trsReff, string useCase)
     {
-        var newLayer = StokLayerModel.Create(qty, hpp, stokLot, 
-            trsReffId, trsReffDate, jenisMutasi);
+        var newLayer = StokLayerModel.Create(trsReff, stokLot, qty, 
+            hpp, useCase);
         _listLayer.Add(newLayer);
         UpdateQty();
     }
-    public void RemoveStok(int qty, string trsReffId, DateTime trsReffDate, string jenisMutasi)
+    public void RemoveStok(int qty, TrsReffType trsReff, string useCase)
     {
         if (qty > Qty)
             throw new ArgumentException("Qty tidak boleh melebihi Qty Stok");
@@ -52,7 +52,7 @@ public class StokModel : IStokKey
         foreach (var item in _listLayer.OrderBy(x => x.StokLot.ExpDate))
         {
             var qtyRemove = Math.Min(qtyToBeRemoved, item.QtySisa);
-            item.RemoveStok(qtyRemove, trsReffId, trsReffDate, jenisMutasi);
+            item.RemoveStok(qtyRemove, trsReff, useCase);
             qtyToBeRemoved -= qtyRemove;
             if (qtyToBeRemoved == 0)
                 break;
