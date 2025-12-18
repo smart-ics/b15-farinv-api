@@ -4,7 +4,7 @@ using Farinv.Domain.InventoryContext.StokFeature;
 public record StokDto(
     string BrgId, 
     string LayananId, 
-    int Qty, 
+    decimal Qty, 
     string Satuan,
     string BrgName,
     string LayananName)
@@ -29,7 +29,7 @@ public record StokDto(
             LayananId, 
             new BrgReff(BrgId, BrgName), 
             new LayananReff(LayananId, LayananName), 
-            Qty, 
+            (int)Qty, 
             Satuan, 
             listLayer);
         return result;

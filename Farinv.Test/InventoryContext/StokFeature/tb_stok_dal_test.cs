@@ -13,7 +13,8 @@ public class tb_stok_dalTest
     private readonly tb_stok_dal _sut = new(ConnStringHelper.GetTestEnv());
 
     private static tb_stok_dto Faker()
-        => new tb_stok_dto("A", "B", "C", "D", "E", "F", "G", 1, 2, 3, "H", "I", "J", "K", "L", "M");
+        => new tb_stok_dto("A", "B", "C", "D", "E", "F", "G", 
+            1, 2, 3, "H", "I", "J", "K", "L", "M", "N", "O");
 
     private static IBrgKey FakerBrgKey()
         => BrgObatType.Key("B");
@@ -48,7 +49,10 @@ public class tb_stok_dalTest
         using var trans = TransHelper.NewScope();
         _sut.Insert(Faker());
         var actual = _sut.GetData("A");
-        actual.Should().BeEquivalentTo(Faker());
+        actual.Should().BeEquivalentTo(Faker(),
+            opt => opt
+                .Excluding(x => x.fs_nm_barang)
+                .Excluding(x => x.fs_nm_layanan));
     }
     
     [Fact]
@@ -57,6 +61,9 @@ public class tb_stok_dalTest
         using var trans = TransHelper.NewScope();
         _sut.Insert(Faker());
         var actual = _sut.ListData(FakerBrgKey(), FakerLayananKey());
-        actual.Should().ContainEquivalentOf(Faker());
+        actual.Should().ContainEquivalentOf(Faker(),
+            opt => opt
+                .Excluding(x => x.fs_nm_barang)
+                .Excluding(x => x.fs_nm_layanan));
     }
 }

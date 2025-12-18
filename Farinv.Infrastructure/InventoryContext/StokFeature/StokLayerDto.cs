@@ -10,8 +10,8 @@ public record StokLayerDto(
     string ReceiveId,
     DateTime ExpDate,
     string BatchNo,
-    int QtyIn,
-    int QtySisa,
+    decimal QtyIn,
+    decimal QtySisa,
     decimal Hpp,
     string BrgName,
     string LayananName)
@@ -40,7 +40,7 @@ public record StokLayerDto(
     {
         var trsReffIn = new TrsReffType(TrsReffInId, TrsReffInDate);
         var stokLot = new StokLotType(PurchaseId, ReceiveId, DateOnly.FromDateTime(ExpDate), BatchNo);
-        var result = new StokLayerModel(StokLayerId, trsReffIn, stokLot, QtyIn, QtySisa, Hpp, listBuku);
+        var result = new StokLayerModel(StokLayerId, trsReffIn, stokLot, (int)QtyIn, (int)QtySisa, Hpp, listBuku);
         return result;
     }
 }
