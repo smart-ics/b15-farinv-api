@@ -1,5 +1,6 @@
 using Farinv.Domain.InventoryContext.StokFeature;
 using MediatR;
+using Nuna.Lib.TransactionHelper;
 
 namespace Farinv.Application.InventoryContext.StokFeature.UseCases;
 
@@ -17,7 +18,9 @@ public class StokGetKartuStokHandler : IRequestHandler<StokGetKartuStokQuery, St
     public Task<StokModel> Handle(StokGetKartuStokQuery request, CancellationToken cancellationToken)
     {
         var brgLayananKey = StokModel.Key(request.BrgId, request.LayananId);
+        using var trans = TransHelper.NewScope();
         var result = _stokRepo.LoadEntity(brgLayananKey);
+        trans.Complete();
         return Task.FromResult(result.Value);
     }
 }

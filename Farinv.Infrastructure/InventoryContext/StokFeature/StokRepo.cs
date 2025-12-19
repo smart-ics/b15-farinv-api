@@ -73,14 +73,12 @@ public class StokRepo : IStokRepo
         var listTbStok = _tb_stok_dal.ListData(key, key)?.ToList() ?? [];
         if (listTbStok.Count == 0)
             return;
-        
         //  2. list tb_buku by kode do dari listTbStok
         var listTbBuku = _tb_buku_dal
             .ListData(
                 key, listTbStok
                     .Select(x => x.fs_kd_do)
                     .ToList())?.ToList() ?? [];
-            
         //  3. cek dan perbaiki konsistensi tb_stok dan tb_buku
         foreach (var item in listTbStok)
         {
@@ -92,15 +90,10 @@ public class StokRepo : IStokRepo
                 _tb_stok_dal.Delete(item.fs_kd_trs);
                 continue;                
             }
-            
-            if (qtyTbBuku == item.fn_qty)
-                continue;
-
-            
+            if (qtyTbBuku == item.fn_qty) continue;
             var validTbStokItem = item with { fn_qty = qtyTbBuku };
             _tb_stok_dal.Update(validTbStokItem);
         }
-        
         //  4. membentuk FARIN_StokLayer
         listTbStok = _tb_stok_dal.ListData(key, key)?.ToList() ?? [];
         var listStokLayerDto = new List<StokLayerDto>();
@@ -114,7 +107,6 @@ public class StokRepo : IStokRepo
             listStokLayerDto.Add(stokLayerDto);
         }
         _stokLayerDal.Insert(listStokLayerDto); 
-        
         //  5. membentuk FARIN_StokBukuMap
         foreach (var item in listStokLayerDto)
         {
@@ -124,7 +116,6 @@ public class StokRepo : IStokRepo
 
             _stokBukuMapDal.Insert(newBukuMap);
         }
-        
         // 6. membentuk FARIN_Stok
         var qty = listStokLayerDto.Sum(x => x.QtySisa);
         var satuan = listTbBuku.First().fs_kd_satuan;
@@ -132,7 +123,6 @@ public class StokRepo : IStokRepo
         var layananName = listTbStok.First().fs_nm_layanan;
         var newFarinStok = new StokDto(key.BrgId, key.LayananId, qty, satuan, brgName, layananName);
         _stokDal.Insert(newFarinStok);
-        
     }
 
     #endregion
