@@ -83,14 +83,14 @@ public class tb_buku_dal : Itb_buku_dal
                 aa.fn_stok_in, aa.fn_stok_out, aa.fn_hpp, 
                 aa.fs_kd_mutasi, aa.fd_tgl_mutasi, aa.fs_jam_mutasi, aa.fd_tgl_jam_mutasi, 
                 aa.fs_kd_jenis_mutasi, aa.fs_kd_satuan,
-                ISNULL(aa.fs_nm_barang, '') fs_nm_barang, 
-                ISNULL(aa.fs_nm_layanan, '') fs_nm_layanan,
+                ISNULL(cc.fs_nm_barang, '') fs_nm_barang, 
+                ISNULL(dd.fs_nm_layanan, '') fs_nm_layanan,
                 ISNULL(bb.StokLayerId, '') fs_stok_layer_id
             FROM 
                 tb_buku aa
                 LEFT JOIN FARIN_StokBukuMap bb ON aa.fs_kd_trs = bb.StokBukuId
                 LEFT JOIN tb_barang cc ON aa.fs_kd_barang = cc.BrgId
-                LEFT JOIN tb_layanan dd ON aa.fs_kd_layanan = dd.LayananId
+                LEFT JOIN tb_layanan dd ON aa.fs_kd_layanan = dd.fs_kd_layanan
             WHERE
                 bb.StokLayerId IN @listStokLayerId
             """;
@@ -110,14 +110,14 @@ public class tb_buku_dal : Itb_buku_dal
                aa.fn_stok_in, aa.fn_stok_out, aa.fn_hpp, 
                aa.fs_kd_mutasi, aa.fd_tgl_mutasi, aa.fs_jam_mutasi, aa.fd_tgl_jam_mutasi, 
                aa.fs_kd_jenis_mutasi, aa.fs_kd_satuan,
-               ISNULL(aa.fs_nm_barang, '') fs_nm_barang, 
-               ISNULL(aa.fs_nm_layanan, '') fs_nm_layanan,
+               ISNULL(cc.fs_nm_barang, '') fs_nm_barang, 
+               ISNULL(dd.fs_nm_layanan, '') fs_nm_layanan,
                ISNULL(bb.StokLayerId, '') fs_stok_layer_id
            FROM 
                tb_buku aa
                LEFT JOIN FARIN_StokBukuMap bb ON aa.fs_kd_trs = bb.StokBukuId
                LEFT JOIN tb_barang cc ON aa.fs_kd_barang = cc.fs_kd_barang
-               LEFT JOIN ta_layanan dd ON aa.fs_kd_layanan = dd.LayananId
+               LEFT JOIN ta_layanan dd ON aa.fs_kd_layanan = dd.fs_kd_layanan
            WHERE
                aa.fs_kd_barang = @fs_kd_barang
                AND aa.fs_kd_layanan = @fs_kd_layanan
