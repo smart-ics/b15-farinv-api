@@ -89,7 +89,7 @@ public class OrderMutasiModel : IOrderMutasiKey
         State = OrderMutasiStateEnum.Rejected;
     }
 
-    public void Close()
+    public void Complete()
     {
         GuardStatus(OrderMutasiStateEnum.Approved);
         State = OrderMutasiStateEnum.Completed;
