@@ -3,10 +3,10 @@ using Farinv.Domain.Shared.Helpers;
 
 namespace Farinv.Domain.InventoryContext.MutasiFeature;
 
-public class OrderMutasiItemModel
+public class OrderMutasiBrgModel
 {
     #region CREATION
-    public OrderMutasiItemModel(int noUrut, BrgReff brg, decimal qty, SatuanType satuan)
+    public OrderMutasiBrgModel(int noUrut, BrgReff brg, decimal qty, SatuanType satuan)
     {
         NoUrut = noUrut;
         Brg = brg;

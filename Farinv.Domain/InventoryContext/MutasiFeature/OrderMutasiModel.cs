@@ -7,13 +7,12 @@ namespace Farinv.Domain.InventoryContext.MutasiFeature;
 
 public class OrderMutasiModel : IOrderMutasiKey
 {
-    private readonly List<OrderMutasiItemModel> _items;
-    public IReadOnlyCollection<OrderMutasiItemModel> Items => _items;
+    private readonly List<OrderMutasiBrgModel> _listBrg;
 
     #region CREATION
     public OrderMutasiModel(string orderMutasiId, DateTime orderMutasiDate, OrderMutasiStateEnum state,
         LayananReff layananOrder, LayananReff layananTujuan, string orderNote, AuditTrailType auditTrail, 
-        List<OrderMutasiItemModel> items)
+        IEnumerable<OrderMutasiBrgModel> listBrg)
     {
         OrderMutasiId = orderMutasiId;
         OrderMutasiDate = orderMutasiDate;
@@ -22,16 +21,16 @@ public class OrderMutasiModel : IOrderMutasiKey
         LayananTujuan = layananTujuan;
         OrderNote = orderNote;
         AuditTrail = auditTrail;
-        _items = items;
+        _listBrg = listBrg?.ToList() ?? [];
     }
 
     public static OrderMutasiModel Default() 
         => new("-", new DateTime(300, 1, 1), OrderMutasiStateEnum.Draft,
-            LayananType.Default.ToReff(), LayananType.Default.ToReff(), string.Empty, AuditTrailType.Default, []);
+            LayananType.Default.ToReff(), LayananType.Default.ToReff(), "-", AuditTrailType.Default, []);
 
     public static IOrderMutasiKey Key(string id)
         => new OrderMutasiModel(id, new DateTime(300, 1, 1), OrderMutasiStateEnum.Draft,
-            LayananType.Default.ToReff(), LayananType.Default.ToReff(), string.Empty, AuditTrailType.Default, []);
+            LayananType.Default.ToReff(), LayananType.Default.ToReff(), "-", AuditTrailType.Default, []);
     #endregion
 
     #region PROPERTIES
@@ -47,26 +46,26 @@ public class OrderMutasiModel : IOrderMutasiKey
     #endregion
 
     #region BEHAVIOR
-    public void AddItem(OrderMutasiItemModel item)
+    public void AddItem(OrderMutasiBrgModel item)
     {
         GuardDraft();
         if (item.Qty <= 0)
             throw new DomainException($"Qty invalid");
 
-        var existing = _items.FirstOrDefault(x => x.Brg.BrgId == item.Brg.BrgId);
+        var existing = _listBrg.FirstOrDefault(x => x.Brg.BrgId == item.Brg.BrgId);
         if (existing is not null)
         {
             existing.AddQty(item.Qty);
             return;
         }
 
-        _items.Add(item);
+        _listBrg.Add(item);
     }
 
     public void RemoveItem(IBrgKey key)
     {
         GuardDraft();
-        _items.RemoveAll(x => x.Brg.BrgId == key.BrgId);
+        _listBrg.RemoveAll(x => x.Brg.BrgId == key.BrgId);
     }
 
     public void Submit(string note)
@@ -74,7 +73,7 @@ public class OrderMutasiModel : IOrderMutasiKey
         GuardDraft();
         GuardHasItem();
 
-        OrderNote = note ?? string.Empty;
+        OrderNote = note ?? "-";
         State = OrderMutasiStateEnum.Submitted;
     }
 
@@ -106,7 +105,7 @@ public class OrderMutasiModel : IOrderMutasiKey
 
     private void GuardHasItem()
     {
-        if (_items.Count == 0)
+        if (_listBrg.Count == 0)
             throw new DomainException("Order Mutasi harus memiliki minimal 1 item");
     }
 
