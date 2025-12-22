@@ -66,7 +66,7 @@
   </ItemGroup>
   <ItemGroup>
     <Build Include="InventoryContext\StokFeature\FARIN_Stok.sql" />
-    <None Include="InventoryContext\StokFeature\FARIN_StokBukuMap.sql" />
+    <Build Include="InventoryContext\StokFeature\FARIN_StokBuku.sql" />
     <Build Include="InventoryContext\StokFeature\FARIN_StokLayer.sql" />
     <Build Include="InventoryContext\StokFeature\tb_buku.sql" />
     <Build Include="InventoryContext\StokFeature\tb_stok.sql" />

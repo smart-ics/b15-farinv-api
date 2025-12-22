@@ -7,8 +7,9 @@ public class StokLayerModel : IStokLayerKey
     private readonly List<StokBukuType> _listMovement;
 
     public StokLayerModel(string stokLayerId, 
-        TrsReffType trsReffIn, StokLotType stokLot, 
+        StokLotType stokLot, 
         int qty, int qtySisa, decimal hpp,
+        TrsReffType trsReffIn, 
         IEnumerable<StokBukuType> listBuku)
     {
         StokLayerId = stokLayerId;
@@ -21,26 +22,28 @@ public class StokLayerModel : IStokLayerKey
         ModelState = ModelStateEnum.Unchange;
     }
     public static IStokLayerKey Key(string id)
-        => new StokLayerModel(id, TrsReffType.Default, StokLotType.Default, 0, 0, 0, []);
+        => new StokLayerModel(id, StokLotType.Default, 0, 0, 0, TrsReffType.Default, []);
     public static StokLayerModel Default
-        => new StokLayerModel("-", TrsReffType.Default, StokLotType.Default, 0, 0, 0, []);
+        => new StokLayerModel("-",  StokLotType.Default, 0, 0, 0, TrsReffType.Default, []);
 
     public static StokLayerModel Create(TrsReffType trsReffIn,
         StokLotType stokLot, int qty, decimal hpp, string useCase)
     {
         var stokLayerId = Ulid.NewUlid().ToString();
         var newBuku = StokBukuType.Masuk(0, qty, trsReffIn, useCase);
-        var newLayer = new StokLayerModel(stokLayerId, trsReffIn, stokLot, 
-            qty, qty, hpp, [newBuku]);
-        newLayer.ModelState = ModelStateEnum.Added;
+        var newLayer = new StokLayerModel(stokLayerId, stokLot, 
+            qty, qty, hpp, trsReffIn, [newBuku])
+        {
+            ModelState = ModelStateEnum.Added
+        };
         return newLayer;
     }
     public string StokLayerId { get; init; }
-    public TrsReffType TrsReffIn { get; init; }
     public StokLotType StokLot { get; init; }
     public int QtyIn { get; init; }
     public int QtySisa { get; private set; }
     public decimal Hpp { get; init; }
+    public TrsReffType TrsReffIn { get; init; }
     public IEnumerable<StokBukuType> ListBuku => _listMovement;
     public ModelStateEnum ModelState { get; private set; }
     

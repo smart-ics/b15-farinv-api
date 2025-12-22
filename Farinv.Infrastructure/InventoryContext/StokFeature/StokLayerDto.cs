@@ -4,15 +4,19 @@ public record StokLayerDto(
     string StokLayerId,
     string BrgId,
     string LayananId,
-    string TrsReffInId,
-    DateTime TrsReffInDate,
+
     string PurchaseId,
     string ReceiveId,
     DateTime ExpDate,
     string BatchNo,
-    decimal QtyIn,
-    decimal QtySisa,
+    
+    int QtyIn,
+    int QtySisa,
     decimal Hpp,
+
+    string TrsReffInId,
+    DateTime TrsReffInDate,
+    
     string BrgName,
     string LayananName)
 {
@@ -22,8 +26,6 @@ public record StokLayerDto(
             model.StokLayerId,
             header.BrgId,
             header.LayananId,
-            model.TrsReffIn.ReffId,
-            model.TrsReffIn.ReffDate,
             model.StokLot.PurchaseId,
             model.StokLot.ReceiveId,
             model.StokLot.ExpDate.ToDateTime(TimeOnly.MinValue),
@@ -31,6 +33,8 @@ public record StokLayerDto(
             model.QtyIn,
             model.QtySisa,
             model.Hpp,
+            model.TrsReffIn.ReffId,
+            model.TrsReffIn.ReffDate,
             header.Brg.BrgName,
             header.Layanan.LayananName);
         return result;
@@ -39,8 +43,13 @@ public record StokLayerDto(
     public StokLayerModel ToModel(IEnumerable<StokBukuType> listBuku)
     {
         var trsReffIn = new TrsReffType(TrsReffInId, TrsReffInDate);
-        var stokLot = new StokLotType(PurchaseId, ReceiveId, DateOnly.FromDateTime(ExpDate), BatchNo);
-        var result = new StokLayerModel(StokLayerId, trsReffIn, stokLot, (int)QtyIn, (int)QtySisa, Hpp, listBuku);
+        
+        var stokLot = new StokLotType(PurchaseId, ReceiveId, 
+            DateOnly.FromDateTime(ExpDate), BatchNo);
+        
+        var result = new StokLayerModel(StokLayerId, stokLot, 
+            QtyIn, QtySisa, Hpp, trsReffIn, listBuku);
+        
         return result;
     }
 }

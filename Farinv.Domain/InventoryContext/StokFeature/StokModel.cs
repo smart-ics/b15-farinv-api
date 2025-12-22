@@ -18,7 +18,8 @@ public class StokModel : IStokKey
         Satuan = satuan;
         _listLayer = listLayer?.ToList() ?? [];
     }
-    public static StokModel Default => new StokModel("-", "-", BrgObatType.Default.ToReff(), 
+    public static StokModel Default 
+        => new StokModel("-", "-", BrgObatType.Default.ToReff(), 
         LayananType.Default.ToReff(), 0, "", []);
     public static IStokKey Key(string brgId, string layananId) 
         => new StokModel(brgId, layananId, BrgObatType.Default.ToReff(), 
