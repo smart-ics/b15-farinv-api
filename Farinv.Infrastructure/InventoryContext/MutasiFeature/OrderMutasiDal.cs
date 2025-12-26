@@ -31,7 +31,7 @@ public class OrderMutasiDal : IOrderMutasiDal
     {
         const string sql = """
             INSERT INTO FARIN_OrderMutasi (
-                OrderMutasiId, OrderMutasiDate, OrderMutasiState,
+                OrderMutasiId, OrderMutasiDate, State,
                 LayananOrderId, LayananOrderName, 
                 LayananTujuanId, LayananTujuanName,
                 OrderNote,
@@ -74,7 +74,7 @@ public class OrderMutasiDal : IOrderMutasiDal
         const string sql = """
             UPDATE FARIN_OrderMutasi SET
                 OrderMutasiDate = @OrderMutasiDate,
-                OrderMutasiState = @State,
+                State = @State,
                 LayananOrderId = @LayananOrderId,
                 LayananOrderName = @LayananOrderName,
                 LayananTujuanId = @LayananTujuanId,
@@ -121,7 +121,7 @@ public class OrderMutasiDal : IOrderMutasiDal
     {
         const string sql = """
             SELECT 
-                OrderMutasiId, OrderMutasiDate, OrderMutasiState,
+                OrderMutasiId, OrderMutasiDate, State,
                 LayananOrderId, LayananOrderName, 
                 LayananTujuanId, LayananTujuanName,
                 OrderNote,
@@ -144,7 +144,7 @@ public class OrderMutasiDal : IOrderMutasiDal
     {
         const string sql = """
             SELECT 
-                OrderMutasiId, OrderMutasiDate, OrderMutasiState,
+                OrderMutasiId, OrderMutasiDate, State,
                 LayananOrderId, LayananOrderName, 
                 LayananTujuanId, LayananTujuanName,
                 OrderNote,
