@@ -41,7 +41,7 @@ public record OrderMutasiDto(
         return result;
     }
 
-    public OrderMutasiModel ToModel(IEnumerable<OrderMutasiBrgModel> listBrg)
+    public OrderMutasiModel ToModel(IEnumerable<OrderMutasiItemModel> listBrg)
     {
         var auditTrail = AuditTrailType.Create(UserCreateId, TglJamCreate);
         auditTrail.Modif(UserModifyId, TglJamModify);

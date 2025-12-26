@@ -3,10 +3,10 @@ using Farinv.Domain.Shared.Helpers;
 
 namespace Farinv.Domain.InventoryContext.MutasiFeature;
 
-public class OrderMutasiBrgModel
+public class OrderMutasiItemModel
 {
     #region CREATION
-    public OrderMutasiBrgModel(int noUrut, BrgReff brg, decimal qty, SatuanType satuan)
+    public OrderMutasiItemModel(int noUrut, BrgReff brg, decimal qty, SatuanType satuan)
     {
         NoUrut = noUrut;
         Brg = brg;
@@ -16,7 +16,7 @@ public class OrderMutasiBrgModel
     #endregion
 
     #region PROPERTIES
-    public int NoUrut { get; private set; }
+    public int NoUrut { get; internal set; }
     public BrgReff Brg { get; private set; }
     public decimal Qty { get; private set; }
     public SatuanType Satuan { get; private set; }
@@ -29,6 +29,14 @@ public class OrderMutasiBrgModel
             throw new DomainException("Qty harus lebih dari 0");
 
         Qty += qty;
+    }
+
+    internal void SetQty(decimal qty)
+    {
+        if (qty <= 0)
+            throw new DomainException("Qty harus lebih dari 0");
+
+        Qty = qty;
     }
     #endregion
 }

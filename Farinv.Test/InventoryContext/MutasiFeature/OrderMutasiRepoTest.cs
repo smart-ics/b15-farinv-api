@@ -113,7 +113,7 @@ public class OrderMutasiRepoTest
         // Assert
         actual.HasValue.Should().BeTrue();
         actual.Value.OrderMutasiId.Should().Be("OM001");
-        actual.Value.ListBrg.Should().HaveCount(1);
+        actual.Value.ListItem.Should().HaveCount(1);
     }
 
     [Fact]
@@ -185,7 +185,7 @@ public class OrderMutasiRepoTest
     {
         var brg = new BrgReff("B001", "Obat A");
         var satuan = new SatuanType("S001", "Buah");
-        var item = new OrderMutasiBrgModel(1, brg, 10, satuan);
+        var item = new OrderMutasiItemModel(1, brg, 10, satuan);
         var audit = AuditTrailType.Create("U001", new DateTime(2025, 12, 26));
 
         return new OrderMutasiModel(
@@ -196,7 +196,7 @@ public class OrderMutasiRepoTest
             new LayananReff("L002", "Rawat Jalan"),
             "Note",
             audit,
-            new List<OrderMutasiBrgModel> { item }
+            new List<OrderMutasiItemModel> { item }
         );
     }
 }

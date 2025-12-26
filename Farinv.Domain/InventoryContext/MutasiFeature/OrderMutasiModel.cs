@@ -8,12 +8,12 @@ namespace Farinv.Domain.InventoryContext.MutasiFeature;
 
 public class OrderMutasiModel : IOrderMutasiKey
 {
-    private readonly List<OrderMutasiBrgModel> _listBrg;
+    private readonly List<OrderMutasiItemModel> _listItem;
 
     #region CREATION
     public OrderMutasiModel(string orderMutasiId, DateTime orderMutasiDate, OrderMutasiStateEnum state,
         LayananReff layananOrder, LayananReff layananTujuan, string orderNote, AuditTrailType auditTrail, 
-        IEnumerable<OrderMutasiBrgModel> listBrg)
+        IEnumerable<OrderMutasiItemModel> listItem)
     {
         OrderMutasiId = orderMutasiId;
         OrderMutasiDate = orderMutasiDate;
@@ -22,7 +22,7 @@ public class OrderMutasiModel : IOrderMutasiKey
         LayananTujuan = layananTujuan;
         OrderNote = orderNote;
         AuditTrail = auditTrail;
-        _listBrg = listBrg?.ToList() ?? [];
+        _listItem = listItem?.ToList() ?? [];
     }
 
     public static OrderMutasiModel Default() 
@@ -38,7 +38,7 @@ public class OrderMutasiModel : IOrderMutasiKey
         LayananType layananTujuan,
         string orderNote,
         string userId,
-        IEnumerable<OrderMutasiBrgModel> listBrg)
+        IEnumerable<OrderMutasiItemModel> listBrg)
     {
         Guard.Against.Null(layananOrder, nameof(layananOrder));
         Guard.Against.Null(layananTujuan, nameof(layananTujuan));
@@ -64,31 +64,35 @@ public class OrderMutasiModel : IOrderMutasiKey
     public string OrderNote { get; private set; }
     public AuditTrailType AuditTrail { get; init; }
 
-    public IReadOnlyCollection<OrderMutasiBrgModel> ListBrg => _listBrg;
+    public IReadOnlyCollection<OrderMutasiItemModel> ListItem => _listItem;
 
     #endregion
 
     #region BEHAVIOR
-    public void AddItem(OrderMutasiBrgModel item)
+    public void AddItem(OrderMutasiItemModel item)
     {
         GuardDraft();
         if (item.Qty <= 0)
             throw new DomainException($"Qty invalid");
 
-        var existing = _listBrg.FirstOrDefault(x => x.Brg.BrgId == item.Brg.BrgId);
+        var existing = _listItem.FirstOrDefault(x => x.Brg.BrgId == item.Brg.BrgId);
         if (existing is not null)
         {
             existing.AddQty(item.Qty);
             return;
         }
 
-        _listBrg.Add(item);
+        item.NoUrut = _listItem.Count + 1;
+        _listItem.Add(item);
     }
 
     public void RemoveItem(IBrgKey key)
     {
         GuardDraft();
-        _listBrg.RemoveAll(x => x.Brg.BrgId == key.BrgId);
+        _listItem.RemoveAll(x => x.Brg.BrgId == key.BrgId);
+
+        for (int i = 0; i < _listItem.Count; i++)
+            _listItem[i].NoUrut = i + 1;
     }
 
     public void Submit(string note)
@@ -128,7 +132,7 @@ public class OrderMutasiModel : IOrderMutasiKey
 
     private void GuardHasItem()
     {
-        if (_listBrg.Count == 0)
+        if (_listItem.Count == 0)
             throw new DomainException("Order Mutasi harus memiliki minimal 1 item");
     }
 

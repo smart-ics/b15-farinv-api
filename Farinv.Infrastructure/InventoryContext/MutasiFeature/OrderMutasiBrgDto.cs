@@ -12,18 +12,18 @@ public record OrderMutasiBrgDto(
     string SatuanId,
     string SatuanName)
 {
-    public static OrderMutasiBrgDto FromModel(string orderMutasiId, OrderMutasiBrgModel model)
+    public static OrderMutasiBrgDto FromModel(string orderMutasiId, OrderMutasiItemModel model)
     {
         var result = new OrderMutasiBrgDto(orderMutasiId, model.NoUrut, 
             model.Brg.BrgId, model.Brg.BrgName, model.Qty, model.Satuan.SatuanId, model.Satuan.SatuanName );
         return result;
     }
 
-    public OrderMutasiBrgModel ToModel()
+    public OrderMutasiItemModel ToModel()
     {
         var brg = new BrgReff(BrgId, BrgName);
         var satuan = new SatuanType(SatuanId, SatuanName);
-        var result = new OrderMutasiBrgModel(NoUrut, brg, Qty, satuan);
+        var result = new OrderMutasiItemModel(NoUrut, brg, Qty, satuan);
         return result;
     }
 }

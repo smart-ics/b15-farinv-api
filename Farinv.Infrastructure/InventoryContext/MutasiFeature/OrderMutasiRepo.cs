@@ -50,7 +50,7 @@ public class OrderMutasiRepo : IOrderMutasiRepo
                 onNone: () => _orderMutasiDal.Insert(dto)
             );
 
-        var listBrgDto = model.ListBrg
+        var listBrgDto = model.ListItem
             .Select(x => OrderMutasiBrgDto.FromModel(model.OrderMutasiId, x));
         _orderMutasiBrgDal.Delete(model);
         _orderMutasiBrgDal.Insert(listBrgDto);
