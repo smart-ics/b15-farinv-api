@@ -1,4 +1,5 @@
-﻿using Farinv.Domain.BrgContext.BrgFeature;
+﻿using Ardalis.GuardClauses;
+using Farinv.Domain.BrgContext.BrgFeature;
 using Farinv.Domain.InventoryContext.StokFeature;
 using Farinv.Domain.Shared.Helpers;
 using Farinv.Domain.Shared.Helpers.CommonValueObjects;
@@ -31,6 +32,25 @@ public class OrderMutasiModel : IOrderMutasiKey
     public static IOrderMutasiKey Key(string id)
         => new OrderMutasiModel(id, new DateTime(300, 1, 1), OrderMutasiStateEnum.Draft,
             LayananType.Default.ToReff(), LayananType.Default.ToReff(), "-", AuditTrailType.Default, []);
+
+    public static OrderMutasiModel Create(
+        LayananType layananOrder,
+        LayananType layananTujuan,
+        string orderNote,
+        string userId,
+        IEnumerable<OrderMutasiBrgModel> listBrg)
+    {
+        Guard.Against.Null(layananOrder, nameof(layananOrder));
+        Guard.Against.Null(layananTujuan, nameof(layananTujuan));
+        Guard.Against.Null(listBrg, nameof(listBrg));
+
+        var id = Ulid.NewUlid().ToString();
+        var auditTrail = AuditTrailType.Create(userId, DateTime.Now);
+
+        var result = new OrderMutasiModel(id, auditTrail.Created.Timestamp, OrderMutasiStateEnum.Draft,
+            layananOrder.ToReff(), layananTujuan.ToReff(), orderNote, auditTrail, listBrg);
+        return result;
+    }
     #endregion
 
     #region PROPERTIES
@@ -43,6 +63,9 @@ public class OrderMutasiModel : IOrderMutasiKey
 
     public string OrderNote { get; private set; }
     public AuditTrailType AuditTrail { get; init; }
+
+    public IReadOnlyCollection<OrderMutasiBrgModel> ListBrg => _listBrg;
+
     #endregion
 
     #region BEHAVIOR
@@ -121,3 +144,9 @@ public interface IOrderMutasiKey
 {
     string OrderMutasiId { get; }
 }
+
+public record OrderMutasiHeaderView(
+    string OrderMutasiId,
+    DateTime OrderMutasiDate,
+    OrderMutasiStateEnum State,
+    LayananReff LayananOrder) : IOrderMutasiKey;
