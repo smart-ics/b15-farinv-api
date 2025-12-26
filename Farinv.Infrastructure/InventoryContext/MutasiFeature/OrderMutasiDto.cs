@@ -22,7 +22,7 @@ public record OrderMutasiDto(
 {
     public static OrderMutasiDto FromModel(OrderMutasiModel model)
     {
-        return new OrderMutasiDto(
+        var result = new OrderMutasiDto(
             model.OrderMutasiId,
             model.OrderMutasiDate,
             model.State,
@@ -38,6 +38,7 @@ public record OrderMutasiDto(
             model.AuditTrail.Voided.UserId,
             model.AuditTrail.Voided.Timestamp
         );
+        return result;
     }
 
     public OrderMutasiModel ToModel(IEnumerable<OrderMutasiBrgModel> listBrg)
@@ -46,7 +47,7 @@ public record OrderMutasiDto(
         auditTrail.Modif(UserModifyId, TglJamModify);
         auditTrail.Batal(UserVoidId, TglJamVoid);
 
-        return new OrderMutasiModel(
+        var result = new OrderMutasiModel(
             OrderMutasiId,
             OrderMutasiDate,
             State,
@@ -55,5 +56,6 @@ public record OrderMutasiDto(
             OrderNote,
             auditTrail,
             listBrg?.ToList() ?? []);
+        return result;
     }
 }
