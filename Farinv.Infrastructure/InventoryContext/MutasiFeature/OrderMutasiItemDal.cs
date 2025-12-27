@@ -9,22 +9,22 @@ using System.Data.SqlClient;
 namespace Farinv.Infrastructure.InventoryContext.MutasiFeature;
 
 public interface IOrderMutasiBrgDal :
-    IInsertBulk<OrderMutasiBrgDto>,
+    IInsertBulk<OrderMutasiItemDto>,
     IDelete<IOrderMutasiKey>,
-    IListData<OrderMutasiBrgDto, IOrderMutasiKey>
+    IListData<OrderMutasiItemDto, IOrderMutasiKey>
 {
 }
 
-public class OrderMutasiBrgDal : IOrderMutasiBrgDal
+public class OrderMutasiItemDal : IOrderMutasiBrgDal
 {
     private readonly DatabaseOptions _opt;
 
-    public OrderMutasiBrgDal(IOptions<DatabaseOptions> opt)
+    public OrderMutasiItemDal(IOptions<DatabaseOptions> opt)
     {
         _opt = opt.Value;
     }
 
-    public void Insert(IEnumerable<OrderMutasiBrgDto> listModel)
+    public void Insert(IEnumerable<OrderMutasiItemDto> listModel)
     {
         var list = listModel.ToList();
 
@@ -58,7 +58,7 @@ public class OrderMutasiBrgDal : IOrderMutasiBrgDal
         conn.Execute(sql, dp);
     }
 
-    public IEnumerable<OrderMutasiBrgDto> ListData(IOrderMutasiKey filter)
+    public IEnumerable<OrderMutasiItemDto> ListData(IOrderMutasiKey filter)
     {
         const string sql = """
             SELECT
@@ -75,6 +75,6 @@ public class OrderMutasiBrgDal : IOrderMutasiBrgDal
         dp.AddParam("@OrderMutasiId", filter.OrderMutasiId, SqlDbType.VarChar);
 
         using var conn = new SqlConnection(ConnStringHelper.Get(_opt));
-        return conn.Read<OrderMutasiBrgDto>(sql, dp);
+        return conn.Read<OrderMutasiItemDto>(sql, dp);
     }
 }

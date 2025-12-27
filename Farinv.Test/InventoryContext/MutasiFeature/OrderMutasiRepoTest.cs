@@ -91,9 +91,9 @@ public class OrderMutasiRepoTest
             TglJamVoid: new DateTime(2025, 12, 26)
         );
 
-        var detailDtos = new List<OrderMutasiBrgDto>
+        var detailDtos = new List<OrderMutasiItemDto>
         {
-            new OrderMutasiBrgDto(
+            new OrderMutasiItemDto(
                 OrderMutasiId: "OM001",
                 NoUrut: 1,
                 BrgId: "B001",
@@ -145,7 +145,7 @@ public class OrderMutasiRepoTest
         _mockHeaderDal.Verify(x => x.Insert(It.IsAny<OrderMutasiDto>()), Times.Once);
         _mockHeaderDal.Verify(x => x.Update(It.IsAny<OrderMutasiDto>()), Times.Never);
         _mockDetailDal.Verify(x => x.Delete(model), Times.Once);
-        _mockDetailDal.Verify(x => x.Insert(It.IsAny<IEnumerable<OrderMutasiBrgDto>>()), Times.Once);
+        _mockDetailDal.Verify(x => x.Insert(It.IsAny<IEnumerable<OrderMutasiItemDto>>()), Times.Once);
     }
 
     [Fact]
@@ -178,14 +178,14 @@ public class OrderMutasiRepoTest
         _mockHeaderDal.Verify(x => x.Update(It.IsAny<OrderMutasiDto>()), Times.Once);
         _mockHeaderDal.Verify(x => x.Insert(It.IsAny<OrderMutasiDto>()), Times.Never);
         _mockDetailDal.Verify(x => x.Delete(model), Times.Once);
-        _mockDetailDal.Verify(x => x.Insert(It.IsAny<IEnumerable<OrderMutasiBrgDto>>()), Times.Once);
+        _mockDetailDal.Verify(x => x.Insert(It.IsAny<IEnumerable<OrderMutasiItemDto>>()), Times.Once);
     }
 
     private OrderMutasiModel CreateFakeModel(bool isNew)
     {
         var brg = new BrgReff("B001", "Obat A");
         var satuan = new SatuanType("S001", "Buah");
-        var item = new OrderMutasiItemModel(1, brg, 10, satuan);
+        var item = new OrderMutasiItemModel(brg, 10, satuan);
         var audit = AuditTrailType.Create("U001", new DateTime(2025, 12, 26));
 
         return new OrderMutasiModel(

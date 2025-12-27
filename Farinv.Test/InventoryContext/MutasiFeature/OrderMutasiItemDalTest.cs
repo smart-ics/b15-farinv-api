@@ -6,15 +6,15 @@ using Nuna.Lib.TransactionHelper;
 
 namespace Farinv.Test.InventoryContext.MutasiFeature;
 
-public class OrderMutasiBrgDalTest
+public class OrderMutasiItemDalTest
 {
-    private readonly OrderMutasiBrgDal _sut = new(ConnStringHelper.GetTestEnv());
+    private readonly OrderMutasiItemDal _sut = new(ConnStringHelper.GetTestEnv());
 
-    private IEnumerable<OrderMutasiBrgDto> FakerList()
+    private IEnumerable<OrderMutasiItemDto> FakerList()
     {
-        return new List<OrderMutasiBrgDto>
+        return new List<OrderMutasiItemDto>
         {
-            new OrderMutasiBrgDto(
+            new OrderMutasiItemDto(
                 OrderMutasiId: "OM001",
                 NoUrut: 1,
                 BrgId: "B001",
@@ -23,7 +23,7 @@ public class OrderMutasiBrgDalTest
                 SatuanId: "S001",
                 SatuanName: "Buah"
             ),
-            new OrderMutasiBrgDto(
+            new OrderMutasiItemDto(
                 OrderMutasiId: "OM001",
                 NoUrut: 2,
                 BrgId: "B002",

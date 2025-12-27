@@ -3,7 +3,7 @@ using Farinv.Domain.InventoryContext.MutasiFeature;
 
 namespace Farinv.Infrastructure.InventoryContext.MutasiFeature;
 
-public record OrderMutasiBrgDto(
+public record OrderMutasiItemDto(
     string OrderMutasiId,
     int NoUrut,
     string BrgId,
@@ -12,9 +12,9 @@ public record OrderMutasiBrgDto(
     string SatuanId,
     string SatuanName)
 {
-    public static OrderMutasiBrgDto FromModel(string orderMutasiId, OrderMutasiItemModel model)
+    public static OrderMutasiItemDto FromModel(string orderMutasiId, OrderMutasiItemModel model)
     {
-        var result = new OrderMutasiBrgDto(orderMutasiId, model.NoUrut, 
+        var result = new OrderMutasiItemDto(orderMutasiId, model.NoUrut, 
             model.Brg.BrgId, model.Brg.BrgName, model.Qty, model.Satuan.SatuanId, model.Satuan.SatuanName );
         return result;
     }
@@ -23,7 +23,7 @@ public record OrderMutasiBrgDto(
     {
         var brg = new BrgReff(BrgId, BrgName);
         var satuan = new SatuanType(SatuanId, SatuanName);
-        var result = new OrderMutasiItemModel(NoUrut, brg, Qty, satuan);
+        var result = new OrderMutasiItemModel(brg, Qty, satuan);
         return result;
     }
 }

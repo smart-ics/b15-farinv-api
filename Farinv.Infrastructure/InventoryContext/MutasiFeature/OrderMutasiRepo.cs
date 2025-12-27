@@ -35,9 +35,9 @@ public class OrderMutasiRepo : IOrderMutasiRepo
     public MayBe<OrderMutasiModel> LoadEntity(IOrderMutasiKey key)
     {
         var orderMutasi = _orderMutasiDal.GetData(key);
-        var listBrgDto = _orderMutasiBrgDal.ListData(key)?.ToList() ?? [];
-        var listBrg = listBrgDto.Select(x => x.ToModel());
-        var model = orderMutasi?.ToModel(listBrg);
+        var listItemDto = _orderMutasiBrgDal.ListData(key)?.ToList() ?? [];
+        var listItem = listItemDto.Select(x => x.ToModel());
+        var model = orderMutasi?.ToModel(listItem);
         return MayBe.From(model!);
     }
 
@@ -51,7 +51,7 @@ public class OrderMutasiRepo : IOrderMutasiRepo
             );
 
         var listBrgDto = model.ListItem
-            .Select(x => OrderMutasiBrgDto.FromModel(model.OrderMutasiId, x));
+            .Select(x => OrderMutasiItemDto.FromModel(model.OrderMutasiId, x));
         _orderMutasiBrgDal.Delete(model);
         _orderMutasiBrgDal.Insert(listBrgDto);
     }

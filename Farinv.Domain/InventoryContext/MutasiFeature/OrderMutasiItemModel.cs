@@ -6,9 +6,8 @@ namespace Farinv.Domain.InventoryContext.MutasiFeature;
 public class OrderMutasiItemModel
 {
     #region CREATION
-    public OrderMutasiItemModel(int noUrut, BrgReff brg, decimal qty, SatuanType satuan)
+    public OrderMutasiItemModel(BrgReff brg, decimal qty, SatuanType satuan)
     {
-        NoUrut = noUrut;
         Brg = brg;
         Qty = qty;
         Satuan = satuan;
