@@ -91,7 +91,7 @@
     <None Include="BrgContext\StandardFeature\Kfa\FARPU_KfaReplacement.sql" />
     <None Include="BrgContext\BrgFeature\tb_satuan.sql" />
     <Build Include="InventoryContext\MutasiFeature\FARIN_OrderMutasi.sql" />
-    <Build Include="InventoryContext\MutasiFeature\FARIN_OrderMutasiBrg.sql" />
+    <Build Include="InventoryContext\MutasiFeature\FARIN_OrderMutasiItem.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="BrgContext\StandardFeature\tb_gol_terapi.sql" />

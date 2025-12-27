@@ -16,7 +16,7 @@ public class AuditTrailType
 
     public void Batal(string userId, DateTime timestamp)
     {
-        if (userId.Length == 0 || timestamp.Date == new DateTime(3000, 1, 1))
+        if (userId.Length == 0)
             throw new ArgumentException("VoidDate-UserId invalid");
         
         Voided = new AuditInfoType(userId, timestamp);
@@ -24,7 +24,7 @@ public class AuditTrailType
     }
     public void Modif(string userId, DateTime timestamp)
     {
-        if (userId.Length == 0 || timestamp.Date == new DateTime(3000, 1, 1))
+        if (userId.Length == 0)
             throw new ArgumentException("ModifDate-UserId invalid");
 
         Modified = new AuditInfoType(userId, timestamp);
@@ -43,5 +43,5 @@ public record AuditInfoType(string UserId, DateTime Timestamp)
         this(userId, DateTime.ParseExact($"{tgl} {jam}", "yyyy-MM-dd HH:mm:ss", null))
     {
     }
-    public static AuditInfoType Default => new("", new DateTime(3000,1,1));
+    public static AuditInfoType Default => new("-", new DateTime(3000,1,1));
 };

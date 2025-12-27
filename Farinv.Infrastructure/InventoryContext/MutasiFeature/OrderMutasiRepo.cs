@@ -26,9 +26,11 @@ public class OrderMutasiRepo : IOrderMutasiRepo
 
     public IEnumerable<OrderMutasiHeaderView> ListData(Periode filter)
     {
-        var listDto = _orderMutasiDal.ListData(filter);
-        var result = listDto.Select(x => new OrderMutasiHeaderView(x.OrderMutasiId, x.OrderMutasiDate, 
-            x.State, new LayananReff(x.LayananOrderId, x.LayananOrderName)));
+        var listDto = _orderMutasiDal.ListData(filter) ?? [];
+        var result = listDto.Select(x => 
+            new OrderMutasiHeaderView(
+                x.OrderMutasiId, x.OrderMutasiDate, x.State, 
+                new LayananReff(x.LayananOrderId, x.LayananOrderName)));
         return result;
     }
 

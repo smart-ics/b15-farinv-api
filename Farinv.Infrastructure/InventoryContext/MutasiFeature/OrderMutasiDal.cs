@@ -154,7 +154,7 @@ public class OrderMutasiDal : IOrderMutasiDal
             FROM 
                 FARIN_OrderMutasi
             WHERE 
-                AntrianDate BETWEEN @Tgl1 AND @Tgl2
+                OrderMutasiDate BETWEEN @Tgl1 AND @Tgl2
             """;
         var dp = new DynamicParameters();
         dp.AddParam("@Tgl1", filter.Tgl1, SqlDbType.DateTime);

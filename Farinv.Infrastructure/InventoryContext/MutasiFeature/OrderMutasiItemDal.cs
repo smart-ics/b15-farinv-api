@@ -41,14 +41,14 @@ public class OrderMutasiItemDal : IOrderMutasiBrgDal
         bcp.AddMap("SatuanName", "SatuanName");
 
         bcp.BatchSize = list.Count;
-        bcp.DestinationTableName = "FARIN_OrderMutasiBrg";
+        bcp.DestinationTableName = "FARIN_OrderMutasiItem";
         bcp.WriteToServer(list.AsDataTable());
     }
 
     public void Delete(IOrderMutasiKey key)
     {
         const string sql = """
-            DELETE FROM FARIN_OrderMutasiBrg
+            DELETE FROM FARIN_OrderMutasiItem
             WHERE OrderMutasiId = @OrderMutasiId;
             """;
         var dp = new DynamicParameters();
@@ -66,7 +66,7 @@ public class OrderMutasiItemDal : IOrderMutasiBrgDal
                 BrgId, BrgName, Qty,
                 SatuanId, SatuanName
             FROM
-                FARIN_OrderMutasiBrg
+                FARIN_OrderMutasiItem
             WHERE
                OrderMutasiId = @OrderMutasiId 
             """;

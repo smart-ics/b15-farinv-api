@@ -82,7 +82,9 @@ public class OrderMutasiModel : IOrderMutasiKey
             return;
         }
 
-        item.NoUrut = _listItem.Count + 1;
+        var lastNoUrut = _listItem.Any() ? _listItem.Max(x => x.NoUrut) : 0;
+        item.SetNoUrut(lastNoUrut + 1);
+
         _listItem.Add(item);
     }
 
@@ -122,6 +124,32 @@ public class OrderMutasiModel : IOrderMutasiKey
         State = OrderMutasiStateEnum.Completed;
     }
 
+    public void ReorderItem(string brgId, int newNoUrut)
+    {
+        GuardDraft();
+
+        var item = _listItem.FirstOrDefault(x => x.Brg.BrgId == brgId)
+            ?? throw new DomainException("Item not found");
+
+        if (newNoUrut < 1 || newNoUrut > _listItem.Count)
+            throw new DomainException("NoUrut out of range");
+
+        // geser item lain
+        foreach (var i in _listItem)
+        {
+            if (i == item) continue;
+
+            if (newNoUrut > item.NoUrut &&
+                i.NoUrut > item.NoUrut && i.NoUrut <= newNoUrut)
+                i.SetNoUrut(i.NoUrut - 1);
+
+            if (newNoUrut < item.NoUrut &&
+                i.NoUrut < item.NoUrut && i.NoUrut >= newNoUrut)
+                i.SetNoUrut(i.NoUrut + 1);
+        }
+
+        item.SetNoUrut(newNoUrut);
+    }
     #endregion
 
     #region GUARD

@@ -37,5 +37,12 @@ public class OrderMutasiItemModel
 
         Qty = qty;
     }
+    internal void SetNoUrut(int noUrut)
+    {
+        if (noUrut <= 0)
+            throw new DomainException("NoUrut invalid");
+
+        NoUrut = noUrut;
+    }
     #endregion
 }
