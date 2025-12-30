@@ -69,6 +69,8 @@ public class OrderMutasiItemDal : IOrderMutasiBrgDal
                 FARIN_OrderMutasiItem
             WHERE
                OrderMutasiId = @OrderMutasiId 
+            ORDER BY
+                NoUrut
             """;
 
         var dp = new DynamicParameters();

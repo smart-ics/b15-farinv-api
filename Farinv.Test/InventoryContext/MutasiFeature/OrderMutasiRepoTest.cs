@@ -185,7 +185,7 @@ public class OrderMutasiRepoTest
     {
         var brg = new BrgReff("B001", "Obat A");
         var satuan = new SatuanType("S001", "Buah");
-        var item = new OrderMutasiItemModel(brg, 10, satuan);
+        var item = new OrderMutasiItemModel(1, brg, 10, satuan);
         var audit = AuditTrailType.Create("U001", new DateTime(2025, 12, 26));
 
         return new OrderMutasiModel(

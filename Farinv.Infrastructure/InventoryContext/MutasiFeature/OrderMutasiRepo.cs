@@ -9,18 +9,18 @@ namespace Farinv.Infrastructure.InventoryContext.MutasiFeature;
 public class OrderMutasiRepo : IOrderMutasiRepo
 {
     private readonly IOrderMutasiDal _orderMutasiDal;
-    private readonly IOrderMutasiBrgDal _orderMutasiBrgDal;
+    private readonly IOrderMutasiBrgDal _orderMutasiItemDal;
 
     public OrderMutasiRepo(IOrderMutasiDal orderMutasiDal,
-        IOrderMutasiBrgDal orderMutasiBrgDal)
+        IOrderMutasiBrgDal orderMutasiItemDal)
     {
         _orderMutasiDal = orderMutasiDal;
-        _orderMutasiBrgDal = orderMutasiBrgDal;
+        _orderMutasiItemDal = orderMutasiItemDal;
     }
 
     public void DeleteEntity(IOrderMutasiKey key)
     {
-        _orderMutasiBrgDal.Delete(key);
+        _orderMutasiItemDal.Delete(key);
         _orderMutasiDal.Delete(key);
     }
 
@@ -37,7 +37,7 @@ public class OrderMutasiRepo : IOrderMutasiRepo
     public MayBe<OrderMutasiModel> LoadEntity(IOrderMutasiKey key)
     {
         var orderMutasi = _orderMutasiDal.GetData(key);
-        var listItemDto = _orderMutasiBrgDal.ListData(key)?.ToList() ?? [];
+        var listItemDto = _orderMutasiItemDal.ListData(key)?.ToList() ?? [];
         var listItem = listItemDto.Select(x => x.ToModel());
         var model = orderMutasi?.ToModel(listItem);
         return MayBe.From(model!);
@@ -54,7 +54,7 @@ public class OrderMutasiRepo : IOrderMutasiRepo
 
         var listBrgDto = model.ListItem
             .Select(x => OrderMutasiItemDto.FromModel(model.OrderMutasiId, x));
-        _orderMutasiBrgDal.Delete(model);
-        _orderMutasiBrgDal.Insert(listBrgDto);
+        _orderMutasiItemDal.Delete(model);
+        _orderMutasiItemDal.Insert(listBrgDto);
     }
 }

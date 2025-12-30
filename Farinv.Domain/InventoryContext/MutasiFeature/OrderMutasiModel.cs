@@ -82,19 +82,22 @@ public class OrderMutasiModel : IOrderMutasiKey
             return;
         }
 
-        var lastNoUrut = _listItem.Any() ? _listItem.Max(x => x.NoUrut) : 0;
-        item.SetNoUrut(lastNoUrut + 1);
-
         _listItem.Add(item);
+        Reorder();
     }
 
     public void RemoveItem(IBrgKey key)
     {
         GuardDraft();
         _listItem.RemoveAll(x => x.Brg.BrgId == key.BrgId);
+        Reorder();
+    }
 
-        for (int i = 0; i < _listItem.Count; i++)
-            _listItem[i].NoUrut = i + 1;
+    internal void Reorder()
+    {
+        var i = 1;
+        foreach (var item in _listItem)
+            item.SetNoUrut(i++);
     }
 
     public void Submit(string note)
@@ -122,33 +125,6 @@ public class OrderMutasiModel : IOrderMutasiKey
     {
         GuardStatus(OrderMutasiStateEnum.Approved);
         State = OrderMutasiStateEnum.Completed;
-    }
-
-    public void ReorderItem(string brgId, int newNoUrut)
-    {
-        GuardDraft();
-
-        var item = _listItem.FirstOrDefault(x => x.Brg.BrgId == brgId)
-            ?? throw new DomainException("Item not found");
-
-        if (newNoUrut < 1 || newNoUrut > _listItem.Count)
-            throw new DomainException("NoUrut out of range");
-
-        // geser item lain
-        foreach (var i in _listItem)
-        {
-            if (i == item) continue;
-
-            if (newNoUrut > item.NoUrut &&
-                i.NoUrut > item.NoUrut && i.NoUrut <= newNoUrut)
-                i.SetNoUrut(i.NoUrut - 1);
-
-            if (newNoUrut < item.NoUrut &&
-                i.NoUrut < item.NoUrut && i.NoUrut >= newNoUrut)
-                i.SetNoUrut(i.NoUrut + 1);
-        }
-
-        item.SetNoUrut(newNoUrut);
     }
     #endregion
 
