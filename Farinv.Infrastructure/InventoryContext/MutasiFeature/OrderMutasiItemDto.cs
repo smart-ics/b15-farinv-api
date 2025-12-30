@@ -23,7 +23,7 @@ public record OrderMutasiItemDto(
     {
         var brg = new BrgReff(BrgId, BrgName);
         var satuan = new SatuanType(SatuanId, SatuanName);
-        var result = new OrderMutasiItemModel(NoUrut, brg, Qty, satuan);
+        var result = new OrderMutasiItemModel(brg, Qty, satuan);
         return result;
     }
 }

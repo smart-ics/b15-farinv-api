@@ -22,7 +22,9 @@ public class OrderMutasiModel : IOrderMutasiKey
         LayananTujuan = layananTujuan;
         OrderNote = orderNote;
         AuditTrail = auditTrail;
+
         _listItem = listItem?.ToList() ?? [];
+        Reorder();
     }
 
     public static OrderMutasiModel Default() 
@@ -99,6 +101,25 @@ public class OrderMutasiModel : IOrderMutasiKey
         foreach (var item in _listItem)
             item.SetNoUrut(i++);
     }
+
+    public void MoveItem(IBrgKey key, int targetNoUrut)
+    {
+        GuardDraft();
+
+        if (targetNoUrut <= 0)
+            throw new DomainException("NoUrut tidak valid");
+
+        var item = _listItem.FirstOrDefault(x => x.Brg.BrgId == key.BrgId) 
+            ?? throw new DomainException("Item tidak ditemukan");
+        if (targetNoUrut > _listItem.Count)
+            targetNoUrut = _listItem.Count;
+
+        _listItem.Remove(item);
+        _listItem.Insert(targetNoUrut - 1, item);
+
+        Reorder();
+    }
+
 
     public void Submit(string note)
     {

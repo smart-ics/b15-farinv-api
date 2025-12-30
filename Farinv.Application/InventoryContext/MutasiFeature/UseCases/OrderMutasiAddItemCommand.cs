@@ -40,7 +40,7 @@ public class OrderMutasiAddItemHandler : IRequestHandler<OrderMutasiAddItemComma
         var order = GetOrderDraft(request);
         var brg = GetBrg(request);
         var satuan = GetSatuan(request);
-        var item = new OrderMutasiItemModel(1, brg, request.Qty, satuan);
+        var item = new OrderMutasiItemModel(brg, request.Qty, satuan);
         order.AddItem(item);
 
         // WRITE
