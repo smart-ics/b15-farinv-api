@@ -31,4 +31,14 @@ public class OrderMutasiController : ControllerBase
         await _mediator.Send(cmd);
         return Ok(new JSendOk("Done"));
     }
+
+    [HttpGet]
+    [Route("{id}")]
+    public async Task<IActionResult> GetOrder(string id)
+    {
+        var query = new OrderMutasiGetQuery(id);
+        var response = await _mediator.Send(query);
+        return Ok(new JSendOk(response));
+    }
+
 }
