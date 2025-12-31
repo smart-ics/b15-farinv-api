@@ -78,7 +78,7 @@ public class OrderMutasiAddItemHandler : IRequestHandler<OrderMutasiAddItemComma
         var key = OrderMutasiModel.Key(header.OrderMutasiId);
         var maybe = _orderMutasiRepo.LoadEntity(key);
         if (!maybe.HasValue)
-            throw new InvalidOperationException($"OrderMutasiId {header.OrderMutasiId} not found");
+            throw new ArgumentException($"OrderMutasiId {header.OrderMutasiId} not found");
 
         return maybe.Value;
     }

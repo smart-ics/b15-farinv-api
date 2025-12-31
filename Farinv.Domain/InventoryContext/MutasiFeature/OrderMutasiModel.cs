@@ -28,11 +28,11 @@ public class OrderMutasiModel : IOrderMutasiKey
     }
 
     public static OrderMutasiModel Default() 
-        => new("-", new DateTime(300, 1, 1), OrderMutasiStateEnum.Draft,
+        => new("-", new DateTime(3000, 1, 1), OrderMutasiStateEnum.Draft,
             LayananType.Default.ToReff(), LayananType.Default.ToReff(), "-", AuditTrailType.Default, []);
 
     public static IOrderMutasiKey Key(string id)
-        => new OrderMutasiModel(id, new DateTime(300, 1, 1), OrderMutasiStateEnum.Draft,
+        => new OrderMutasiModel(id, new DateTime(3000, 1, 1), OrderMutasiStateEnum.Draft,
             LayananType.Default.ToReff(), LayananType.Default.ToReff(), "-", AuditTrailType.Default, []);
 
     public static OrderMutasiModel Create(

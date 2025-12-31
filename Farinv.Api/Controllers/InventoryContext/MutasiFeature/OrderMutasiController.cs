@@ -17,7 +17,7 @@ public class OrderMutasiController : ControllerBase
     }
 
     [HttpPost]
-    [Route("AddItem")]
+    [Route("addItem")]
     public async Task<IActionResult> AddItem(OrderMutasiAddItemCommand cmd)
     {
         await _mediator.Send(cmd);
@@ -25,7 +25,7 @@ public class OrderMutasiController : ControllerBase
     }
 
     [HttpPost]
-    [Route("Submit")]
+    [Route("submit")]
     public async Task<IActionResult> Submit(OrderMutasiSubmitCommand cmd)
     {
         await _mediator.Send(cmd);
@@ -41,4 +41,12 @@ public class OrderMutasiController : ControllerBase
         return Ok(new JSendOk(response));
     }
 
+    [HttpGet]
+    [Route("layananOrder/{id}/draft")]
+    public async Task<IActionResult> GetOrderDraft(string id)
+    {
+        var query = new OrderMutasiDraftStateGetQuery(id);
+        var response = await _mediator.Send(query);
+        return Ok(new JSendOk(response));
+    }
 }
