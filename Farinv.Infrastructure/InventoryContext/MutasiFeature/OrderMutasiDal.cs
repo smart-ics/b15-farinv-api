@@ -27,49 +27,42 @@ public class OrderMutasiDal : IOrderMutasiDal
         _opt = opt.Value;
     }
 
-    public void Insert(OrderMutasiDto model)
+    public void Insert(OrderMutasiDto dto)
     {
         const string sql = """
             INSERT INTO FARIN_OrderMutasi (
                 OrderMutasiId, OrderMutasiDate, State,
                 LayananOrderId, LayananOrderName, 
-                LayananTujuanId, LayananTujuanName,
-                OrderNote,
-                UserCreateId, TglJamCreate,
-                UserModifyId, TglJamModify,
-                UserVoidId, TglJamVoid
-            )
+                LayananTujuanId, LayananTujuanName, OrderNote,
+                CrtUser, CrtDate, UpdUser, UpdDate, VodUser, VodDate)
             VALUES (
                 @OrderMutasiId, @OrderMutasiDate, @State,
                 @LayananOrderId, @LayananOrderName, 
-                @LayananTujuanId, @LayananTujuanName,
-                @OrderNote,
-                @UserCreateId, @TglJamCreate,
-                @UserModifyId, @TglJamModify,
-                @UserVoidId, @TglJamVoid
+                @LayananTujuanId, @LayananTujuanName, @OrderNote,
+                @CrtUser, @CrtDate, @UpdUser, @UpdDate, @VodUser, @VodDate
             )
             """;
         var dp = new DynamicParameters();
-        dp.AddParam("@OrderMutasiId", model.OrderMutasiId, SqlDbType.VarChar);
-        dp.AddParam("@OrderMutasiDate", model.OrderMutasiDate, SqlDbType.DateTime);
-        dp.AddParam("@State", (int)model.State, SqlDbType.Int);
-        dp.AddParam("@LayananOrderId", model.LayananOrderId, SqlDbType.VarChar);
-        dp.AddParam("@LayananOrderName", model.LayananOrderName, SqlDbType.VarChar);
-        dp.AddParam("@LayananTujuanId", model.LayananTujuanId, SqlDbType.VarChar);
-        dp.AddParam("@LayananTujuanName", model.LayananTujuanName, SqlDbType.VarChar);
-        dp.AddParam("@OrderNote", model.OrderNote, SqlDbType.VarChar);
-        dp.AddParam("@UserCreateId", model.UserCreateId, SqlDbType.VarChar);
-        dp.AddParam("@TglJamCreate", model.TglJamCreate, SqlDbType.DateTime);
-        dp.AddParam("@UserModifyId", model.UserModifyId, SqlDbType.VarChar);
-        dp.AddParam("@TglJamModify", model.TglJamModify, SqlDbType.DateTime);
-        dp.AddParam("@UserVoidId", model.UserVoidId, SqlDbType.VarChar);
-        dp.AddParam("@TglJamVoid", model.TglJamVoid, SqlDbType.DateTime);
+        dp.AddParam("@OrderMutasiId", dto.OrderMutasiId, SqlDbType.VarChar);
+        dp.AddParam("@OrderMutasiDate", dto.OrderMutasiDate, SqlDbType.DateTime);
+        dp.AddParam("@State", (int)dto.State, SqlDbType.Int);
+        dp.AddParam("@LayananOrderId", dto.LayananOrderId, SqlDbType.VarChar);
+        dp.AddParam("@LayananOrderName", dto.LayananOrderName, SqlDbType.VarChar);
+        dp.AddParam("@LayananTujuanId", dto.LayananTujuanId, SqlDbType.VarChar);
+        dp.AddParam("@LayananTujuanName", dto.LayananTujuanName, SqlDbType.VarChar);
+        dp.AddParam("@OrderNote", dto.OrderNote, SqlDbType.VarChar);
+        dp.AddParam("@CrtUser", dto.CrtUser, SqlDbType.VarChar);
+        dp.AddParam("@CrtDate", dto.CrtDate, SqlDbType.DateTime);
+        dp.AddParam("@UpdUser", dto.UpdUser, SqlDbType.VarChar);
+        dp.AddParam("@UpdDate", dto.UpdDate, SqlDbType.DateTime);
+        dp.AddParam("@VodUser", dto.VodUser, SqlDbType.VarChar);
+        dp.AddParam("@VodDate", dto.VodDate, SqlDbType.DateTime);
 
         using var conn = new SqlConnection(ConnStringHelper.Get(_opt));
         conn.Execute(sql, dp);
     }
 
-    public void Update(OrderMutasiDto model)
+    public void Update(OrderMutasiDto dto)
     {
         const string sql = """
             UPDATE FARIN_OrderMutasi SET
@@ -80,26 +73,30 @@ public class OrderMutasiDal : IOrderMutasiDal
                 LayananTujuanId = @LayananTujuanId,
                 LayananTujuanName = @LayananTujuanName,
                 OrderNote = @OrderNote,
-                UserModifyId = @UserModifyId,
-                TglJamModify = @TglJamModify,
-                UserVoidId = @UserVoidId,
-                TglJamVoid = @TglJamVoid
+                CrtUser = @CrtUser,
+                CrtDate = @CrtDate,
+                UpdUser = @UpdUser,
+                UpdDate = @UpdDate,
+                VodUser = @VodUser,
+                VodDate = @VodDate
             WHERE 
                 OrderMutasiId = @OrderMutasiId
             """;
         var dp = new DynamicParameters();
-        dp.AddParam("@OrderMutasiId", model.OrderMutasiId, SqlDbType.VarChar);
-        dp.AddParam("@OrderMutasiDate", model.OrderMutasiDate, SqlDbType.DateTime);
-        dp.AddParam("@State", (int)model.State, SqlDbType.Int);
-        dp.AddParam("@LayananOrderId", model.LayananOrderId, SqlDbType.VarChar);
-        dp.AddParam("@LayananOrderName", model.LayananOrderName, SqlDbType.VarChar);
-        dp.AddParam("@LayananTujuanId", model.LayananTujuanId, SqlDbType.VarChar);
-        dp.AddParam("@LayananTujuanName", model.LayananTujuanName, SqlDbType.VarChar);
-        dp.AddParam("@OrderNote", model.OrderNote, SqlDbType.VarChar);
-        dp.AddParam("@UserModifyId", model.UserModifyId, SqlDbType.VarChar);
-        dp.AddParam("@TglJamModify", model.TglJamModify, SqlDbType.DateTime);
-        dp.AddParam("@UserVoidId", model.UserVoidId, SqlDbType.VarChar);
-        dp.AddParam("@TglJamVoid", model.TglJamVoid, SqlDbType.DateTime);
+        dp.AddParam("@OrderMutasiId", dto.OrderMutasiId, SqlDbType.VarChar);
+        dp.AddParam("@OrderMutasiDate", dto.OrderMutasiDate, SqlDbType.DateTime);
+        dp.AddParam("@State", (int)dto.State, SqlDbType.Int);
+        dp.AddParam("@LayananOrderId", dto.LayananOrderId, SqlDbType.VarChar);
+        dp.AddParam("@LayananOrderName", dto.LayananOrderName, SqlDbType.VarChar);
+        dp.AddParam("@LayananTujuanId", dto.LayananTujuanId, SqlDbType.VarChar);
+        dp.AddParam("@LayananTujuanName", dto.LayananTujuanName, SqlDbType.VarChar);
+        dp.AddParam("@OrderNote", dto.OrderNote, SqlDbType.VarChar);
+        dp.AddParam("@CrtUser", dto.CrtUser, SqlDbType.VarChar);
+        dp.AddParam("@CrtDate", dto.CrtDate, SqlDbType.DateTime);
+        dp.AddParam("@UpdUser", dto.UpdUser, SqlDbType.VarChar);
+        dp.AddParam("@UpdDate", dto.UpdDate, SqlDbType.DateTime);
+        dp.AddParam("@VodUser", dto.VodUser, SqlDbType.VarChar);
+        dp.AddParam("@VodDate", dto.VodDate, SqlDbType.DateTime);
 
         using var conn = new SqlConnection(ConnStringHelper.Get(_opt));
         conn.Execute(sql, dp);
@@ -123,11 +120,8 @@ public class OrderMutasiDal : IOrderMutasiDal
             SELECT 
                 OrderMutasiId, OrderMutasiDate, State,
                 LayananOrderId, LayananOrderName, 
-                LayananTujuanId, LayananTujuanName,
-                OrderNote,
-                UserCreateId, TglJamCreate,
-                UserModifyId, TglJamModify,
-                UserVoidId, TglJamVoid
+                LayananTujuanId, LayananTujuanName, OrderNote,
+                CrtUser, CrtDate, UpdUser, UpdDate, VodUser, VodDate
             FROM 
                 FARIN_OrderMutasi
             WHERE 
@@ -146,11 +140,8 @@ public class OrderMutasiDal : IOrderMutasiDal
             SELECT 
                 OrderMutasiId, OrderMutasiDate, State,
                 LayananOrderId, LayananOrderName, 
-                LayananTujuanId, LayananTujuanName,
-                OrderNote,
-                UserCreateId, TglJamCreate,
-                UserModifyId, TglJamModify,
-                UserVoidId, TglJamVoid
+                LayananTujuanId, LayananTujuanName, OrderNote,
+                CrtUser, CrtDate, UpdUser, UpdDate, VodUser, VodDate
             FROM 
                 FARIN_OrderMutasi
             WHERE 

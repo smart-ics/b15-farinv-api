@@ -21,12 +21,12 @@ public class OrderMutasiDalTest
             LayananTujuanId: "L002",
             LayananTujuanName: "Rawat Jalan",
             OrderNote: "Order untuk stok baru",
-            UserCreateId: "U001",
-            TglJamCreate: new DateTime(2025, 12, 26, 9, 0, 0),
-            UserModifyId: "U001",
-            TglJamModify: new DateTime(2025, 12, 26, 10, 0, 0),
-            UserVoidId: "",
-            TglJamVoid: new DateTime(3000, 1, 1)
+            CrtUser: "U001",
+            CrtDate: new DateTime(2025, 12, 26, 9, 0, 0),
+            UpdUser: "U001",
+            UpdDate: new DateTime(2025, 12, 26, 10, 0, 0),
+            VodUser: "",
+            VodDate: new DateTime(3000, 1, 1)
         );
     }
 

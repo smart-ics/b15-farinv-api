@@ -67,7 +67,7 @@ public class OrderMutasiAddItemHandler : IRequestHandler<OrderMutasiAddItemComma
 
     private OrderMutasiModel GetOrderDraft(OrderMutasiAddItemCommand request)
     {
-        var periode = new Periode(DateTime.Now);
+        var periode = new Periode(DateTime.Now.AddDays(-1), DateTime.Now);
         var header = _orderMutasiRepo.ListData(periode)
         .FirstOrDefault(x =>
             x.LayananOrder.LayananId == request.LayananOrderId &&

@@ -50,12 +50,12 @@ public class OrderMutasiRepoTest
                 LayananTujuanId: "L002",
                 LayananTujuanName: "Rawat Jalan",
                 OrderNote: "Note",
-                UserCreateId: "U001",
-                TglJamCreate: DateTime.Now,
-                UserModifyId: "-",
-                TglJamModify: new DateTime(3000, 1, 1),
-                UserVoidId: "-",
-                TglJamVoid: new DateTime(3000, 1, 1)
+                CrtUser: "U001",
+                CrtDate: DateTime.Now,
+                UpdUser: "-",
+                UpdDate: new DateTime(3000, 1, 1),
+                VodUser: "-",
+                VodDate: new DateTime(3000, 1, 1)
             )
         };
 
@@ -83,12 +83,12 @@ public class OrderMutasiRepoTest
             LayananTujuanId: "L002",
             LayananTujuanName: "Rawat Jalan",
             OrderNote: "Note",
-            UserCreateId: "U001",
-            TglJamCreate: new DateTime(2025, 12, 26),
-            UserModifyId: "U002",
-            TglJamModify: new DateTime(2025, 12, 26),
-            UserVoidId: "U003",
-            TglJamVoid: new DateTime(2025, 12, 26)
+            CrtUser: "U001",
+            CrtDate: new DateTime(2025, 12, 26),
+            UpdUser: "U002",
+            UpdDate: new DateTime(2025, 12, 26),
+            VodUser: "U003",
+            VodDate: new DateTime(2025, 12, 26)
         );
 
         var detailDtos = new List<OrderMutasiItemDto>
@@ -163,12 +163,12 @@ public class OrderMutasiRepoTest
             LayananTujuanId: "L002",
             LayananTujuanName: "Rawat Jalan",
             OrderNote: "Note",
-            UserCreateId: "U001",
-            TglJamCreate: new DateTime(2025, 12, 26),
-            UserModifyId: "U002",
-            TglJamModify: new DateTime(2025, 12, 26),
-            UserVoidId: "U003",
-            TglJamVoid: new DateTime(2025, 12, 26)
+            CrtUser: "U001",
+            CrtDate: new DateTime(2025, 12, 26),
+            UpdUser: "U002",
+            UpdDate: new DateTime(2025, 12, 26),
+            VodUser: "U003",
+            VodDate: new DateTime(2025, 12, 26)
         ));
 
         // Act

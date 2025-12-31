@@ -23,4 +23,12 @@ public class OrderMutasiController : ControllerBase
         await _mediator.Send(cmd);
         return Ok(new JSendOk("Done"));
     }
+
+    [HttpPost]
+    [Route("Submit")]
+    public async Task<IActionResult> Submit(OrderMutasiSubmitCommand cmd)
+    {
+        await _mediator.Send(cmd);
+        return Ok(new JSendOk("Done"));
+    }
 }

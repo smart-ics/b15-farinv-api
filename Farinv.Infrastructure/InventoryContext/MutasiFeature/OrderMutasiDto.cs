@@ -5,20 +5,14 @@ using Farinv.Domain.Shared.Helpers.CommonValueObjects;
 namespace Farinv.Infrastructure.InventoryContext.MutasiFeature;
 
 public record OrderMutasiDto(
-    string OrderMutasiId,
-    DateTime OrderMutasiDate,
-    OrderMutasiStateEnum State,
-    string LayananOrderId,
-    string LayananOrderName,
-    string LayananTujuanId,
-    string LayananTujuanName,
+    string OrderMutasiId, DateTime OrderMutasiDate, OrderMutasiStateEnum State,
+
+    string LayananOrderId, string LayananOrderName,
+    string LayananTujuanId, string LayananTujuanName, 
     string OrderNote,
-    string UserCreateId,
-    DateTime TglJamCreate,
-    string UserModifyId,
-    DateTime TglJamModify,
-    string UserVoidId,
-    DateTime TglJamVoid)
+
+    string CrtUser, DateTime CrtDate, string UpdUser,
+    DateTime UpdDate, string VodUser, DateTime VodDate)
 {
     public static OrderMutasiDto FromModel(OrderMutasiModel model)
     {
@@ -43,9 +37,9 @@ public record OrderMutasiDto(
 
     public OrderMutasiModel ToModel(IEnumerable<OrderMutasiItemModel> listBrg)
     {
-        var auditTrail = AuditTrailType.Create(UserCreateId, TglJamCreate);
-        auditTrail.Modif(UserModifyId, TglJamModify);
-        auditTrail.Batal(UserVoidId, TglJamVoid);
+        var auditTrail = AuditTrailType.Create(CrtUser, CrtDate);
+        auditTrail.Modif(UpdUser, UpdDate);
+        auditTrail.Batal(VodUser, VodDate);
 
         var result = new OrderMutasiModel(
             OrderMutasiId,

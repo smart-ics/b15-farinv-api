@@ -61,7 +61,7 @@ public class OrderMutasiModel : IOrderMutasiKey
     public OrderMutasiStateEnum State { get; private set; }
 
     public LayananReff LayananOrder { get; init; }
-    public LayananReff LayananTujuan { get; init; }
+    public LayananReff LayananTujuan { get; private set; }
 
     public string OrderNote { get; private set; }
     public AuditTrailType AuditTrail { get; init; }
@@ -121,13 +121,21 @@ public class OrderMutasiModel : IOrderMutasiKey
     }
 
 
-    public void Submit(string note)
+    public void Submit(LayananReff layananTujuan, string note, string userId)
     {
         GuardDraft();
         GuardHasItem();
 
-        OrderNote = note ?? "-";
         State = OrderMutasiStateEnum.Submitted;
+        LayananTujuan = layananTujuan;
+        OrderNote = note ?? "-";
+        AuditTrail.Modif(userId, DateTime.Now);
+    }
+
+    public void SetLayananTujuan(LayananReff tujuan)
+    {
+        GuardDraft();
+        LayananTujuan = tujuan;
     }
 
     public void Approve()
