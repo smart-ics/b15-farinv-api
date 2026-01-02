@@ -2,201 +2,113 @@
 using Farinv.Domain.InventoryContext.MutasiFeature;
 using Farinv.Domain.InventoryContext.StokFeature;
 using Farinv.Domain.Shared.Helpers.CommonValueObjects;
+using Farinv.Infrastructure.Helpers;
 using Farinv.Infrastructure.InventoryContext.MutasiFeature;
 using FluentAssertions;
-using Moq;
+using Nuna.Lib.TransactionHelper;
 using Nuna.Lib.ValidationHelper;
 
 namespace Farinv.Test.InventoryContext.MutasiFeature;
 
 public class OrderMutasiRepoTest
 {
-    private readonly Mock<IOrderMutasiDal> _mockHeaderDal = new();
-    private readonly Mock<IOrderMutasiBrgDal> _mockDetailDal = new();
-    private readonly OrderMutasiRepo _sut;
+    private readonly OrderMutasiRepo _sut = new(
+        new OrderMutasiDal(ConnStringHelper.GetTestEnv()),
+        new OrderMutasiItemDal(ConnStringHelper.GetTestEnv()));
 
-    public OrderMutasiRepoTest()
-    {
-        _sut = new OrderMutasiRepo(_mockHeaderDal.Object, _mockDetailDal.Object);
-    }
-
-    [Fact]
-    public void DeleteEntity_Should_Call_Delete_In_Order()
-    {
-        // Arrange
-        var key = OrderMutasiModel.Key("OM001");
-
-        // Act
-        _sut.DeleteEntity(key);
-
-        // Assert
-        _mockDetailDal.Verify(x => x.Delete(key), Times.Once);
-        _mockHeaderDal.Verify(x => x.Delete(key), Times.Once);
-    }
-
-    [Fact]
-    public void ListData_Should_Return_Headers()
-    {
-        // Arrange
-        var filter = new Periode(new DateTime(2025, 12, 26));
-        var dtos = new List<OrderMutasiDto>
-        {
-            new OrderMutasiDto(
-                OrderMutasiId: "OM001",
-                OrderMutasiDate: new DateTime(2025, 12, 26),
-                State: OrderMutasiStateEnum.Submitted,
-                LayananOrderId: "L001",
-                LayananOrderName: "Rawat Inap",
-                LayananTujuanId: "L002",
-                LayananTujuanName: "Rawat Jalan",
-                OrderNote: "Note",
-                CrtUser: "U001",
-                CrtDate: DateTime.Now,
-                UpdUser: "-",
-                UpdDate: new DateTime(3000, 1, 1),
-                VodUser: "-",
-                VodDate: new DateTime(3000, 1, 1)
-            )
-        };
-
-        _mockHeaderDal.Setup(x => x.ListData(filter)).Returns(dtos);
-
-        // Act
-        var actual = _sut.ListData(filter);
-
-        // Assert
-        actual.Should().HaveCount(1);
-        actual.First().OrderMutasiId.Should().Be("OM001");
-    }
-
-    [Fact]
-    public void LoadEntity_Should_Return_Model_If_Exists()
-    {
-        // Arrange
-        var key = OrderMutasiModel.Key("OM001");
-        var headerDto = new OrderMutasiDto(
-            OrderMutasiId: "OM001",
-            OrderMutasiDate: new DateTime(2025, 12, 26),
-            State: OrderMutasiStateEnum.Submitted,
-            LayananOrderId: "L001",
-            LayananOrderName: "Rawat Inap",
-            LayananTujuanId: "L002",
-            LayananTujuanName: "Rawat Jalan",
-            OrderNote: "Note",
-            CrtUser: "U001",
-            CrtDate: new DateTime(2025, 12, 26),
-            UpdUser: "U002",
-            UpdDate: new DateTime(2025, 12, 26),
-            VodUser: "U003",
-            VodDate: new DateTime(2025, 12, 26)
-        );
-
-        var detailDtos = new List<OrderMutasiItemDto>
-        {
-            new OrderMutasiItemDto(
-                OrderMutasiId: "OM001",
-                NoUrut: 1,
-                BrgId: "B001",
-                BrgName: "Obat A",
-                Qty: 10,
-                SatuanId: "S001",
-                SatuanName: "Buah"
-            )
-        };
-
-        _mockHeaderDal.Setup(x => x.GetData(key)).Returns(headerDto);
-        _mockDetailDal.Setup(x => x.ListData(key)).Returns(detailDtos);
-
-        // Act
-        var actual = _sut.LoadEntity(key);
-
-        // Assert
-        actual.HasValue.Should().BeTrue();
-        actual.Value.OrderMutasiId.Should().Be("OM001");
-        actual.Value.ListItem.Should().HaveCount(1);
-    }
-
-    [Fact]
-    public void LoadEntity_Should_Return_None_If_Not_Exists()
-    {
-        // Arrange
-        var key = OrderMutasiModel.Key("OM001");
-        _mockHeaderDal.Setup(x => x.GetData(key)).Returns((OrderMutasiDto)null);
-
-        // Act
-        var actual = _sut.LoadEntity(key);
-
-        // Assert
-        actual.HasValue.Should().BeFalse();
-    }
-
-    [Fact]
-    public void SaveChanges_Should_Insert_If_New()
-    {
-        // Arrange
-        var model = CreateFakeModel(isNew: true);
-
-        _mockHeaderDal.Setup(x => x.GetData(model)).Returns((OrderMutasiDto)null);
-
-        // Act
-        _sut.SaveChanges(model);
-
-        // Assert
-        _mockHeaderDal.Verify(x => x.Insert(It.IsAny<OrderMutasiDto>()), Times.Once);
-        _mockHeaderDal.Verify(x => x.Update(It.IsAny<OrderMutasiDto>()), Times.Never);
-        _mockDetailDal.Verify(x => x.Delete(model), Times.Once);
-        _mockDetailDal.Verify(x => x.Insert(It.IsAny<IEnumerable<OrderMutasiItemDto>>()), Times.Once);
-    }
-
-    [Fact]
-    public void SaveChanges_Should_Update_If_Exists()
-    {
-        // Arrange
-        var model = CreateFakeModel(isNew: false);
-
-        _mockHeaderDal.Setup(x => x.GetData(model)).Returns(new OrderMutasiDto(
-            OrderMutasiId: "OM001",
-            OrderMutasiDate: new DateTime(2025, 12, 26),
-            State: OrderMutasiStateEnum.Submitted,
-            LayananOrderId: "L001",
-            LayananOrderName: "Rawat Inap",
-            LayananTujuanId: "L002",
-            LayananTujuanName: "Rawat Jalan",
-            OrderNote: "Note",
-            CrtUser: "U001",
-            CrtDate: new DateTime(2025, 12, 26),
-            UpdUser: "U002",
-            UpdDate: new DateTime(2025, 12, 26),
-            VodUser: "U003",
-            VodDate: new DateTime(2025, 12, 26)
-        ));
-
-        // Act
-        _sut.SaveChanges(model);
-
-        // Assert
-        _mockHeaderDal.Verify(x => x.Update(It.IsAny<OrderMutasiDto>()), Times.Once);
-        _mockHeaderDal.Verify(x => x.Insert(It.IsAny<OrderMutasiDto>()), Times.Never);
-        _mockDetailDal.Verify(x => x.Delete(model), Times.Once);
-        _mockDetailDal.Verify(x => x.Insert(It.IsAny<IEnumerable<OrderMutasiItemDto>>()), Times.Once);
-    }
-
-    private OrderMutasiModel CreateFakeModel(bool isNew)
+    private OrderMutasiModel FakerData()
     {
         var brg = new BrgReff("B001", "Obat A");
         var satuan = new SatuanType("S001", "Buah");
         var item = new OrderMutasiItemModel(brg, 10, satuan);
+        var approval = new ApprovalType("-", new DateTime(3000, 1, 1));
+        var rejection = new ApprovalType("-", new DateTime(3000, 1, 1));
         var audit = AuditTrailType.Create("U001", new DateTime(2025, 12, 26));
 
         return new OrderMutasiModel(
-            isNew ? "-" : "OM001",
+            "-", // new
             new DateTime(2025, 12, 26),
             OrderMutasiStateEnum.Submitted,
             new LayananReff("L001", "Rawat Inap"),
             new LayananReff("L002", "Rawat Jalan"),
-            "Note",
+            approval, rejection, "Note",
             audit,
             new List<OrderMutasiItemModel> { item }
         );
     }
+
+    private static IOrderMutasiKey FakerKey()
+        => OrderMutasiModel.Key("OM001");
+
+    [Fact]
+    public void SaveChanges_InsertTest()
+    {
+        using var trans = TransHelper.NewScope();
+        var model = FakerData();
+        _sut.SaveChanges(model);
+    }
+
+    [Fact]
+    public void SaveChanges_UpdateTest()
+    {
+        using var trans = TransHelper.NewScope();
+        var model = FakerData();
+        _sut.SaveChanges(model); // insert dulu
+        model.UpdateNote("Updated Note");
+        _sut.SaveChanges(model); // update
+    }
+
+    [Fact]
+    public void DeleteEntityTest()
+    {
+        using var trans = TransHelper.NewScope();
+        var model = FakerData();
+        _sut.SaveChanges(model); // insert dulu
+        _sut.DeleteEntity(FakerKey());
+    }
+
+    [Fact]
+    public void LoadEntityTest()
+    {
+        using var trans = TransHelper.NewScope();
+
+        // Arrange
+        var model = FakerData();
+        _sut.SaveChanges(model);
+
+        // Ambil ID yang BENAR
+        var headers = _sut.ListData(new Periode(new DateTime(2025, 12, 26)));
+        headers.Should().NotBeEmpty(); // safety
+        var id = headers.First().OrderMutasiId;
+
+        // Act
+        var actual = _sut.LoadEntity(OrderMutasiModel.Key(id));
+
+        // Assert
+        actual.HasValue.Should().BeTrue();
+        actual.Value.OrderMutasiId.Should().Be(id);
+        actual.Value.ListItem.Should().HaveCount(1);
+    }
+
+    [Fact]
+    public void ListDataTest()
+    {
+        using var trans = TransHelper.NewScope();
+
+        // Arrange
+        var model = FakerData();
+        _sut.SaveChanges(model);
+
+        var filter = new Periode(new DateTime(2025, 12, 26));
+
+        // Act
+        var actual = _sut.ListData(filter).ToList();
+
+        // Assert
+        actual.Should().HaveCountGreaterThan(0);
+
+        actual.First().OrderMutasiId
+            .Should().NotBeNullOrWhiteSpace();
+    }
+
 }

@@ -8,7 +8,10 @@ public record OrderMutasiDto(
     string OrderMutasiId, DateTime OrderMutasiDate, OrderMutasiStateEnum State,
 
     string LayananOrderId, string LayananOrderName,
-    string LayananTujuanId, string LayananTujuanName, 
+    string LayananTujuanId, string LayananTujuanName,
+
+    string ApprovalUserId, DateTime ApprovalDate,
+    string RejectionUserId, DateTime RejectionDate,
     string OrderNote,
 
     string CrtUser, DateTime CrtDate, string UpdUser,
@@ -24,6 +27,10 @@ public record OrderMutasiDto(
             model.LayananOrder.LayananName,
             model.LayananTujuan.LayananId,
             model.LayananTujuan.LayananName,
+            model.Approval.UserId, 
+            model.Approval.Timestamp,
+            model.Rejection.UserId,
+            model.Rejection.Timestamp,
             model.OrderNote,
             model.AuditTrail.Created.UserId,
             model.AuditTrail.Created.Timestamp,
@@ -40,6 +47,8 @@ public record OrderMutasiDto(
         var auditTrail = AuditTrailType.Create(CrtUser, CrtDate);
         auditTrail.Modif(UpdUser, UpdDate);
         auditTrail.Batal(VodUser, VodDate);
+        var approval = new ApprovalType(ApprovalUserId, ApprovalDate);
+        var rejection = new ApprovalType(RejectionUserId, RejectionDate);
 
         var result = new OrderMutasiModel(
             OrderMutasiId,
@@ -47,6 +56,7 @@ public record OrderMutasiDto(
             State,
             new LayananReff(LayananOrderId, LayananOrderName),
             new LayananReff(LayananTujuanId, LayananTujuanName),
+            approval, rejection,
             OrderNote,
             auditTrail,
             listBrg?.ToList() ?? []);

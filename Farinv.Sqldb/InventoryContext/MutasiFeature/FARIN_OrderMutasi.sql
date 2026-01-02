@@ -8,6 +8,10 @@
 	LayananOrderName VARCHAR(50) NOT NULL CONSTRAINT DF_FARIN_OrderMutasi_LayananOrderName DEFAULT(''),
 	LayananTujuanId VARCHAR(5) NOT NULL CONSTRAINT DF_FARIN_OrderMutasi_LayananTujuanId DEFAULT(''),
 	LayananTujuanName VARCHAR(50) NOT NULL CONSTRAINT DF_FARIN_OrderMutasi_LayananTujuanName DEFAULT(''),
+	ApprovalUserId VARCHAR(50) NOT NULL CONSTRAINT DF_FARIN_OrderMutasi_ApprovalUserId DEFAULT(''),
+	ApprovalDate DATETIME NOT NULL CONSTRAINT DF_FARIN_OrderMutasi_ApprovalDate DEFAULT('3000-01-01'),
+	RejectionUserId VARCHAR(50) NOT NULL CONSTRAINT DF_FARIN_OrderMutasi_RejectionUserId DEFAULT(''),
+	RejectionDate DATETIME NOT NULL CONSTRAINT DF_FARIN_OrderMutasi_RejectionDate DEFAULT('3000-01-01'),
 	OrderNote VARCHAR(50) NOT NULL CONSTRAINT DF_FARIN_OrderMutasi_OrderNote DEFAULT(''),
 
 	CrtUser VARCHAR(50) NOT NULL CONSTRAINT DF_FARIN_OrderMutasi_CrtUser DEFAULT(''),

@@ -33,12 +33,16 @@ public class OrderMutasiDal : IOrderMutasiDal
             INSERT INTO FARIN_OrderMutasi (
                 OrderMutasiId, OrderMutasiDate, State,
                 LayananOrderId, LayananOrderName, 
-                LayananTujuanId, LayananTujuanName, OrderNote,
+                LayananTujuanId, LayananTujuanName, 
+                ApprovalUserId, ApprovalDate, 
+                RejectionUserId, RejectionDate, OrderNote,
                 CrtUser, CrtDate, UpdUser, UpdDate, VodUser, VodDate)
             VALUES (
                 @OrderMutasiId, @OrderMutasiDate, @State,
                 @LayananOrderId, @LayananOrderName, 
-                @LayananTujuanId, @LayananTujuanName, @OrderNote,
+                @LayananTujuanId, @LayananTujuanName, 
+                @ApprovalUserId, @ApprovalDate, 
+                @RejectionUserId, @RejectionDate, @OrderNote,
                 @CrtUser, @CrtDate, @UpdUser, @UpdDate, @VodUser, @VodDate
             )
             """;
@@ -50,6 +54,10 @@ public class OrderMutasiDal : IOrderMutasiDal
         dp.AddParam("@LayananOrderName", dto.LayananOrderName, SqlDbType.VarChar);
         dp.AddParam("@LayananTujuanId", dto.LayananTujuanId, SqlDbType.VarChar);
         dp.AddParam("@LayananTujuanName", dto.LayananTujuanName, SqlDbType.VarChar);
+        dp.AddParam("@ApprovalUserId", dto.ApprovalUserId, SqlDbType.VarChar);
+        dp.AddParam("@ApprovalDate", dto.ApprovalDate, SqlDbType.DateTime);
+        dp.AddParam("@RejectionUserId", dto.RejectionUserId, SqlDbType.VarChar);
+        dp.AddParam("@RejectionDate", dto.RejectionDate, SqlDbType.DateTime);
         dp.AddParam("@OrderNote", dto.OrderNote, SqlDbType.VarChar);
         dp.AddParam("@CrtUser", dto.CrtUser, SqlDbType.VarChar);
         dp.AddParam("@CrtDate", dto.CrtDate, SqlDbType.DateTime);
@@ -72,6 +80,10 @@ public class OrderMutasiDal : IOrderMutasiDal
                 LayananOrderName = @LayananOrderName,
                 LayananTujuanId = @LayananTujuanId,
                 LayananTujuanName = @LayananTujuanName,
+                ApprovalUserId = @ApprovalUserId,
+                ApprovalDate = @ApprovalDate,
+                RejectionUserId = @RejectionUserId,
+                RejectionDate = @RejectionDate,
                 OrderNote = @OrderNote,
                 CrtUser = @CrtUser,
                 CrtDate = @CrtDate,
@@ -90,6 +102,10 @@ public class OrderMutasiDal : IOrderMutasiDal
         dp.AddParam("@LayananOrderName", dto.LayananOrderName, SqlDbType.VarChar);
         dp.AddParam("@LayananTujuanId", dto.LayananTujuanId, SqlDbType.VarChar);
         dp.AddParam("@LayananTujuanName", dto.LayananTujuanName, SqlDbType.VarChar);
+        dp.AddParam("@ApprovalUserId", dto.ApprovalUserId, SqlDbType.VarChar);
+        dp.AddParam("@ApprovalDate", dto.ApprovalDate, SqlDbType.DateTime);
+        dp.AddParam("@RejectionUserId", dto.RejectionUserId, SqlDbType.VarChar);
+        dp.AddParam("@RejectionDate", dto.RejectionDate, SqlDbType.DateTime);
         dp.AddParam("@OrderNote", dto.OrderNote, SqlDbType.VarChar);
         dp.AddParam("@CrtUser", dto.CrtUser, SqlDbType.VarChar);
         dp.AddParam("@CrtDate", dto.CrtDate, SqlDbType.DateTime);
@@ -120,7 +136,9 @@ public class OrderMutasiDal : IOrderMutasiDal
             SELECT 
                 OrderMutasiId, OrderMutasiDate, State,
                 LayananOrderId, LayananOrderName, 
-                LayananTujuanId, LayananTujuanName, OrderNote,
+                LayananTujuanId, LayananTujuanName, 
+                ApprovalUserId, ApprovalDate, 
+                RejectionUserId, RejectionDate, OrderNote,
                 CrtUser, CrtDate, UpdUser, UpdDate, VodUser, VodDate
             FROM 
                 FARIN_OrderMutasi
@@ -140,7 +158,9 @@ public class OrderMutasiDal : IOrderMutasiDal
             SELECT 
                 OrderMutasiId, OrderMutasiDate, State,
                 LayananOrderId, LayananOrderName, 
-                LayananTujuanId, LayananTujuanName, OrderNote,
+                LayananTujuanId, LayananTujuanName, 
+                ApprovalUserId, ApprovalDate, 
+                RejectionUserId, RejectionDate, OrderNote,
                 CrtUser, CrtDate, UpdUser, UpdDate, VodUser, VodDate
             FROM 
                 FARIN_OrderMutasi

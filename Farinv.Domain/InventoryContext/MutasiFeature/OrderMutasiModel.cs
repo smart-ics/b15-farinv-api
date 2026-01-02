@@ -12,14 +12,17 @@ public class OrderMutasiModel : IOrderMutasiKey
 
     #region CREATION
     public OrderMutasiModel(string orderMutasiId, DateTime orderMutasiDate, OrderMutasiStateEnum state,
-        LayananReff layananOrder, LayananReff layananTujuan, string orderNote, AuditTrailType auditTrail, 
-        IEnumerable<OrderMutasiItemModel> listItem)
+        LayananReff layananOrder, LayananReff layananTujuan, 
+        ApprovalType approval, ApprovalType rejection, string orderNote, 
+        AuditTrailType auditTrail, IEnumerable<OrderMutasiItemModel> listItem)
     {
         OrderMutasiId = orderMutasiId;
         OrderMutasiDate = orderMutasiDate;
         State = state;
         LayananOrder = layananOrder;
         LayananTujuan = layananTujuan;
+        Approval = approval;
+        Rejection = rejection;
         OrderNote = orderNote;
         AuditTrail = auditTrail;
 
@@ -27,13 +30,15 @@ public class OrderMutasiModel : IOrderMutasiKey
         Reorder();
     }
 
-    public static OrderMutasiModel Default() 
+    public static OrderMutasiModel Default
         => new("-", new DateTime(3000, 1, 1), OrderMutasiStateEnum.Draft,
-            LayananType.Default.ToReff(), LayananType.Default.ToReff(), "-", AuditTrailType.Default, []);
+            LayananType.Default.ToReff(), LayananType.Default.ToReff(), 
+            ApprovalType.Default, ApprovalType.Default,"-", AuditTrailType.Default, []);
 
     public static IOrderMutasiKey Key(string id)
         => new OrderMutasiModel(id, new DateTime(3000, 1, 1), OrderMutasiStateEnum.Draft,
-            LayananType.Default.ToReff(), LayananType.Default.ToReff(), "-", AuditTrailType.Default, []);
+            LayananType.Default.ToReff(), LayananType.Default.ToReff(),
+            ApprovalType.Default, ApprovalType.Default, "-", AuditTrailType.Default, []);
 
     public static OrderMutasiModel Create(
         LayananType layananOrder,
@@ -50,7 +55,8 @@ public class OrderMutasiModel : IOrderMutasiKey
         var auditTrail = AuditTrailType.Create(userId, DateTime.Now);
 
         var result = new OrderMutasiModel(id, auditTrail.Created.Timestamp, OrderMutasiStateEnum.Draft,
-            layananOrder.ToReff(), layananTujuan.ToReff(), orderNote, auditTrail, listBrg);
+            layananOrder.ToReff(), layananTujuan.ToReff(), 
+            ApprovalType.Default, ApprovalType.Default, orderNote, auditTrail, listBrg);
         return result;
     }
     #endregion
@@ -63,7 +69,10 @@ public class OrderMutasiModel : IOrderMutasiKey
     public LayananReff LayananOrder { get; init; }
     public LayananReff LayananTujuan { get; private set; }
 
+    public ApprovalType Approval { get; private set; }
+    public ApprovalType Rejection { get; private set; }
     public string OrderNote { get; private set; }
+
     public AuditTrailType AuditTrail { get; init; }
 
     public IReadOnlyCollection<OrderMutasiItemModel> ListItem => _listItem;
@@ -95,7 +104,7 @@ public class OrderMutasiModel : IOrderMutasiKey
         Reorder();
     }
 
-    internal void Reorder()
+    private void Reorder()
     {
         var i = 1;
         foreach (var item in _listItem)
@@ -105,6 +114,9 @@ public class OrderMutasiModel : IOrderMutasiKey
     public void MoveItem(IBrgKey key, int targetNoUrut)
     {
         GuardDraft();
+
+        if (_listItem.Count <= 1)
+            return;
 
         if (targetNoUrut <= 0)
             throw new DomainException("NoUrut tidak valid");
@@ -128,8 +140,13 @@ public class OrderMutasiModel : IOrderMutasiKey
 
         State = OrderMutasiStateEnum.Submitted;
         LayananTujuan = layananTujuan;
-        OrderNote = note ?? "-";
+        UpdateNote(note);
         AuditTrail.Modif(userId, DateTime.Now);
+    }
+
+    public void UpdateNote(string note)
+    {
+        OrderNote = note;
     }
 
     public void SetLayananTujuan(LayananReff tujuan)
@@ -138,16 +155,21 @@ public class OrderMutasiModel : IOrderMutasiKey
         LayananTujuan = tujuan;
     }
 
-    public void Approve()
+    public void Approve(string userId)
     {
         GuardStatus(OrderMutasiStateEnum.Submitted);
         State = OrderMutasiStateEnum.Approved;
+        Approval = new ApprovalType(userId, DateTime.Now);
+        AuditTrail.Modif(userId, DateTime.Now);
     }
 
-    public void Reject()
+    public void Reject(string note, string userId)
     {
         GuardStatus(OrderMutasiStateEnum.Submitted);
         State = OrderMutasiStateEnum.Rejected;
+        Rejection = new ApprovalType(userId, DateTime.Now);
+        OrderNote = note;
+        AuditTrail.Modif(userId, DateTime.Now);
     }
 
     public void Complete()
