@@ -96,14 +96,13 @@ public class OrderMutasiModel : IOrderMutasiKey
         _listItem.Add(item);
     }
 
-    public void Submit(LayananReff layananTujuan, string note, string userId)
+    public void Submit(LayananReff layananTujuan, string userId)
     {
         GuardDraft();
         GuardHasItem();
 
         State = OrderMutasiStateEnum.Submitted;
         LayananTujuan = layananTujuan;
-        UpdateNote(note);
         AuditTrail.Modif(userId, DateTime.Now);
     }
 

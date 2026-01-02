@@ -7,7 +7,7 @@ using MediatR;
 namespace Farinv.Application.InventoryContext.MutasiFeature.UseCases;
 
 public record OrderMutasiSubmitCommand(string OrderMutasiId,
-    string LayananTujuanId, string Note, string UserId) : IRequest, IOrderMutasiKey;
+    string LayananTujuanId, string UserId) : IRequest, IOrderMutasiKey;
 
 public class OrderMutasiSubmitHandler : IRequestHandler<OrderMutasiSubmitCommand>
 {
@@ -31,7 +31,7 @@ public class OrderMutasiSubmitHandler : IRequestHandler<OrderMutasiSubmitCommand
         // BUILD       
         var order = GetOrderMutasi(request);
         var tujuan = GetLayananTujuan(request.LayananTujuanId);
-        order.Submit(tujuan, request.Note, request.UserId);     
+        order.Submit(tujuan, request.UserId);     
 
         // WRITE
         _orderMutasiRepo.SaveChanges(order);
