@@ -1,6 +1,5 @@
 ﻿using Farinv.Domain.InventoryContext.MutasiFeature;
 using Nuna.Lib.DataAccessHelper;
-using Nuna.Lib.PatternHelper;
 using Nuna.Lib.ValidationHelper;
 
 namespace Farinv.Application.InventoryContext.MutasiFeature;
@@ -11,4 +10,5 @@ public interface IOrderMutasiRepo :
     IDeleteEntity<IOrderMutasiKey>,
     IListData<OrderMutasiHeaderView, Periode>
 {
+    IEnumerable<OrderMutasiHeaderView> ListDraftState();
 }

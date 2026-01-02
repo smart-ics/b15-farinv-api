@@ -32,6 +32,14 @@ public class OrderMutasiController : ControllerBase
         return Ok(new JSendOk("Done"));
     }
 
+    [HttpPost]
+    [Route("approve")]
+    public async Task<IActionResult> Approve(OrderMutasiApproveCommand cmd)
+    {
+        await _mediator.Send(cmd);
+        return Ok(new JSendOk("Done"));
+    }
+
     [HttpGet]
     [Route("{id}")]
     public async Task<IActionResult> GetOrder(string id)

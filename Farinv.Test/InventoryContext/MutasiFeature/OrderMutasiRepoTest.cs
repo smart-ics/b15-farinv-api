@@ -20,7 +20,7 @@ public class OrderMutasiRepoTest
     {
         var brg = new BrgReff("B001", "Obat A");
         var satuan = new SatuanType("S001", "Buah");
-        var item = new OrderMutasiItemModel(brg, 10, satuan);
+        var item = new OrderMutasiItemModel(1, brg, 10, satuan);
         var approval = new ApprovalType("-", new DateTime(3000, 1, 1));
         var rejection = new ApprovalType("-", new DateTime(3000, 1, 1));
         var audit = AuditTrailType.Create("U001", new DateTime(2025, 12, 26));

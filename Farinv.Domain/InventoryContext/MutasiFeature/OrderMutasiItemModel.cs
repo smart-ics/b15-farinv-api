@@ -6,12 +6,16 @@ namespace Farinv.Domain.InventoryContext.MutasiFeature;
 public class OrderMutasiItemModel
 {
     #region CREATION
-    public OrderMutasiItemModel(BrgReff brg, decimal qty, SatuanType satuan)
+    public OrderMutasiItemModel(int noUrut, BrgReff brg, decimal qty, SatuanType satuan)
     {
+        NoUrut = noUrut;
         Brg = brg;
         Qty = qty;
         Satuan = satuan;
     }
+
+    public static OrderMutasiItemModel Default
+        => new(0, new BrgReff("-", "-"), 0, SatuanType.Default);
     #endregion
 
     #region PROPERTIES
@@ -25,7 +29,7 @@ public class OrderMutasiItemModel
     internal void AddQty(decimal qty)
     {
         if (qty <= 0)
-            throw new DomainException("Qty harus lebih dari 0");
+            throw new ArgumentException("Qty harus lebih dari 0");
 
         Qty += qty;
     }
@@ -33,14 +37,14 @@ public class OrderMutasiItemModel
     internal void SetQty(decimal qty)
     {
         if (qty <= 0)
-            throw new DomainException("Qty harus lebih dari 0");
+            throw new ArgumentException("Qty harus lebih dari 0");
 
         Qty = qty;
     }
     internal void SetNoUrut(int noUrut)
     {
         if (noUrut <= 0)
-            throw new DomainException("NoUrut invalid");
+            throw new ArgumentException("NoUrut invalid");
 
         NoUrut = noUrut;
     }

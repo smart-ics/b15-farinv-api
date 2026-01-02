@@ -1,7 +1,6 @@
 ﻿using Ardalis.GuardClauses;
 using Farinv.Domain.BrgContext.BrgFeature;
 using Farinv.Domain.InventoryContext.StokFeature;
-using Farinv.Domain.Shared.Helpers;
 using Farinv.Domain.Shared.Helpers.CommonValueObjects;
 
 namespace Farinv.Domain.InventoryContext.MutasiFeature;
@@ -27,7 +26,6 @@ public class OrderMutasiModel : IOrderMutasiKey
         AuditTrail = auditTrail;
 
         _listItem = listItem?.ToList() ?? [];
-        Reorder();
     }
 
     public static OrderMutasiModel Default
@@ -84,7 +82,7 @@ public class OrderMutasiModel : IOrderMutasiKey
     {
         GuardDraft();
         if (item.Qty <= 0)
-            throw new DomainException($"Qty invalid");
+            throw new ArgumentException($"Qty invalid");
 
         var existing = _listItem.FirstOrDefault(x => x.Brg.BrgId == item.Brg.BrgId);
         if (existing is not null)
@@ -93,8 +91,9 @@ public class OrderMutasiModel : IOrderMutasiKey
             return;
         }
 
+        var noUrut = _listItem.Count > 0 ? _listItem.Max(x => x.NoUrut) + 1 : 1;
+        item.NoUrut = noUrut;
         _listItem.Add(item);
-        Reorder();
     }
 
     public void RemoveItem(IBrgKey key)
@@ -119,10 +118,10 @@ public class OrderMutasiModel : IOrderMutasiKey
             return;
 
         if (targetNoUrut <= 0)
-            throw new DomainException("NoUrut tidak valid");
+            throw new ArgumentException("NoUrut tidak valid");
 
         var item = _listItem.FirstOrDefault(x => x.Brg.BrgId == key.BrgId) 
-            ?? throw new DomainException("Item tidak ditemukan");
+            ?? throw new ArgumentException("Item tidak ditemukan");
         if (targetNoUrut > _listItem.Count)
             targetNoUrut = _listItem.Count;
 
@@ -160,7 +159,6 @@ public class OrderMutasiModel : IOrderMutasiKey
         GuardStatus(OrderMutasiStateEnum.Submitted);
         State = OrderMutasiStateEnum.Approved;
         Approval = new ApprovalType(userId, DateTime.Now);
-        AuditTrail.Modif(userId, DateTime.Now);
     }
 
     public void Reject(string note, string userId)
@@ -169,7 +167,6 @@ public class OrderMutasiModel : IOrderMutasiKey
         State = OrderMutasiStateEnum.Rejected;
         Rejection = new ApprovalType(userId, DateTime.Now);
         OrderNote = note;
-        AuditTrail.Modif(userId, DateTime.Now);
     }
 
     public void Complete()
@@ -188,13 +185,13 @@ public class OrderMutasiModel : IOrderMutasiKey
     private void GuardHasItem()
     {
         if (_listItem.Count == 0)
-            throw new DomainException("Order Mutasi harus memiliki minimal 1 item");
+            throw new ArgumentException("Order Mutasi harus memiliki minimal 1 item");
     }
 
     private void GuardStatus(params OrderMutasiStateEnum[] allowed)
     {
         if (!allowed.Contains(State))
-            throw new DomainException($"Status tidak valid: {State}");
+            throw new ArgumentException($"Status invalid: {State}");
     }
     #endregion
 }

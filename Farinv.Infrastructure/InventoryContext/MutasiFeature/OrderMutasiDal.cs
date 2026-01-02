@@ -16,6 +16,7 @@ public interface IOrderMutasiDal :
     IGetData<OrderMutasiDto, IOrderMutasiKey>,
     IListData<OrderMutasiDto, Periode>
 {
+    IEnumerable<OrderMutasiDto> ListDraftState();
 }
 
 public class OrderMutasiDal : IOrderMutasiDal
@@ -175,4 +176,23 @@ public class OrderMutasiDal : IOrderMutasiDal
         return conn.Read<OrderMutasiDto>(sql, dp);
     }
 
+    public IEnumerable<OrderMutasiDto> ListDraftState()
+    {
+        const string sql = """
+            SELECT 
+                OrderMutasiId, OrderMutasiDate, State,
+                LayananOrderId, LayananOrderName, 
+                LayananTujuanId, LayananTujuanName, 
+                ApprovalUserId, ApprovalDate, 
+                RejectionUserId, RejectionDate, OrderNote,
+                CrtUser, CrtDate, UpdUser, UpdDate, VodUser, VodDate
+            FROM 
+                FARIN_OrderMutasi
+            WHERE 
+                State = 0
+            """;
+        var dp = new DynamicParameters();
+        using var conn = new SqlConnection(ConnStringHelper.Get(_opt));
+        return conn.Read<OrderMutasiDto>(sql, dp);
+    }
 }

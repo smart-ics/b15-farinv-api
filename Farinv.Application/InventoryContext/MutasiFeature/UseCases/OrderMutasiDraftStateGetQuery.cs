@@ -55,13 +55,9 @@ public class OrderMutasiDraftStateGetHandler :
 
     private OrderMutasiModel GetOrderDraftState(LayananType layanan)
     {
-        var periode = new Periode(DateTime.Now.AddDays(-1), DateTime.Now);
-        var header = _orderMutasiRepo.ListData(periode)
-           .FirstOrDefault(x =>
-               x.LayananOrder.LayananId == layanan.LayananId &&
-               x.State == OrderMutasiStateEnum.Draft);
-        if (header is null)
-            throw new KeyNotFoundException($"OrderMutasi with Draft State not found");
+        var header = _orderMutasiRepo.ListDraftState()
+           .FirstOrDefault(x => x.LayananOrder.LayananId == layanan.LayananId) 
+           ?? throw new KeyNotFoundException($"OrderMutasi with Draft State not found");
 
         var key = OrderMutasiModel.Key(header.OrderMutasiId);
         var maybe = _orderMutasiRepo.LoadEntity(key);

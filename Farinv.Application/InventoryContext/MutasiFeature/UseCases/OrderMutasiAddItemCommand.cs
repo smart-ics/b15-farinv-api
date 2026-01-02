@@ -37,15 +37,22 @@ public class OrderMutasiAddItemHandler : IRequestHandler<OrderMutasiAddItemComma
         Guard.Against.NegativeOrZero(request.Qty);
 
         // BUILD
-        var order = GetOrderDraft(request);
-        var brg = GetBrg(request);
-        var satuan = GetSatuan(request);
-        var item = new OrderMutasiItemModel(brg, request.Qty, satuan);
+        var order = GetOrderDraft(request);        
+        var item = CreateItem(request);        
         order.AddItem(item);
 
         // WRITE
         _orderMutasiRepo.SaveChanges(order);
         return Task.CompletedTask;
+    }
+
+    private OrderMutasiItemModel CreateItem(OrderMutasiAddItemCommand request)
+    {
+        var brg = GetBrg(request);
+        var satuan = GetSatuan(request);
+        var item = new OrderMutasiItemModel(1, brg, request.Qty, satuan);
+
+        return item;
     }
 
     #region PRIVATE-HELPERS
@@ -67,11 +74,8 @@ public class OrderMutasiAddItemHandler : IRequestHandler<OrderMutasiAddItemComma
 
     private OrderMutasiModel GetOrderDraft(OrderMutasiAddItemCommand request)
     {
-        var periode = new Periode(DateTime.Now.AddDays(-1), DateTime.Now);
-        var header = _orderMutasiRepo.ListData(periode)
-        .FirstOrDefault(x =>
-            x.LayananOrder.LayananId == request.LayananOrderId &&
-            x.State == OrderMutasiStateEnum.Draft);
+        var header = _orderMutasiRepo.ListDraftState()
+            .FirstOrDefault(x => x.LayananOrder.LayananId == request.LayananOrderId);
         if (header is null)
             return CreateOrderDraft(request);
 

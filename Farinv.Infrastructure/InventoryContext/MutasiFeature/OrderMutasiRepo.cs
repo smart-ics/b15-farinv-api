@@ -34,6 +34,16 @@ public class OrderMutasiRepo : IOrderMutasiRepo
         return result;
     }
 
+    public IEnumerable<OrderMutasiHeaderView> ListDraftState()
+    {
+        var listDto = _orderMutasiDal.ListDraftState() ?? [];
+        var result = listDto.Select(x =>
+            new OrderMutasiHeaderView(
+                x.OrderMutasiId, x.OrderMutasiDate, x.State,
+                new LayananReff(x.LayananOrderId, x.LayananOrderName)));
+        return result;
+    }
+
     public MayBe<OrderMutasiModel> LoadEntity(IOrderMutasiKey key)
     {
         var orderMutasi = _orderMutasiDal.GetData(key);
