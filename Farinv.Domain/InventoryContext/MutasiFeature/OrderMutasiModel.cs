@@ -43,18 +43,18 @@ public class OrderMutasiModel : IOrderMutasiKey
         LayananType layananTujuan,
         string orderNote,
         string userId,
-        IEnumerable<OrderMutasiItemModel> listBrg)
+        IEnumerable<OrderMutasiItemModel> listItem)
     {
         Guard.Against.Null(layananOrder, nameof(layananOrder));
         Guard.Against.Null(layananTujuan, nameof(layananTujuan));
-        Guard.Against.Null(listBrg, nameof(listBrg));
+        Guard.Against.Null(listItem, nameof(listItem));
 
         var id = Ulid.NewUlid().ToString();
         var auditTrail = AuditTrailType.Create(userId, DateTime.Now);
 
         var result = new OrderMutasiModel(id, auditTrail.Created.Timestamp, OrderMutasiStateEnum.Draft,
             layananOrder.ToReff(), layananTujuan.ToReff(), 
-            ApprovalType.Default, ApprovalType.Default, orderNote, auditTrail, listBrg);
+            ApprovalType.Default, ApprovalType.Default, orderNote, auditTrail, listItem);
         return result;
     }
     #endregion

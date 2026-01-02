@@ -89,7 +89,7 @@ public class OrderMutasiAddItemHandler : IRequestHandler<OrderMutasiAddItemComma
             layananTujuan: LayananType.Default,
             orderNote: "-",
             userId: request.UserId,
-            listBrg: []
+            listItem: []
         );
     }
 

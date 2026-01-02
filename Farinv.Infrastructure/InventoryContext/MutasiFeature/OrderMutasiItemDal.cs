@@ -8,14 +8,14 @@ using System.Data.SqlClient;
 
 namespace Farinv.Infrastructure.InventoryContext.MutasiFeature;
 
-public interface IOrderMutasiBrgDal :
+public interface IOrderMutasiItemDal :
     IInsertBulk<OrderMutasiItemDto>,
     IDelete<IOrderMutasiKey>,
     IListData<OrderMutasiItemDto, IOrderMutasiKey>
 {
 }
 
-public class OrderMutasiItemDal : IOrderMutasiBrgDal
+public class OrderMutasiItemDal : IOrderMutasiItemDal
 {
     private readonly DatabaseOptions _opt;
 

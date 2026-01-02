@@ -9,10 +9,10 @@ namespace Farinv.Infrastructure.InventoryContext.MutasiFeature;
 public class OrderMutasiRepo : IOrderMutasiRepo
 {
     private readonly IOrderMutasiDal _orderMutasiDal;
-    private readonly IOrderMutasiBrgDal _orderMutasiItemDal;
+    private readonly IOrderMutasiItemDal _orderMutasiItemDal;
 
     public OrderMutasiRepo(IOrderMutasiDal orderMutasiDal,
-        IOrderMutasiBrgDal orderMutasiItemDal)
+        IOrderMutasiItemDal orderMutasiItemDal)
     {
         _orderMutasiDal = orderMutasiDal;
         _orderMutasiItemDal = orderMutasiItemDal;
