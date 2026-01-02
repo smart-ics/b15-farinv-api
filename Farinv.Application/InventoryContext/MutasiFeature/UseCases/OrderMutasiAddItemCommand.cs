@@ -5,7 +5,6 @@ using Farinv.Domain.BrgContext.BrgFeature;
 using Farinv.Domain.InventoryContext.MutasiFeature;
 using Farinv.Domain.InventoryContext.StokFeature;
 using MediatR;
-using Nuna.Lib.ValidationHelper;
 
 namespace Farinv.Application.InventoryContext.MutasiFeature.UseCases;
 
@@ -44,15 +43,6 @@ public class OrderMutasiAddItemHandler : IRequestHandler<OrderMutasiAddItemComma
         // WRITE
         _orderMutasiRepo.SaveChanges(order);
         return Task.CompletedTask;
-    }
-
-    private OrderMutasiItemModel CreateItem(OrderMutasiAddItemCommand request)
-    {
-        var brg = GetBrg(request);
-        var satuan = GetSatuan(request);
-        var item = new OrderMutasiItemModel(1, brg, request.Qty, satuan);
-
-        return item;
     }
 
     #region PRIVATE-HELPERS
@@ -101,6 +91,15 @@ public class OrderMutasiAddItemHandler : IRequestHandler<OrderMutasiAddItemComma
             userId: request.UserId,
             listBrg: []
         );
+    }
+
+    private OrderMutasiItemModel CreateItem(OrderMutasiAddItemCommand request)
+    {
+        var brg = GetBrg(request);
+        var satuan = GetSatuan(request);
+        var item = new OrderMutasiItemModel(1, brg, request.Qty, satuan);
+
+        return item;
     }
     #endregion
 }

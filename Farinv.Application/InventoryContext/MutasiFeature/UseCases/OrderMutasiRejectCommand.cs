@@ -4,18 +4,19 @@ using MediatR;
 
 namespace Farinv.Application.InventoryContext.MutasiFeature.UseCases;
 
-public record OrderMutasiApproveCommand(string OrderMutasiId, string UserId) : IRequest, IOrderMutasiKey;
+public record OrderMutasiRejectCommand(string OrderMutasiId, string Note, string UserId) 
+    : IRequest, IOrderMutasiKey;
 
-public class OrderMutasiApproveHandler : IRequestHandler<OrderMutasiApproveCommand>
+public class OrderMutasiRejectHandler : IRequestHandler<OrderMutasiRejectCommand>
 {
     private readonly IOrderMutasiRepo _orderMutasiRepo;
 
-    public OrderMutasiApproveHandler(IOrderMutasiRepo orderMutasiRepo)
+    public OrderMutasiRejectHandler(IOrderMutasiRepo orderMutasiRepo)
     {
         _orderMutasiRepo = orderMutasiRepo;
     }
 
-    public Task Handle(OrderMutasiApproveCommand request, CancellationToken cancellationToken)
+    public Task Handle(OrderMutasiRejectCommand request, CancellationToken cancellationToken)
     {
         // GUARD
         Guard.Against.NullOrWhiteSpace(request.OrderMutasiId);
@@ -23,7 +24,7 @@ public class OrderMutasiApproveHandler : IRequestHandler<OrderMutasiApproveComma
 
         // BUILD
         var order = GetOrderMutasi(request);
-        order.Approve(request.UserId);
+        order.Reject(request.Note, request.UserId);
 
         // PERSIST
         _orderMutasiRepo.SaveChanges(order);
@@ -31,13 +32,12 @@ public class OrderMutasiApproveHandler : IRequestHandler<OrderMutasiApproveComma
         return Task.CompletedTask;
     }
 
-    private OrderMutasiModel GetOrderMutasi(OrderMutasiApproveCommand key)
+    private OrderMutasiModel GetOrderMutasi(OrderMutasiRejectCommand key)
     {
         var maybe = _orderMutasiRepo.LoadEntity(key);
         if (!maybe.HasValue)
             throw new KeyNotFoundException($"OrderMutasi {key.OrderMutasiId} not found");
-        
+
         return maybe.Value;
     }
 }
-

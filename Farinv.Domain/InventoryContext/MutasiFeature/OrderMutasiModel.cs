@@ -96,42 +96,6 @@ public class OrderMutasiModel : IOrderMutasiKey
         _listItem.Add(item);
     }
 
-    public void RemoveItem(IBrgKey key)
-    {
-        GuardDraft();
-        _listItem.RemoveAll(x => x.Brg.BrgId == key.BrgId);
-        Reorder();
-    }
-
-    private void Reorder()
-    {
-        var i = 1;
-        foreach (var item in _listItem)
-            item.SetNoUrut(i++);
-    }
-
-    public void MoveItem(IBrgKey key, int targetNoUrut)
-    {
-        GuardDraft();
-
-        if (_listItem.Count <= 1)
-            return;
-
-        if (targetNoUrut <= 0)
-            throw new ArgumentException("NoUrut tidak valid");
-
-        var item = _listItem.FirstOrDefault(x => x.Brg.BrgId == key.BrgId) 
-            ?? throw new ArgumentException("Item tidak ditemukan");
-        if (targetNoUrut > _listItem.Count)
-            targetNoUrut = _listItem.Count;
-
-        _listItem.Remove(item);
-        _listItem.Insert(targetNoUrut - 1, item);
-
-        Reorder();
-    }
-
-
     public void Submit(LayananReff layananTujuan, string note, string userId)
     {
         GuardDraft();
@@ -141,17 +105,6 @@ public class OrderMutasiModel : IOrderMutasiKey
         LayananTujuan = layananTujuan;
         UpdateNote(note);
         AuditTrail.Modif(userId, DateTime.Now);
-    }
-
-    public void UpdateNote(string note)
-    {
-        OrderNote = note;
-    }
-
-    public void SetLayananTujuan(LayananReff tujuan)
-    {
-        GuardDraft();
-        LayananTujuan = tujuan;
     }
 
     public void Approve(string userId)
@@ -166,13 +119,59 @@ public class OrderMutasiModel : IOrderMutasiKey
         GuardStatus(OrderMutasiStateEnum.Submitted);
         State = OrderMutasiStateEnum.Rejected;
         Rejection = new ApprovalType(userId, DateTime.Now);
-        OrderNote = note;
+        UpdateNote(note);
     }
 
     public void Complete()
     {
         GuardStatus(OrderMutasiStateEnum.Approved);
         State = OrderMutasiStateEnum.Completed;
+    }
+
+    public void UpdateNote(string note)
+    {
+        OrderNote = note;
+    }
+
+    public void SetLayananTujuan(LayananReff tujuan)
+    {
+        GuardDraft();
+        LayananTujuan = tujuan;
+    }
+
+    public void RemoveItem(IBrgKey key)
+    {
+        GuardDraft();
+        _listItem.RemoveAll(x => x.Brg.BrgId == key.BrgId);
+        Reorder();
+    }
+
+    public void MoveItem(IBrgKey key, int targetNoUrut)
+    {
+        GuardDraft();
+
+        if (_listItem.Count <= 1)
+            return;
+
+        if (targetNoUrut <= 0)
+            throw new ArgumentException("NoUrut tidak valid");
+
+        var item = _listItem.FirstOrDefault(x => x.Brg.BrgId == key.BrgId)
+            ?? throw new ArgumentException("Item tidak ditemukan");
+        if (targetNoUrut > _listItem.Count)
+            targetNoUrut = _listItem.Count;
+
+        _listItem.Remove(item);
+        _listItem.Insert(targetNoUrut - 1, item);
+
+        Reorder();
+    }
+
+    private void Reorder()
+    {
+        var i = 1;
+        foreach (var item in _listItem)
+            item.SetNoUrut(i++);
     }
     #endregion
 
