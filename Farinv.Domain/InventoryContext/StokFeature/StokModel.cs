@@ -24,6 +24,12 @@ public class StokModel : IStokKey
     public static IStokKey Key(string brgId, string layananId) 
         => new StokModel(brgId, layananId, BrgObatType.Default.ToReff(), 
         LayananType.Default.ToReff(), 0, "", []);
+
+    public static StokModel Create(string brgId, string layananId,
+        BrgReff brg, LayananReff layanan, string satuan)
+    {
+        return new StokModel(brgId, layananId, brg, layanan, 0, satuan, []);
+    }
     #endregion
     
     #region PROPERTIES
