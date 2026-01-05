@@ -7,8 +7,8 @@ using MediatR;
 
 namespace Farinv.Application.InventoryContext.MutasiFeature.UseCases;
 
-public record OrderMutasiDraftStateGetQuery(string LayananOrderId) : 
-    IRequest<OrderMutasiDraftStateGetResponse>;
+public record OrderMutasiDraftStateGetQuery(string LayananOrderId) 
+    : IRequest<OrderMutasiDraftStateGetResponse>;
 
 public record OrderMutasiDraftStateGetResponse(string OrderMutasiId, string OrderMutasiDate,
     string State, LayananReff LayananOrder, LayananReff LayananTujuan, string OrderNote,
@@ -16,8 +16,8 @@ public record OrderMutasiDraftStateGetResponse(string OrderMutasiId, string Orde
 
 public record OrderMutasiDraftStateItemGetResponse(int NoUrut, BrgReff Brg, decimal Qty, SatuanType Satuan);
 
-public class OrderMutasiDraftStateGetHandler :
-    IRequestHandler<OrderMutasiDraftStateGetQuery, OrderMutasiDraftStateGetResponse>
+public class OrderMutasiDraftStateGetHandler 
+    : IRequestHandler<OrderMutasiDraftStateGetQuery, OrderMutasiDraftStateGetResponse>
 {
     private readonly IOrderMutasiRepo _orderMutasiRepo;
     private readonly ILayananRepo _layananRepo;

@@ -65,4 +65,22 @@ public class OrderMutasiController : ControllerBase
         var response = await _mediator.Send(query);
         return Ok(new JSendOk(response));
     }
+
+    [HttpGet]
+    [Route("submitted/{tglYmd1}/{tglYmd2}")]
+    public async Task<IActionResult> ListSubmitted(string tglYmd1, string tglYmd2)
+    {
+        var query = new OrderMutasiSubmittedListQuery(tglYmd1, tglYmd2);
+        var response = await _mediator.Send(query);
+        return Ok(new JSendOk(response));
+    }
+
+    [HttpGet]
+    [Route("approved/{tglYmd1}/{tglYmd2}")]
+    public async Task<IActionResult> ListApproved(string tglYmd1, string tglYmd2)
+    {
+        var query = new OrderMutasiApprovedListQuery(tglYmd1, tglYmd2);
+        var response = await _mediator.Send(query);
+        return Ok(new JSendOk(response));
+    }
 }

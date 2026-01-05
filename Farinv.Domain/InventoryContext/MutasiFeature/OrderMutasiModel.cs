@@ -61,7 +61,7 @@ public class OrderMutasiModel : IOrderMutasiKey
 
     #region PROPERTIES
     public string OrderMutasiId { get; init; }
-    public DateTime OrderMutasiDate { get; init; }
+    public DateTime OrderMutasiDate { get; private set; }
     public OrderMutasiStateEnum State { get; private set; }
 
     public LayananReff LayananOrder { get; init; }
@@ -103,6 +103,7 @@ public class OrderMutasiModel : IOrderMutasiKey
 
         State = OrderMutasiStateEnum.Submitted;
         LayananTujuan = layananTujuan;
+        OrderMutasiDate = DateTime.Now;
         AuditTrail.Modif(userId, DateTime.Now);
     }
 
@@ -199,8 +200,6 @@ public interface IOrderMutasiKey
     string OrderMutasiId { get; }
 }
 
-public record OrderMutasiHeaderView(
-    string OrderMutasiId,
-    DateTime OrderMutasiDate,
-    OrderMutasiStateEnum State,
-    LayananReff LayananOrder) : IOrderMutasiKey;
+public record OrderMutasiHeaderView(string OrderMutasiId,
+    DateTime OrderMutasiDate, OrderMutasiStateEnum State,
+    LayananReff LayananOrder, LayananReff LayananTujuan) : IOrderMutasiKey;

@@ -11,4 +11,5 @@ public interface IOrderMutasiRepo :
     IListData<OrderMutasiHeaderView, Periode>
 {
     IEnumerable<OrderMutasiHeaderView> ListDraftState();
+    IEnumerable<OrderMutasiHeaderView> ListApprovedState(Periode filter);
 }

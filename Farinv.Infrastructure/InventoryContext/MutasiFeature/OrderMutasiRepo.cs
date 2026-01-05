@@ -30,7 +30,8 @@ public class OrderMutasiRepo : IOrderMutasiRepo
         var result = listDto.Select(x => 
             new OrderMutasiHeaderView(
                 x.OrderMutasiId, x.OrderMutasiDate, x.State, 
-                new LayananReff(x.LayananOrderId, x.LayananOrderName)));
+                new LayananReff(x.LayananOrderId, x.LayananOrderName),
+                new LayananReff(x.LayananTujuanId, x.LayananTujuanName)));
         return result;
     }
 
@@ -40,7 +41,19 @@ public class OrderMutasiRepo : IOrderMutasiRepo
         var result = listDto.Select(x =>
             new OrderMutasiHeaderView(
                 x.OrderMutasiId, x.OrderMutasiDate, x.State,
-                new LayananReff(x.LayananOrderId, x.LayananOrderName)));
+                 new LayananReff(x.LayananOrderId, x.LayananOrderName),
+                new LayananReff(x.LayananTujuanId, x.LayananTujuanName)));
+        return result;
+    }
+
+    public IEnumerable<OrderMutasiHeaderView> ListApprovedState(Periode filter)
+    {
+        var listDto = _orderMutasiDal.ListApprovedState(filter) ?? [];
+        var result = listDto.Select(x =>
+            new OrderMutasiHeaderView(
+                x.OrderMutasiId, x.OrderMutasiDate, x.State,
+                new LayananReff(x.LayananOrderId, x.LayananOrderName),
+                new LayananReff(x.LayananTujuanId, x.LayananTujuanName)));
         return result;
     }
 

@@ -6,8 +6,8 @@ using MediatR;
 
 namespace Farinv.Application.InventoryContext.MutasiFeature.UseCases;
 
-public record OrderMutasiGetQuery(string OrderMutasiId) : 
-    IRequest<OrderMutasiGetResponse>, IOrderMutasiKey;
+public record OrderMutasiGetQuery(string OrderMutasiId) 
+    : IRequest<OrderMutasiGetResponse>, IOrderMutasiKey;
 
 public record OrderMutasiGetResponse(string OrderMutasiId, string OrderMutasiDate, 
     string State, LayananReff LayananOrder, LayananReff LayananTujuan,

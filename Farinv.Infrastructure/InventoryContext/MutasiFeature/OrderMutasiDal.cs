@@ -17,6 +17,7 @@ public interface IOrderMutasiDal :
     IListData<OrderMutasiDto, Periode>
 {
     IEnumerable<OrderMutasiDto> ListDraftState();
+    IEnumerable<OrderMutasiDto> ListApprovedState(Periode filter);
 }
 
 public class OrderMutasiDal : IOrderMutasiDal
@@ -192,6 +193,29 @@ public class OrderMutasiDal : IOrderMutasiDal
                 State = 0
             """;
         var dp = new DynamicParameters();
+        using var conn = new SqlConnection(ConnStringHelper.Get(_opt));
+        return conn.Read<OrderMutasiDto>(sql, dp);
+    }
+
+    public IEnumerable<OrderMutasiDto> ListApprovedState(Periode filter)
+    {
+        const string sql = """
+            SELECT 
+                OrderMutasiId, OrderMutasiDate, State,
+                LayananOrderId, LayananOrderName, 
+                LayananTujuanId, LayananTujuanName, 
+                ApprovalUserId, ApprovalDate, 
+                RejectionUserId, RejectionDate, OrderNote,
+                CrtUser, CrtDate, UpdUser, UpdDate, VodUser, VodDate
+            FROM 
+                FARIN_OrderMutasi
+            WHERE 
+                ApprovalDate BETWEEN @Tgl1 AND @Tgl2
+            """;
+        var dp = new DynamicParameters();
+        dp.AddParam("@Tgl1", filter.Tgl1, SqlDbType.DateTime);
+        dp.AddParam("@Tgl2", filter.Tgl2, SqlDbType.DateTime);
+
         using var conn = new SqlConnection(ConnStringHelper.Get(_opt));
         return conn.Read<OrderMutasiDto>(sql, dp);
     }
