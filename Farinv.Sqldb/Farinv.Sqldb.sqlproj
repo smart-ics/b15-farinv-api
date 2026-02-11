@@ -63,6 +63,7 @@
     <Folder Include="InventoryContext\" />
     <Folder Include="BrgContext\BrgFeature\" />
     <Folder Include="BrgContext\KlasifikasiFeature\" />
+    <Folder Include="InventoryContext\StokFeature\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="InventoryContext\StokFeature\FARIN_Stok.sql" />
