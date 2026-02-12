@@ -1,14 +1,15 @@
 ﻿using Ardalis.GuardClauses;
-using Farinv.Domain.Shared.Helpers.CommonValueObjects;
 
 namespace Farinv.Domain.SalesContext.AntrianFeature;
 
 public class AntrianModel: IAntrianKey
 {
     #region CREATION
-    public AntrianModel(string antrianId, DateOnly antrianDate,
-        string sequenceTag, int noAntrian, AntrianStatusEnum antrianStatus, 
-        string personName, AuditTrailType auditTrail)
+    public AntrianModel(
+        string antrianId, DateOnly antrianDate, string sequenceTag, 
+        int noAntrian, AntrianStatusEnum antrianStatus, string personName, 
+        DateTime takenAt, DateTime assignedAt, DateTime preparedAt, 
+        DateTime deliveredAt, DateTime cancelAt)
     {
         AntrianId = antrianId;
         AntrianDate = antrianDate;
@@ -16,27 +17,39 @@ public class AntrianModel: IAntrianKey
         NoAntrian = noAntrian;
         AntrianStatus = antrianStatus;
         PersonName = personName;
-        AuditTrail = auditTrail;
+        TakenAt = takenAt;
+        AssignedAt = assignedAt;
+        PreparedAt = preparedAt;
+        DeliveredAt = deliveredAt;
+        CancelAt = cancelAt;
     }
 
     public static IAntrianKey Key(string id)
     {
-        var result = new AntrianModel(id, DateOnly.FromDateTime(DateTime.Now),
-            "-", 0, AntrianStatusEnum.Open, "-", AuditTrailType.Default);
+        var result = new AntrianModel(
+            id, DateOnly.FromDateTime(DateTime.Now), "-", 
+            0, AntrianStatusEnum.Open, "-", 
+            new DateTime(3000, 1, 1), new DateTime(3000, 1, 1), new DateTime(3000, 1, 1), 
+            new DateTime(3000, 1, 1), new DateTime(3000, 1, 1));
         return result; 
     }
 
-    public static AntrianModel Default => new("-", DateOnly.FromDateTime(DateTime.Now),
-            "-", 0, AntrianStatusEnum.Open, "-", AuditTrailType.Default);
+    public static AntrianModel Default => new(
+            "-", DateOnly.FromDateTime(DateTime.Now),"-", 
+            0, AntrianStatusEnum.Open, "-",
+            new DateTime(3000, 1, 1), new DateTime(3000, 1, 1), new DateTime(3000, 1, 1),
+            new DateTime(3000, 1, 1), new DateTime(3000, 1, 1));
 
     public static AntrianModel Create(string antrianId, DateOnly antrianDate, 
-        string sequenceTag, int noAntrian, string userId)
+        string sequenceTag, int noAntrian)
     {
         Guard.Against.NegativeOrZero(noAntrian, nameof(noAntrian));
+        Guard.Against.NullOrWhiteSpace(sequenceTag, nameof(sequenceTag));
 
         return new AntrianModel(antrianId, antrianDate, 
             sequenceTag, noAntrian, AntrianStatusEnum.Taken, "-",
-            AuditTrailType.Create(userId, DateTime.Now));
+            DateTime.Now, new DateTime(3000, 1, 1), new DateTime(3000, 1, 1),
+            new DateTime(3000, 1, 1), new DateTime(3000, 1, 1));
     }
     #endregion
 
@@ -49,38 +62,42 @@ public class AntrianModel: IAntrianKey
     public AntrianStatusEnum AntrianStatus { get; private set; }
     public string PersonName { get; private set; }
 
-    public AuditTrailType AuditTrail { get; init; }
+    public DateTime TakenAt { get; init; }
+    public DateTime AssignedAt { get; private set; }
+    public DateTime PreparedAt { get; private set; }
+    public DateTime DeliveredAt { get; private set; }
+    public DateTime CancelAt { get; private set; }
     #endregion
 
     #region BEHAVIOR
-    public void Assign(string personName, string userId)
+    public void Assign(string personName)
     {
         Guard.Against.NullOrWhiteSpace(personName, nameof(personName));
         EnsureStatus(AntrianStatusEnum.Taken);
 
-        AuditTrail.Modif(userId, DateTime.Now);
         AntrianStatus = AntrianStatusEnum.Assigned;
+        AssignedAt = DateTime.Now;
         PersonName = personName;
     }
 
-    public void Prepare(string userId)
+    public void Prepare()
     {
         EnsureStatus(AntrianStatusEnum.Assigned);
-        AuditTrail.Modif(userId, DateTime.Now);
+        PreparedAt = DateTime.Now;
         AntrianStatus = AntrianStatusEnum.Prepared;
     }
 
-    public void Deliver(string userId)
+    public void Deliver()
     {
         EnsureStatus(AntrianStatusEnum.Prepared);
-        AuditTrail.Modif(userId, DateTime.Now);
+        DeliveredAt = DateTime.Now;
         AntrianStatus = AntrianStatusEnum.Delivered;
     }
 
-    public void Cancel(string userId)
+    public void Cancel()
     {
         EnsureStatus(AntrianStatusEnum.Prepared);
-        AuditTrail.Batal(userId, DateTime.Now);
+        CancelAt = DateTime.Now;
         AntrianStatus = AntrianStatusEnum.Cancelled;
     }
 

@@ -1,13 +1,12 @@
 ﻿using Farinv.Domain.SalesContext.AntrianFeature;
-using Farinv.Domain.Shared.Helpers.CommonValueObjects;
 
 namespace Farinv.Infrastructure.SalesContext.AntrianFeature;
 
 public record AntrianDto(
     string AntrianId, DateTime AntrianDate, string SequenceTag, 
     int NoAntrian, int AntrianStatus, string PersonName,
-    string CrtUser, DateTime CrtDate, string UpdUser,
-    DateTime UpdDate, string VodUser, DateTime VodDate) : IAntrianKey
+    DateTime TakenAt, DateTime AssignedAt, DateTime PreparedAt, 
+    DateTime DeliveredAt, DateTime CancelAt) : IAntrianKey
 {
     public static AntrianDto FromModel(AntrianModel model)
     {
@@ -18,19 +17,16 @@ public record AntrianDto(
             model.NoAntrian,
             (int)model.AntrianStatus,
             model.PersonName,
-            model.AuditTrail.Created.UserId, model.AuditTrail.Created.Timestamp,
-            model.AuditTrail.Modified.UserId, model.AuditTrail.Modified.Timestamp,
-            model.AuditTrail.Voided.UserId, model.AuditTrail.Voided.Timestamp);
+            model.TakenAt,
+            model.AssignedAt,
+            model.PreparedAt,
+            model.DeliveredAt,
+            model.CancelAt);
         return result;
     }
 
     public AntrianModel ToModel()
     {
-        var crt = new AuditInfoType(CrtUser, CrtDate);
-        var upd = new AuditInfoType(UpdUser, UpdDate);
-        var vod = new AuditInfoType(VodUser, VodDate);
-        var auditTrail = new AuditTrailType(crt, upd, vod);
-
         var result = new AntrianModel(
             AntrianId, 
             DateOnly.FromDateTime(AntrianDate),
@@ -38,7 +34,11 @@ public record AntrianDto(
             NoAntrian,
             (AntrianStatusEnum)AntrianStatus,
             PersonName,
-            auditTrail);
+            TakenAt,
+            AssignedAt,
+            PreparedAt,
+            DeliveredAt,
+            CancelAt);
         return result;
     }
 }

@@ -33,11 +33,13 @@ public class AntrianDal : IAntrialDal
            INSERT INTO FARIN_Antrian(
                AntrianId, AntrianDate, SequenceTag, 
                NoAntrian, AntrianStatus, PersonName,
-               CrtUser, CrtDate, UpdUser, UpdDate, VodUser, VodDate)
+               TakenAt, AssignedAt, PreparedAt, 
+               DeliveredAt, CancelAt)
            VALUES (
                @AntrianId, @AntrianDate, @SequenceTag, 
                @NoAntrian, @AntrianStatus, @PersonName,
-               @CrtUser, @CrtDate, @UpdUser, @UpdDate, @VodUser, @VodDate)
+               @TakenAt, @AssignedAt, @PreparedAt, 
+               @DeliveredAt, @CancelAt)
            """;
 
         var dp = new DynamicParameters();
@@ -48,12 +50,11 @@ public class AntrianDal : IAntrialDal
         dp.AddParam("@AntrianStatus", dto.AntrianStatus, SqlDbType.Int);
         dp.AddParam("@PersonName", dto.PersonName, SqlDbType.VarChar);
 
-        dp.AddParam("@CrtUser", dto.CrtUser, SqlDbType.VarChar);
-        dp.AddParam("@CrtDate", dto.CrtDate, SqlDbType.DateTime);
-        dp.AddParam("@UpdUser", dto.UpdUser, SqlDbType.VarChar);
-        dp.AddParam("@UpdDate", dto.UpdDate, SqlDbType.DateTime);
-        dp.AddParam("@VodUser", dto.VodUser, SqlDbType.VarChar);
-        dp.AddParam("@VodDate", dto.VodDate, SqlDbType.DateTime);
+        dp.AddParam("@TakenAt", dto.TakenAt, SqlDbType.DateTime);
+        dp.AddParam("@AssignedAt", dto.AssignedAt, SqlDbType.DateTime);
+        dp.AddParam("@PreparedAt", dto.PreparedAt, SqlDbType.DateTime);
+        dp.AddParam("@DeliveredAt", dto.DeliveredAt, SqlDbType.DateTime);
+        dp.AddParam("@CancelAt", dto.CancelAt, SqlDbType.DateTime);
 
         using var conn = new SqlConnection(ConnStringHelper.Get(_opt));
         conn.Execute(sql, dp);
@@ -70,12 +71,11 @@ public class AntrianDal : IAntrialDal
                 NoAntrian = @NoAntrian, 
                 AntrianStatus = @AntrianStatus,
                 PersonName = @PersonName,
-                CrtUser = @CrtUser,
-                CrtDate = @CrtDate,
-                UpdUser = @UpdUser,
-                UpdDate = @UpdDate,
-                VodUser = @VodUser,
-                VodDate = @VodDate
+                TakenAt = @TakenAt,
+                AssignedAt = @AssignedAt,
+                PreparedAt = @PreparedAt,
+                DeliveredAt = @DeliveredAt,
+                CancelAt = @CancelAt
            WHERE
                 AntrianId = @AntrianId
            """;
@@ -88,12 +88,11 @@ public class AntrianDal : IAntrialDal
         dp.AddParam("@AntrianStatus", dto.AntrianStatus, SqlDbType.Int);
         dp.AddParam("@PersonName", dto.PersonName, SqlDbType.VarChar);
 
-        dp.AddParam("@CrtUser", dto.CrtUser, SqlDbType.VarChar);
-        dp.AddParam("@CrtDate", dto.CrtDate, SqlDbType.DateTime);
-        dp.AddParam("@UpdUser", dto.UpdUser, SqlDbType.VarChar);
-        dp.AddParam("@UpdDate", dto.UpdDate, SqlDbType.DateTime);
-        dp.AddParam("@VodUser", dto.VodUser, SqlDbType.VarChar);
-        dp.AddParam("@VodDate", dto.VodDate, SqlDbType.DateTime);
+        dp.AddParam("@TakenAt", dto.TakenAt, SqlDbType.DateTime);
+        dp.AddParam("@AssignedAt", dto.AssignedAt, SqlDbType.DateTime);
+        dp.AddParam("@PreparedAt", dto.PreparedAt, SqlDbType.DateTime);
+        dp.AddParam("@DeliveredAt", dto.DeliveredAt, SqlDbType.DateTime);
+        dp.AddParam("@CancelAt", dto.CancelAt, SqlDbType.DateTime);
 
         using var conn = new SqlConnection(ConnStringHelper.Get(_opt));
         conn.Execute(sql, dp);
@@ -121,7 +120,8 @@ public class AntrianDal : IAntrialDal
            SELECT
                 AntrianId, AntrianDate, SequenceTag, 
                 NoAntrian, AntrianStatus, PersonName,
-                CrtUser, CrtDate, UpdUser, UpdDate, VodUser, VodDate
+                TakenAt, AssignedAt, PreparedAt, 
+                DeliveredAt, CancelAt
            FROM
                 FARIN_Antrian
            WHERE
@@ -141,7 +141,8 @@ public class AntrianDal : IAntrialDal
            SELECT
                 AntrianId, AntrianDate, SequenceTag, 
                 NoAntrian, AntrianStatus, PersonName,
-                CrtUser, CrtDate, UpdUser, UpdDate, VodUser, VodDate
+                TakenAt, AssignedAt, PreparedAt, 
+                DeliveredAt, CancelAt
            FROM
                 FARIN_Antrian
            WHERE

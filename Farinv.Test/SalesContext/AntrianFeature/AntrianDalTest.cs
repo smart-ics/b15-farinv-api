@@ -19,12 +19,11 @@ public class AntrianDalTest
             NoAntrian: 1,
             AntrianStatus: (int)AntrianStatusEnum.Taken,
             PersonName: "-",
-            CrtUser: "USR001",
-            CrtDate: new DateTime(2026, 2, 3),
-            UpdUser: "USR001",
-            UpdDate: new DateTime(2026, 2, 3),
-            VodUser: "",
-            VodDate: new DateTime(3000, 1, 1)
+            TakenAt: new DateTime(2026, 2, 3),
+            AssignedAt: new DateTime(3000, 1, 1),
+            PreparedAt: new DateTime(3000, 1, 1),
+            DeliveredAt: new DateTime(3000, 1, 1),
+            CancelAt: new DateTime(3000, 1, 1)
         );
 
     private static IAntrianKey FakerKey()
