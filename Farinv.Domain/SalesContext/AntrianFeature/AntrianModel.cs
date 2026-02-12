@@ -1,4 +1,5 @@
 ﻿using Ardalis.GuardClauses;
+using Farinv.Domain.Shared.Helpers.CommonValueObjects;
 
 namespace Farinv.Domain.SalesContext.AntrianFeature;
 
@@ -6,32 +7,36 @@ public class AntrianModel: IAntrianKey
 {
     #region CREATION
     public AntrianModel(string antrianId, DateOnly antrianDate,
-        int noAntrian, AntrianStatusEnum status, string pasienName)
+        string sequenceTag, int noAntrian, AntrianStatusEnum antrianStatus, 
+        string personName, AuditTrailType auditTrail)
     {
         AntrianId = antrianId;
         AntrianDate = antrianDate;
+        SequenceTag = sequenceTag;
         NoAntrian = noAntrian;
-        Status = status;
-        PasienName = pasienName;
+        AntrianStatus = antrianStatus;
+        PersonName = personName;
+        AuditTrail = auditTrail;
     }
 
     public static IAntrianKey Key(string id)
     {
         var result = new AntrianModel(id, DateOnly.FromDateTime(DateTime.Now),
-            0, AntrianStatusEnum.Open, "-");
-        return result;
+            "-", 0, AntrianStatusEnum.Open, "-", AuditTrailType.Default);
+        return result; 
     }
 
     public static AntrianModel Default => new("-", DateOnly.FromDateTime(DateTime.Now),
-            0, AntrianStatusEnum.Open, "-");
+            "-", 0, AntrianStatusEnum.Open, "-", AuditTrailType.Default);
 
-    public static AntrianModel Create(string antrianId, 
-        DateOnly antrianDate, int noAntrian)
+    public static AntrianModel Create(string antrianId, DateOnly antrianDate, 
+        string sequenceTag, int noAntrian, string userId)
     {
         Guard.Against.NegativeOrZero(noAntrian, nameof(noAntrian));
 
         return new AntrianModel(antrianId, antrianDate, 
-            noAntrian, AntrianStatusEnum.Taken, "-");
+            sequenceTag, noAntrian, AntrianStatusEnum.Taken, "-",
+            AuditTrailType.Create(userId, DateTime.Now));
     }
     #endregion
 
@@ -39,50 +44,57 @@ public class AntrianModel: IAntrianKey
     public string AntrianId { get; init; }
     public DateOnly AntrianDate { get; init; }
 
+    public string SequenceTag { get; init; }
     public int NoAntrian { get; private set; }
-    public AntrianStatusEnum Status { get; private set; }
-    public string PasienName { get; private set; }
+    public AntrianStatusEnum AntrianStatus { get; private set; }
+    public string PersonName { get; private set; }
+
+    public AuditTrailType AuditTrail { get; init; }
     #endregion
 
     #region BEHAVIOR
-    public void Assign(string pasienName)
+    public void Assign(string personName, string userId)
     {
-        Guard.Against.NullOrWhiteSpace(pasienName, nameof(pasienName));
-
+        Guard.Against.NullOrWhiteSpace(personName, nameof(personName));
         EnsureStatus(AntrianStatusEnum.Taken);
-        Status = AntrianStatusEnum.Assigned;
-        PasienName = pasienName;
+
+        AuditTrail.Modif(userId, DateTime.Now);
+        AntrianStatus = AntrianStatusEnum.Assigned;
+        PersonName = personName;
     }
 
-    public void Prepare()
+    public void Prepare(string userId)
     {
         EnsureStatus(AntrianStatusEnum.Assigned);
-        Status = AntrianStatusEnum.Prepared;
+        AuditTrail.Modif(userId, DateTime.Now);
+        AntrianStatus = AntrianStatusEnum.Prepared;
     }
 
-    public void Deliver()
+    public void Deliver(string userId)
     {
         EnsureStatus(AntrianStatusEnum.Prepared);
-        Status = AntrianStatusEnum.Delivered;
+        AuditTrail.Modif(userId, DateTime.Now);
+        AntrianStatus = AntrianStatusEnum.Delivered;
     }
 
-    public void Cancel()
+    public void Cancel(string userId)
     {
         EnsureStatus(AntrianStatusEnum.Prepared);
-        Status = AntrianStatusEnum.Cancelled;
+        AuditTrail.Batal(userId, DateTime.Now);
+        AntrianStatus = AntrianStatusEnum.Cancelled;
     }
 
     private void EnsureStatus(AntrianStatusEnum expected)
     {
         if (IsFinalState())
-            throw new InvalidOperationException($"Status Antrian ({Status}) cannot be change");
+            throw new InvalidOperationException($"Status Antrian ({AntrianStatus}) cannot be change");
 
-        if (Status != expected)
+        if (AntrianStatus != expected)
             throw new InvalidOperationException($"Status Antrian must be {expected}");
     }
 
-    private bool IsFinalState() => 
-        Status == AntrianStatusEnum.Delivered || Status == AntrianStatusEnum.Cancelled;
+    private bool IsFinalState() =>
+        AntrianStatus == AntrianStatusEnum.Delivered || AntrianStatus == AntrianStatusEnum.Cancelled;
     #endregion
 }
 

@@ -64,6 +64,8 @@
     <Folder Include="BrgContext\BrgFeature\" />
     <Folder Include="BrgContext\KlasifikasiFeature\" />
     <Folder Include="InventoryContext\StokFeature\" />
+    <Folder Include="SalesContext" />
+    <Folder Include="SalesContext\AntrianFeature" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="InventoryContext\StokFeature\FARIN_Stok.sql" />
@@ -89,6 +91,7 @@
     <None Include="BrgContext\StandardFeature\Kfa\FARPU_KfaPackaging.sql" />
     <None Include="BrgContext\StandardFeature\Kfa\FARPU_KfaReplacement.sql" />
     <None Include="BrgContext\BrgFeature\tb_satuan.sql" />
+    <Build Include="SalesContext\AntrianFeature\FARIN_Antrian.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="BrgContext\StandardFeature\tb_gol_terapi.sql" />
