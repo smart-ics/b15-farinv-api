@@ -1,24 +1,14 @@
 ﻿CREATE TABLE FARIN_Antrian
 (
-	AntrianId       VARCHAR(26)     NOT NULL CONSTRAINT DF_FARIN_Antrian_AntrianId DEFAULT(''),
-    --AntrianDate     DATETIME        NOT NULL CONSTRAINT DF_FARIN_Antrian_AntrianDate DEFAULT('3000-01-01'),
-    --SequenceTag     VARCHAR(10)     NOT NULL CONSTRAINT DF_FARIN_Antrian_SequenceTag DEFAULT(''),
-    --NoAntrian       INT             NOT NULL CONSTRAINT DF_FARIN_Antrian_NoAntrian DEFAULT(0),
-    --AntrianStatus   INT             NOT NULL CONSTRAINT DF_FARIN_Antrian_AntrianStatus DEFAULT(0),
-    --PersonName      VARCHAR(40)     NOT NULL CONSTRAINT DF_FARIN_Antrian_PersonName DEFAULT(''),
-    
-    --TakenAt         DATETIME       NOT NULL CONSTRAINT DF_FARIN_Antrian_TakenAt DEFAULT('3000-01-01'),
-    --AssignedAt      DATETIME       NOT NULL CONSTRAINT DF_FARIN_Antrian_AssignedAt DEFAULT('3000-01-01'),
-    --PreparedAt      DATETIME       NOT NULL CONSTRAINT DF_FARIN_Antrian_PreparedAt DEFAULT('3000-01-01'),
-    --DeliveredAt     DATETIME       NOT NULL CONSTRAINT DF_FARIN_Antrian_DeliveredAt DEFAULT('3000-01-01'),
-    --CancelAt        DATETIME       NOT NULL CONSTRAINT DF_FARIN_Antrian_CancelAt DEFAULT('3000-01-01'),
+	AntrianId           VARCHAR(26) NOT NULL CONSTRAINT DF_FARIN_Antrian_AntrianId DEFAULT(''),
+    AntrianDate         DATETIME    NOT NULL CONSTRAINT DF_FARIN_Antrian_AntrianDate DEFAULT('3000-01-01'),
+    StartTime           VARCHAR(5)  NOT NULL CONSTRAINT DF_FARIN_Antrian_StartTime DEFAULT('00:00'),
+    EndTime             VARCHAR(5)  NOT NULL CONSTRAINT DF_FARIN_Antrian_EndTime DEFAULT('00:00'),   
+    ServicePoint        INT         NOT NULL CONSTRAINT DF_FARIN_Antrian_ServicePoint DEFAULT(0),
+    SequenceTag         VARCHAR(16) NOT NULL CONSTRAINT DF_FARIN_Antrian_SequenceTag DEFAULT(''),
+    AntrianDescription  VARCHAR(32) NOT NULL CONSTRAINT DF_FARIN_Antrian_AntrianDesc DEFAULT(''),
 
-    --CONSTRAINT PK_FARIN_Antrian PRIMARY KEY NONCLUSTERED (AntrianId)    
+    CONSTRAINT PK_FARIN_Antrian PRIMARY KEY CLUSTERED (AntrianId),
+    CONSTRAINT UQ_Antrian_UniqueEntry UNIQUE (AntrianDate, StartTime, ServicePoint)
 )
 GO
-
---CREATE CLUSTERED INDEX CX_FARIN_Antrian_DateNo ON FARIN_Antrian (AntrianDate, NoAntrian)
---GO
-
---CREATE NONCLUSTERED INDEX IX_FARIN_Antrian_AntrianDate ON FARIN_Antrian (AntrianDate)
---GO

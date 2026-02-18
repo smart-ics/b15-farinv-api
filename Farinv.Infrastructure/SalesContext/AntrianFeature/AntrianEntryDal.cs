@@ -8,7 +8,8 @@ using System.Data.SqlClient;
 
 namespace Farinv.Infrastructure.SalesContext.AntrianFeature;
 
-public interface IAntrianEntryDal :    
+public interface IAntrianEntryDal :
+    IInsert<AntrianEntryDto>,
     IInsertBulk<AntrianEntryDto>,
     IUpdate<AntrianEntryDto>,
     IDelete<IAntrianKey>,
@@ -25,6 +26,38 @@ public class AntrianEntryDal : IAntrianEntryDal
     public AntrianEntryDal(IOptions<DatabaseOptions> opt)
     {
         _opt = opt.Value;
+    }
+
+    public void Insert(AntrianEntryDto dto)
+    {
+        const string sql = """
+       INSERT INTO FARIN_AntrianEntry(
+            AntrianId, NoAntrian, AntrianStatus, 
+            TakenAt, AssignedAt, PreparedAt, DeliveredAt, CancelAt,
+            RegId, PasienId, PasienName, ReffId, ReffDesc)
+       VALUES (
+            @AntrianId, @NoAntrian, @AntrianStatus, 
+            @TakenAt, @AssignedAt, @PreparedAt, @DeliveredAt, @CancelAt,
+            @RegId, @PasienId, @PasienName, @ReffId, @ReffDesc)
+       """;
+
+        var dp = new DynamicParameters();
+        dp.AddParam("@AntrianId", dto.AntrianId, SqlDbType.VarChar);
+        dp.AddParam("@NoAntrian", dto.NoAntrian, SqlDbType.Int);
+        dp.AddParam("@AntrianStatus", dto.AntrianStatus, SqlDbType.Int);
+        dp.AddParam("@TakenAt", dto.TakenAt, SqlDbType.DateTime);
+        dp.AddParam("@AssignedAt", dto.AssignedAt, SqlDbType.DateTime);
+        dp.AddParam("@PreparedAt", dto.PreparedAt, SqlDbType.DateTime);
+        dp.AddParam("@DeliveredAt", dto.DeliveredAt, SqlDbType.DateTime);
+        dp.AddParam("@CancelAt", dto.CancelAt, SqlDbType.DateTime);
+        dp.AddParam("@RegId", dto.RegId, SqlDbType.VarChar);
+        dp.AddParam("@PasienId", dto.PasienId, SqlDbType.VarChar);
+        dp.AddParam("@PasienName", dto.PasienName, SqlDbType.VarChar);
+        dp.AddParam("@ReffId", dto.ReffId, SqlDbType.VarChar);
+        dp.AddParam("@ReffDesc", dto.ReffDesc, SqlDbType.VarChar);
+
+        using var conn = new SqlConnection(ConnStringHelper.Get(_opt));
+        conn.Execute(sql, dp);
     }
 
     public void Insert(IEnumerable<AntrianEntryDto> listDto)

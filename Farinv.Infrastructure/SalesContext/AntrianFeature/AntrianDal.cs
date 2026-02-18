@@ -59,7 +59,6 @@ public class AntrianDal : IAntrianDal
                 FARIN_Antrian
            SET
                 AntrianDate = @AntrianDate, 
-                SequenceTag = @SequenceTag,
                 StartTime = @StartTime, 
                 EndTime = @EndTime,
                 ServicePoint = @ServicePoint, 

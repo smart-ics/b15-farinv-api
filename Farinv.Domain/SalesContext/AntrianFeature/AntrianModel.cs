@@ -20,6 +20,15 @@ public class AntrianModel: IAntrianKey
         _listEntry = [.. listEntry];
     }
 
+    public static AntrianModel Create(
+        DateOnly antrianDate, TimeOnly startTime, TimeOnly endTime,
+        int servicePoint, string antrianDesc)
+    {
+        var newId = Ulid.NewUlid().ToString();
+        return new AntrianModel(newId, antrianDate, startTime, endTime,
+            servicePoint, antrianDesc, []);
+    }
+
     public static IAntrianKey Key(string id)
     {
         var result = new AntrianModel(id, DateOnly.FromDateTime(DateTime.Now),
@@ -102,6 +111,7 @@ public class AntrianModel: IAntrianKey
 
         entry.SetReff(reffId, reffDesc);
     }
+
 
     private AntrianEntryModel GetEntry(int noAntrian)
     {

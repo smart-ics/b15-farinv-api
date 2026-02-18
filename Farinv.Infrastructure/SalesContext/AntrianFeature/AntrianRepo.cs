@@ -27,8 +27,15 @@ public class AntrianRepo : IAntrianRepo
                 onSome: _ => _antrianDal.Update(AntrianDto.FromModel(model)),
                 onNone: () => _antrianDal.Insert(AntrianDto.FromModel(model))
             );
-        _antrianEntryDal.Delete(model);
-        _antrianEntryDal.Insert(ToDtoList(model));
+
+        var listEntryDb = _antrianEntryDal.ListData(model)?.ToList() ?? [];
+        var listCurrent = model.ListEntry
+            .Select(x => AntrianEntryDto.FromModel(model.AntrianId, x)).ToList();
+        var (addedItems, deletedItems, changedItems) = CompareCollections(listEntryDb, listCurrent);
+
+        addedItems.ForEach(x => _antrianEntryDal.Insert(x));
+        deletedItems.ForEach(x => _antrianEntryDal.Delete(model, x.NoAntrian));
+        changedItems.ForEach(x => _antrianEntryDal.Update(x));
 
         trans.Complete();
     }
@@ -69,6 +76,47 @@ public class AntrianRepo : IAntrianRepo
     {
         return model.ListEntry
             .Select(x => AntrianEntryDto.FromModel(model.AntrianId, x));
+    }
+
+    private static (List<AntrianEntryDto> addedItems,
+        List<AntrianEntryDto> deletedItems,
+        List<AntrianEntryDto> changedItems)
+        CompareCollections(
+            List<AntrianEntryDto> listEntryDb,
+            List<AntrianEntryDto> listCurrent)
+    {
+        // Find deleted items - items that exist in persisted but not in current
+        var deletedItems = listEntryDb
+            .Where(persisted => listCurrent.All(current => current.NoAntrian != persisted.NoAntrian))
+            .ToList();
+
+        // Find added items - items that exist in current but not in persisted
+        var addedItems = listCurrent
+            .Where(current => listEntryDb.All(persisted => persisted.NoAntrian != current.NoAntrian))
+            .ToList();
+
+        // Find changed items - items that exist in both but have different properties
+        var changedItems = listCurrent
+            .Where(current => listEntryDb.Any(persisted =>
+                persisted.NoAntrian == current.NoAntrian &&
+                !AreEqual(persisted, current)))
+            .ToList();
+
+        return (addedItems, deletedItems, changedItems);
+    }
+
+    private static bool AreEqual(AntrianEntryDto persisted, AntrianEntryDto current)
+    {
+        return persisted.NoAntrian == current.NoAntrian &&
+               persisted.AntrianStatus == current.AntrianStatus &&
+               persisted.TakenAt == current.TakenAt &&
+               persisted.AssignedAt == current.AssignedAt &&
+               persisted.PreparedAt == current.PreparedAt &&
+               persisted.DeliveredAt == current.DeliveredAt &&
+               persisted.CancelAt == current.CancelAt &&
+               persisted.RegId == current.RegId &&
+               persisted.ReffId == current.ReffId &&
+               persisted.ReffDesc == current.ReffDesc;
     }
     #endregion
 }
