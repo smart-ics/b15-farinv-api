@@ -10,7 +10,6 @@ namespace Farinv.Infrastructure.SalesContext.AntrianFeature;
 
 public interface IAntrianEntryDal :    
     IInsertBulk<AntrianEntryDto>,
-    IInsert<AntrianEntryDto>,
     IUpdate<AntrianEntryDto>,
     IDelete<IAntrianKey>,
     IListData<AntrianEntryDto, IAntrianKey>
@@ -50,38 +49,6 @@ public class AntrianEntryDal : IAntrianEntryDal
         bcp.BatchSize = fetched.Count;
         bcp.DestinationTableName = "FARIN_AntrianEntry";
         bcp.WriteToServer(fetched.AsDataTable());
-    }
-
-    public void Insert(AntrianEntryDto dto)
-    {
-        const string sql = """
-           INSERT INTO FARIN_Antrian(
-                AntrianId, NoAntrian, AntrianDate, 
-                TakenAt, AssignedAt, PreparedAt, DeliveredAt, CancelAt,
-                RegId, PasienId, PasienName, ReffId, ReffDesc)
-           VALUES (
-                @AntrianId, @NoAntrian, @AntrianDate, 
-                @TakenAt, @AssignedAt, @PreparedAt, @DeliveredAt, @CancelAt,
-                @RegId, @PasienId, @PasienName, @ReffId, @ReffDesc)
-           """;
-
-        var dp = new DynamicParameters();
-        dp.AddParam("@AntrianId", dto.AntrianId, SqlDbType.VarChar);
-        dp.AddParam("@NoAntrian", dto.NoAntrian, SqlDbType.Int);
-        dp.AddParam("@AntrianStatus", dto.AntrianStatus, SqlDbType.Int);
-        dp.AddParam("@TakenAt", dto.TakenAt, SqlDbType.DateTime);
-        dp.AddParam("@AssignedAt", dto.AssignedAt, SqlDbType.DateTime);
-        dp.AddParam("@PreparedAt", dto.PreparedAt, SqlDbType.DateTime);
-        dp.AddParam("@DeliveredAt", dto.DeliveredAt, SqlDbType.DateTime);
-        dp.AddParam("@CancelAt", dto.CancelAt, SqlDbType.DateTime);
-        dp.AddParam("@RegId", dto.RegId, SqlDbType.VarChar);
-        dp.AddParam("@PasienId", dto.PasienId, SqlDbType.VarChar);
-        dp.AddParam("@PasienName", dto.PasienName, SqlDbType.VarChar);
-        dp.AddParam("@ReffId", dto.ReffId, SqlDbType.VarChar);
-        dp.AddParam("@ReffDesc", dto.ReffDesc, SqlDbType.VarChar);
-
-        using var conn = new SqlConnection(ConnStringHelper.Get(_opt));
-        conn.Execute(sql, dp);
     }
 
     public void Update(AntrianEntryDto dto)
