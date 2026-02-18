@@ -136,7 +136,7 @@ public record AntrianHeaderView(
     int ServicePoint) : IAntrianKey;
 
 
-public record AntrianView(string AntrianId, int AntrianStatus, int NoAntrian, 
+public record AntrianView(string AntrianId, int NoAntrian, int AntrianStatus, 
     string RegId, string PasienId, string PasienName,
     string ReffId, string ReffDesc, DateTime AntrianDate, string SquenceTag, 
     string AntrianDescription, TimeOnly StartTime, TimeOnly EndTime);
