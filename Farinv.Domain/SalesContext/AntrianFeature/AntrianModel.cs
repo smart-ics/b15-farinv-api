@@ -1,4 +1,6 @@
-﻿namespace Farinv.Domain.SalesContext.AntrianFeature;
+﻿using Farinv.Domain.SalesContext.PenjualanFeature;
+
+namespace Farinv.Domain.SalesContext.AntrianFeature;
 
 public class AntrianModel: IAntrianKey
 {
@@ -6,48 +8,37 @@ public class AntrianModel: IAntrianKey
 
     #region CREATION
     public AntrianModel(
-        string antrianId, DateOnly antrianDate, TimeOnly startTime, TimeOnly endTime,
-        int servicePoint, string antrianDesc, IEnumerable<AntrianEntryModel> listEntry)
+        string antrianId, DateOnly antrianDate, int servicePoint, string antrianDesc, 
+        IEnumerable<AntrianEntryModel> listEntry)
     {
         AntrianId = antrianId;
         AntrianDate = antrianDate;
-        StartTime = startTime;
-        EndTime = endTime;
         ServicePoint = servicePoint;
         AntrianDescription = antrianDesc;
-        SequenceTag = GenSequenceTag(antrianDate, startTime, servicePoint);
 
         _listEntry = [.. listEntry];
     }
 
     public static AntrianModel Create(
-        DateOnly antrianDate, TimeOnly startTime, TimeOnly endTime,
-        int servicePoint, string antrianDesc)
+        DateOnly antrianDate, int servicePoint, string antrianDesc)
     {
         var newId = Ulid.NewUlid().ToString();
-        return new AntrianModel(newId, antrianDate, startTime, endTime,
-            servicePoint, antrianDesc, []);
+        return new AntrianModel(newId, antrianDate, servicePoint, antrianDesc, []);
     }
 
     public static IAntrianKey Key(string id)
     {
-        var result = new AntrianModel(id, DateOnly.FromDateTime(DateTime.Now),
-            TimeOnly.MinValue, TimeOnly.MinValue, 0, "-", []);
-        return result;
+        return new AntrianModel(id, DateOnly.FromDateTime(DateTime.Now), 0, "-", []);
     }
 
-    public static AntrianModel Default => new("-", DateOnly.MinValue,
-        TimeOnly.MinValue, TimeOnly.MinValue, 0, "-", []);
+    public static AntrianModel Default => new("-", DateOnly.MinValue, 0, "-", []);
     #endregion
 
     #region PROPERTIES
     public string AntrianId { get; init; }
     public DateOnly AntrianDate { get; init; }
-    public TimeOnly StartTime { get; init; }
-    public TimeOnly EndTime { get; init; }
 
     public int ServicePoint { get; init; }
-    public string SequenceTag { get; init; }
     public string AntrianDescription { get; init; }
 
     public IReadOnlyCollection<AntrianEntryModel> ListEntry => _listEntry.AsReadOnly();
@@ -61,10 +52,18 @@ public class AntrianModel: IAntrianKey
         _listEntry.Add(entry);
     }
 
-    public void AddEntry(int noAntrian, RegReff reg, string reffId, string reffDesc)
+    public void AddEntry(int noAntrian, RegReff reg)
     {
         EnsureSlotAvailable(noAntrian);
-        var entry = AntrianEntryModel.Create(noAntrian, reg, reffId, reffDesc);
+        var entry = AntrianEntryModel.Create(noAntrian, reg, "-", "-");
+        _listEntry.Add(entry);
+    }
+
+    public void AddEntry(int noAntrian, PenjualanReff penjualan)
+    {
+        EnsureSlotAvailable(noAntrian);
+        var entry = AntrianEntryModel.Create(noAntrian, 
+            penjualan.Reg, penjualan.PenjualanId, "PENJUALAN");
         _listEntry.Add(entry);
     }
 
@@ -119,12 +118,6 @@ public class AntrianModel: IAntrianKey
         return entry is null ? throw new InvalidOperationException($"Slot {noAntrian} not found.") : entry;
     }
 
-    private static string GenSequenceTag(DateOnly tglAntrian, TimeOnly jamMulai, int servicePoint)
-    {
-        var sequenceTag = $"AA{tglAntrian:yyMMdd}{jamMulai:HHmm}_{servicePoint}";
-        return sequenceTag;
-    }
-
     private void EnsureSlotAvailable(int noAntrian)
     {
         if (_listEntry.Any(x => x.NoAntrian == noAntrian))
@@ -142,11 +135,9 @@ public record AntrianHeaderView(
     string AntrianId,
     string AntrianDescription,
     DateOnly AntrianDate,
-    TimeOnly StartTime,
     int ServicePoint) : IAntrianKey;
 
 
 public record AntrianView(string AntrianId, int NoAntrian, int AntrianStatus, 
     string RegId, string PasienId, string PasienName,
-    string ReffId, string ReffDesc, DateTime AntrianDate, string SquenceTag, 
-    string AntrianDescription, TimeOnly StartTime, TimeOnly EndTime);
+    string ReffId, string ReffDesc, DateTime AntrianDate, string AntrianDescription);

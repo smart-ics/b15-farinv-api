@@ -60,7 +60,7 @@ public class AntrianRepo : IAntrianRepo
         var periode = new Periode(filter.ToDateTime(TimeOnly.MinValue));
         var listDto = _antrianDal.ListData(periode)?.ToList() ?? [];
         var result = listDto.Select(x => new AntrianHeaderView(x.AntrianId, x.AntrianDescription,
-            DateOnly.FromDateTime(x.AntrianDate), TimeOnly.Parse(x.StartTime), x.ServicePoint));
+            DateOnly.FromDateTime(x.AntrianDate), x.ServicePoint));
         return result;
     }
 

@@ -17,9 +17,9 @@ public class AntrianController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateAntrian(QueCreateAntrianCmd cmd)
+    public async Task<IActionResult> CreateAntrian(QueAddAntrianCmd cmd)
     {
-        var responst = await _mediator.Send(cmd);
-        return Ok(new JSendOk(responst));
+        await _mediator.Send(cmd);
+        return Ok(new JSendOk("Done"));
     }
 }

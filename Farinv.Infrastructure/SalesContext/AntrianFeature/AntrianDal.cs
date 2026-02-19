@@ -32,20 +32,15 @@ public class AntrianDal : IAntrianDal
     {
         const string sql = """
            INSERT INTO FARIN_Antrian(
-               AntrianId, AntrianDate, StartTime, EndTime,
-               ServicePoint, SequenceTag, AntrianDescription)
+               AntrianId, AntrianDate, ServicePoint, AntrianDescription)
            VALUES (
-               @AntrianId, @AntrianDate, @StartTime, @EndTime,
-               @ServicePoint, @SequenceTag, @AntrianDescription)
+               @AntrianId, @AntrianDate, @ServicePoint, @AntrianDescription)
            """;
 
         var dp = new DynamicParameters();
         dp.AddParam("@AntrianId", dto.AntrianId, SqlDbType.VarChar);
         dp.AddParam("@AntrianDate", dto.AntrianDate, SqlDbType.DateTime);
-        dp.AddParam("@StartTime", dto.StartTime, SqlDbType.VarChar);
-        dp.AddParam("@EndTime", dto.EndTime, SqlDbType.VarChar);
         dp.AddParam("@ServicePoint", dto.ServicePoint, SqlDbType.Int);
-        dp.AddParam("@SequenceTag", dto.SequenceTag, SqlDbType.VarChar);
         dp.AddParam("@AntrianDescription", dto.AntrianDescription, SqlDbType.VarChar);
 
         using var conn = new SqlConnection(ConnStringHelper.Get(_opt));
@@ -59,10 +54,7 @@ public class AntrianDal : IAntrianDal
                 FARIN_Antrian
            SET
                 AntrianDate = @AntrianDate, 
-                StartTime = @StartTime, 
-                EndTime = @EndTime,
                 ServicePoint = @ServicePoint, 
-                SequenceTag = @SequenceTag, 
                 AntrianDescription = @AntrianDescription
            WHERE
                 AntrianId = @AntrianId
@@ -71,10 +63,7 @@ public class AntrianDal : IAntrianDal
         var dp = new DynamicParameters();
         dp.AddParam("@AntrianId", dto.AntrianId, SqlDbType.VarChar);
         dp.AddParam("@AntrianDate", dto.AntrianDate, SqlDbType.DateTime);
-        dp.AddParam("@StartTime", dto.StartTime, SqlDbType.VarChar);
-        dp.AddParam("@EndTime", dto.EndTime, SqlDbType.VarChar);
         dp.AddParam("@ServicePoint", dto.ServicePoint, SqlDbType.Int);
-        dp.AddParam("@SequenceTag", dto.SequenceTag, SqlDbType.VarChar);
         dp.AddParam("@AntrianDescription", dto.AntrianDescription, SqlDbType.VarChar);
 
         using var conn = new SqlConnection(ConnStringHelper.Get(_opt));
@@ -101,8 +90,7 @@ public class AntrianDal : IAntrianDal
     {
         const string sql = """
            SELECT
-                AntrianId, AntrianDate, StartTime, EndTime,
-                ServicePoint, SequenceTag, AntrianDescription
+                AntrianId, AntrianDate, ServicePoint, AntrianDescription
            FROM
                 FARIN_Antrian
            WHERE
@@ -120,8 +108,7 @@ public class AntrianDal : IAntrianDal
     {
         const string sql = """
            SELECT
-                AntrianId, AntrianDate, StartTime, EndTime,
-                ServicePoint, SequenceTag, AntrianDescription
+                AntrianId, AntrianDate, ServicePoint, AntrianDescription
            FROM
                 FARIN_Antrian
            WHERE
@@ -144,10 +131,7 @@ public class AntrianDal : IAntrianDal
                 aa.RegId, aa.PasienId, aa.PasienName, 
                 aa.ReffId, aa.ReffDesc,
                 ISNULL(bb.AntrianDate,'') AS AntrianDate, 
-                ISNULL(bb.SequenceTag,'') AS SequenceTag, 
-                ISNULL(bb.AntrianDescription,'') AS AntrianDescription, 
-                ISNULL(bb.StartTime,'') AS StartTime, 
-                ISNULL(bb.EndTime,'') AS EndTime
+                ISNULL(bb.AntrianDescription,'') AS AntrianDescription
            FROM
            	    FARIN_AntrianEntry aa
            	    LEFT JOIN FARIN_Antrian bb ON aa.AntrianId = bb.AntrianId
