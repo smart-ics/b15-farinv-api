@@ -6,7 +6,7 @@ using Nuna.Lib.ValidationHelper;
 
 namespace Farinv.Application.SalesContext.AntrianFeature.UsesCases;
 
-public record QueCreateAntrianCmd(int ServicePoint, string TglYmd, string JamMulai)
+public record QueCreateAntrianCmd(int ServicePoint, string JamMulai)
     : IRequest<AntrianCreateResponse>;
 
 public record AntrianCreateResponse(int NoAntrian);
@@ -24,7 +24,6 @@ public class AntrianCreateHandler : IRequestHandler<QueCreateAntrianCmd, Antrian
     {
         // GUARD
         Guard.Against.NegativeOrZero(request.ServicePoint);
-        Guard.Against.InvalidDateFormat(request.TglYmd, nameof(request.TglYmd));
         Guard.Against.InvalidTimeFormat(request.JamMulai, nameof(request.JamMulai));
 
         // BUILD
@@ -40,8 +39,8 @@ public class AntrianCreateHandler : IRequestHandler<QueCreateAntrianCmd, Antrian
     #region PRIVATE-HELPERS
     private AntrianModel LoadOrCreateAntrian(QueCreateAntrianCmd request)
     {
-        var date = request.TglYmd.ToDate(DateFormatEnum.YMD);
-        var listAntrian = _antrianRepo.ListData(DateOnly.FromDateTime(date)) ?? [];
+        var date = DateOnly.FromDateTime(DateTime.Now);
+        var listAntrian = _antrianRepo.ListData(date) ?? [];
 
         var time = TimeOnly.Parse(request.JamMulai);
         var antrianView = listAntrian
@@ -53,15 +52,14 @@ public class AntrianCreateHandler : IRequestHandler<QueCreateAntrianCmd, Antrian
             return antrianMaybe.Value;
         }
 
-        var antrian = CreateAntrian(request);
+        var antrian = CreateAntrian(request, date);
         return antrian;
     }
 
-    private static AntrianModel CreateAntrian(QueCreateAntrianCmd request)
+    private static AntrianModel CreateAntrian(QueCreateAntrianCmd request, DateOnly date)
     {
-        var date = request.TglYmd.ToDate(DateFormatEnum.YMD);
         var antrian = AntrianModel.Create(
-            DateOnly.FromDateTime(date), TimeOnly.Parse(request.JamMulai), 
+            date, TimeOnly.Parse(request.JamMulai), 
             TimeOnly.MaxValue, request.ServicePoint, $"Antrian Apotek {request.ServicePoint}");
 
         return antrian;
