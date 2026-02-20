@@ -71,13 +71,23 @@ public class AntrianRepo : IAntrianRepo
         return result;
     }
 
-    #region HELPER
-    private static IEnumerable<AntrianEntryDto> ToDtoList(AntrianModel model)
+    public AntrianModel LoadOrCreate(int servicePoint)
     {
-        return model.ListEntry
-            .Select(x => AntrianEntryDto.FromModel(model.AntrianId, x));
+        var date = DateOnly.FromDateTime(DateTime.Now);
+        var listAntrian = ListData(date) ?? [];
+        var antrianView = listAntrian
+            .FirstOrDefault(x => x.ServicePoint == servicePoint && x.AntrianDate == date);
+
+        if (antrianView is not null)
+        {
+            var maybe = LoadEntity(antrianView);
+            return maybe.Value;
+        }
+
+        return AntrianModel.Create(date, servicePoint, $"Antrian Apotek {servicePoint}");
     }
 
+    #region HELPER
     private static (List<AntrianEntryDto> addedItems,
         List<AntrianEntryDto> deletedItems,
         List<AntrianEntryDto> changedItems)
@@ -117,6 +127,6 @@ public class AntrianRepo : IAntrianRepo
                persisted.RegId == current.RegId &&
                persisted.ReffId == current.ReffId &&
                persisted.ReffDesc == current.ReffDesc;
-    }
+    }    
     #endregion
 }

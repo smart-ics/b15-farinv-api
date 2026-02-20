@@ -22,4 +22,12 @@ public class AntrianController : ControllerBase
         await _mediator.Send(cmd);
         return Ok(new JSendOk("Done"));
     }
+
+    [HttpPost]
+    [Route("byReg")]
+    public async Task<IActionResult> CreateAntrianByReg(QueAddAntrianByRegCmd cmd)
+    {
+        await _mediator.Send(cmd);
+        return Ok(new JSendOk("Done"));
+    }
 }

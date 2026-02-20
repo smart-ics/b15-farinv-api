@@ -3,6 +3,6 @@ using Nuna.Lib.CleanArchHelper;
 
 namespace Farinv.Application.SalesContext.AntrianFeature;
 
-public interface IGetRegService : INunaService<RegType>
+public interface IGetRegService : INunaService<RegType, IRegKey>
 {
 }

@@ -22,7 +22,7 @@ public class AddAntrianHandler : IRequestHandler<QueAddAntrianCmd>
         Guard.Against.NegativeOrZero(request.NoAntrian);
 
         // BUILD
-        var antrian = LoadOrCreateAntrian(request);
+        var antrian = LoadAntrian(request);
         antrian.AddEntry(request.NoAntrian);
 
         //  WRITE
@@ -31,30 +31,9 @@ public class AddAntrianHandler : IRequestHandler<QueAddAntrianCmd>
     }
 
     #region PRIVATE-HELPERS
-    private AntrianModel LoadOrCreateAntrian(QueAddAntrianCmd request)
+    private AntrianModel LoadAntrian(QueAddAntrianCmd request)
     {
-        var date = DateOnly.FromDateTime(DateTime.Now);
-        var listAntrian = _antrianRepo.ListData(date) ?? [];
-
-        var antrianView = listAntrian
-            .FirstOrDefault(x => x.ServicePoint == request.ServicePoint && x.AntrianDate == date);
-        if (antrianView is not null)
-        {
-            var key = AntrianModel.Key(antrianView.AntrianId);
-            var antrianMaybe = _antrianRepo.LoadEntity(antrianView);
-            return antrianMaybe.Value;
-        }
-
-        var antrian = CreateAntrian(request, date);
-        return antrian;
-    }
-
-    private static AntrianModel CreateAntrian(QueAddAntrianCmd request, DateOnly date)
-    {
-        var antrian = AntrianModel.Create(
-            date, request.ServicePoint, $"Antrian Apotek {request.ServicePoint}");
-
-        return antrian;
+        return _antrianRepo.LoadOrCreate(request.ServicePoint);
     }
     #endregion
 }

@@ -24,6 +24,7 @@ public static class InfrastructureService
 
         services
             .Configure<DatabaseOptions>(configuration.GetSection(DatabaseOptions.SECTION_NAME))
+            .Configure<BillingOptions>(configuration.GetSection(BillingOptions.SECTION_NAME))
             .Configure<PasienContextOptions>(configuration.GetSection(PasienContextOptions.SECTION_NAME));
             
         services
