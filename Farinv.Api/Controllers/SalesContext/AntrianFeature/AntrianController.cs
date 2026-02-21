@@ -24,10 +24,19 @@ public class AntrianController : ControllerBase
     }
 
     [HttpPost]
-    [Route("byReg")]
+    [Route("ByReg")]
     public async Task<IActionResult> CreateAntrianByReg(QueAddAntrianByRegCmd cmd)
     {
         await _mediator.Send(cmd);
         return Ok(new JSendOk("Done"));
+    }
+
+    [HttpGet]
+    [Route("{tglYmd}")]
+    public async Task<IActionResult> ListAntrian(string tglYmd)
+    {
+        var query = new QueListAntrianQuery(tglYmd);
+        var response = await _mediator.Send(query);
+        return Ok(new JSendOk(response));
     }
 }

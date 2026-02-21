@@ -131,6 +131,7 @@ public class AntrianDal : IAntrianDal
                 aa.RegId, aa.PasienId, aa.PasienName, 
                 aa.ReffId, aa.ReffDesc,
                 ISNULL(bb.AntrianDate,'') AS AntrianDate, 
+                ISNULL(bb.ServicePoint, 0) AS ServicePoint,
                 ISNULL(bb.AntrianDescription,'') AS AntrianDescription
            FROM
            	    FARIN_AntrianEntry aa
