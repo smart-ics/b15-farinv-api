@@ -11,37 +11,33 @@ public class ResepModel : IResepKey
     private readonly List<ResepObatType> _listObat;
 
     public ResepModel(string resepId, RegReff reg, BodyMetricType bodyMetric, DokterReff dokter, LayananReff layanan,
-        LayananReff layananStok, UrgenitasType urgenitas, TipeBrgReff tipeBrg, int iter, string description,
-        DateTime tglRencanaPeriksa, AuditTrailType auditTrail, IEnumerable<ResepObatType> listObat)
+        UrgenitasType urgenitas, TipeBrgReff tipeBrg, int iter, string description, AuditTrailType auditTrail,
+        IEnumerable<ResepObatType> listObat)
     {
         ResepId = resepId;
         Register = reg;
         BodyMetric = bodyMetric;
         Dokter = dokter;
         Layanan = layanan;
-        LayananStok = layananStok;
         Urgenitas = urgenitas;
         TipeBrg = tipeBrg;
         Iter = iter;
         Description = description;
-        TglRencanaPeriksa = tglRencanaPeriksa;
         AuditTrail = auditTrail;
         _listObat = listObat.ToList();
     }
 
     public static ResepModel Key(string id) => new ResepModel(id, RegType.Default.ToReff(), BodyMetricType.Default(),
-        DokterType.Default.ToReff(), LayananType.Default.ToReff(), LayananType.Default.ToReff(), UrgenitasType.Default,
-        TipeBrgType.Default.ToReff(), 0, AppConst.DASH, AppConst.DEF_DATE, AuditTrailType.Default,
-        new List<ResepObatType>());
+        DokterType.Default.ToReff(), LayananType.Default.ToReff(), UrgenitasType.Default, TipeBrgType.Default.ToReff(), 
+        0, AppConst.DASH, AuditTrailType.Default, new List<ResepObatType>());
 
-    public static ResepModel Create(RegType reg, BodyMetricType bodyMetric, DokterType dokter, LayananType layanan,
-        LayananType layananStok, UrgenitasType urgenitasType, TipeBrgType tipeBrg, int iter, string description,
-        DateTime tglRencanaPeriksa, string userId)
+    public static ResepModel Create(RegType reg, BodyMetricType bodyMetric, DokterType dokter, LayananType layanan, 
+        UrgenitasType urgenitasType, TipeBrgType tipeBrg, int iter, string description, string userId)
     {
         var newId = Ulid.NewUlid().ToString();
         var model = new ResepModel(newId, reg.ToReff(), bodyMetric, dokter.ToReff(), layanan.ToReff(),
-            layananStok.ToReff(), urgenitasType, tipeBrg.ToReff(), iter, description, tglRencanaPeriksa,
-            AuditTrailType.Create(userId, DateTime.Now), new List<ResepObatType>());
+            urgenitasType, tipeBrg.ToReff(), iter, description, AuditTrailType.Create(userId, DateTime.Now),
+            new List<ResepObatType>());
         return model;
     }
 
@@ -51,20 +47,17 @@ public class ResepModel : IResepKey
 
     public DokterReff Dokter { get; private set; }
     public LayananReff Layanan { get; private set; }
-    public LayananReff LayananStok { get; private set; }
 
     public UrgenitasType Urgenitas { get; private set; }
     public TipeBrgReff TipeBrg { get; private set; }
 
     public int Iter { get; private set; }
     public string Description { get; private set; }
-    public DateTime TglRencanaPeriksa { get; set; }
 
     public AuditTrailType AuditTrail { get; private set; }
     public IEnumerable<ResepObatType> ListObat => _listObat;
     
-    public void AddObat(IBrg brg, SatuanType satuan, 
-        decimal qty, int iter, string signa, string instruction, string protocol)
+    public void AddObat(IBrg brg, SatuanType satuan, decimal qty, int iter, string signa, string instruction)
     {
         var isBrgDuplicated = _listObat
             .Any(x => x.Brg.BrgId == brg.BrgId);
@@ -77,7 +70,7 @@ public class ResepModel : IResepKey
             .DefaultIfEmpty(0)
             .Max() + 1;
         
-        var newObat = ResepObatType.Create(noUrut, brg, satuan, qty, iter, signa, instruction, protocol);
+        var newObat = ResepObatType.Create(noUrut, brg, satuan, qty, iter, signa, instruction);
         _listObat.Add(newObat);
     }
 

@@ -6,8 +6,7 @@ public record ResepObatType
 {
     private readonly List<ResepItemRacikType> _listItemRacik;
 
-    public ResepObatType(int noUrut, BrgReff brg, SatuanType satuan, decimal qty, int iter, EtiketType etiket,
-        string protocol)
+    public ResepObatType(int noUrut, BrgReff brg, SatuanType satuan, decimal qty, int iter, EtiketType etiket)
     {
         NoUrut = noUrut;
         Brg = brg;
@@ -15,7 +14,6 @@ public record ResepObatType
         Qty = qty;
         Iter = iter;
         Etiket = etiket;
-        Protocol = protocol;
         _listItemRacik = [];
     }
 
@@ -25,12 +23,11 @@ public record ResepObatType
     public decimal Qty { get; init; }
     public int Iter { get; init; }
     public EtiketType Etiket { get; init; }
-    public string Protocol { get; init; }
     public IEnumerable<ResepItemRacikType> ListItemRacik => _listItemRacik;
 
     public static ResepObatType Create(int noUrut, IBrg brg, SatuanType satuan, decimal qty, int iter, string signa,
-        string instruction, string protocol) => new(noUrut, brg.ToReff(), satuan, qty, iter,
-        EtiketType.Create(signa, instruction), protocol);
+        string instruction) => new(noUrut, brg.ToReff(), satuan, qty, iter,
+        EtiketType.Create(signa, instruction));
 
     public void SetNoUrut(int noUrut) => NoUrut = noUrut;
 
