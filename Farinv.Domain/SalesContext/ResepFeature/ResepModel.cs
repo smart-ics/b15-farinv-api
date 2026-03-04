@@ -103,4 +103,7 @@ public class ResepModel : IResepKey
         if (!obat.ListItemRacik.Any())
             _listObat.RemoveAll(x => x.Brg.BrgId == obatRacik.BrgId);
     }
+    
+    public void Modify(string userId) => AuditTrail.Modif(userId, DateTime.Now);
+    public void Void(string userId) => AuditTrail.Batal(userId, DateTime.Now);
 }
