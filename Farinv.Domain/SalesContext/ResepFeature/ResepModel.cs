@@ -57,7 +57,7 @@ public class ResepModel : IResepKey
     public AuditTrailType AuditTrail { get; private set; }
     public IEnumerable<ResepObatType> ListObat => _listObat;
     
-    public void AddObat(IBrg brg, SatuanType satuan, decimal qty, int iter, string signa, string instruction)
+    public void AddObat(IBrg brg, SatuanType satuan, decimal qty, int iter, string signa, string instruction, string note)
     {
         var isBrgDuplicated = _listObat
             .Any(x => x.Brg.BrgId == brg.BrgId);
@@ -70,7 +70,7 @@ public class ResepModel : IResepKey
             .DefaultIfEmpty(0)
             .Max() + 1;
         
-        var newObat = ResepObatType.Create(noUrut, brg, satuan, qty, iter, signa, instruction);
+        var newObat = ResepObatType.Create(noUrut, brg, satuan, qty, iter, signa, instruction, note);
         _listObat.Add(newObat);
     }
 

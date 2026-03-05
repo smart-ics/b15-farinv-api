@@ -26,8 +26,8 @@ public record ResepObatType
     public IEnumerable<ResepItemRacikType> ListItemRacik => _listItemRacik;
 
     public static ResepObatType Create(int noUrut, IBrg brg, SatuanType satuan, decimal qty, int iter, string signa,
-        string instruction) => new(noUrut, brg.ToReff(), satuan, qty, iter,
-        EtiketType.Create(signa, instruction));
+        string instruction, string note) => new(noUrut, brg.ToReff(), satuan, qty, iter,
+        EtiketType.Create(signa, instruction, note));
 
     public void SetNoUrut(int noUrut) => NoUrut = noUrut;
 
