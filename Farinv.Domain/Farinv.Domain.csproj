@@ -18,7 +18,6 @@
   <ItemGroup>
     <Folder Include="SalesContext\MedicationOrderFeature\" />
     <Folder Include="SalesContext\CopyResepFeature\" />
-    <Folder Include="SalesContext\TelaahFeature\" />
     <Folder Include="Shared\" />
   </ItemGroup>
 

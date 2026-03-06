@@ -9,8 +9,8 @@ namespace Farinv.Test.InventoryContext.StokFeature;
 public class StokLayerDalTest
 {
     private readonly StokLayerDal _sut = new(ConnStringHelper.GetTestEnv());
-    private readonly DateTime _reffIndate = new DateTime(2025,12,16,14,48,50);
-    private readonly DateTime _expDate = new DateTime(2026, 12, 31);
+    private readonly DateTime _reffIndate = new(2025,12,16,14,48,50);
+    private readonly DateTime _expDate = new(2026, 12, 31);
     private IEnumerable<StokLayerDto> FakerList()
         => new List<StokLayerDto>
         {
@@ -18,8 +18,6 @@ public class StokLayerDalTest
                 StokLayerId: "A",
                 BrgId: "B",
                 LayananId: "C",
-                TrsReffInId: "D",
-                TrsReffInDate: _reffIndate,
                 PurchaseId: "E",
                 ReceiveId: "F",
                 ExpDate: _expDate,
@@ -27,6 +25,8 @@ public class StokLayerDalTest
                 QtyIn: 1,
                 QtySisa: 1,
                 Hpp: 1000,
+                TrsReffInId: "D",
+                TrsReffInDate: _reffIndate,
                 BrgName: "H",
                 LayananName: "I"
             ),
@@ -34,8 +34,6 @@ public class StokLayerDalTest
                 StokLayerId: "J",
                 BrgId: "B",
                 LayananId: "C",
-                TrsReffInId: "K",
-                TrsReffInDate: _reffIndate,
                 PurchaseId: "L",
                 ReceiveId: "M",
                 ExpDate: _expDate,
@@ -43,6 +41,8 @@ public class StokLayerDalTest
                 QtyIn: 2,
                 QtySisa: 2,
                 Hpp: 2000,
+                TrsReffInId: "K",
+                TrsReffInDate: _reffIndate,
                 BrgName: "O",
                 LayananName: "P"
             )

@@ -7,7 +7,7 @@ namespace Farinv.Domain.SalesContext.AntrianFeature;
 public record RegType : IRegKey
 {
     #region  CREATION
-    public RegType(string regId, DateOnly regDate,
+    public RegType(string regId, DateOnly regDate, bool isAktif,
         AuditInfoType regMasukAudit, AuditInfoType regKeluarAudit, 
         int jenisReg, string jenisRegDesc, PasienReff pasien, string umur, 
         TipeJaminanReff tipeJaminan, PolisReff polis, KelasReff kelas,
@@ -15,6 +15,7 @@ public record RegType : IRegKey
     {
         RegId = regId;
         RegDate = regDate;
+        IsAktif = isAktif;
         RegMasukAudit = regMasukAudit;
         RegKeluarAudit = regKeluarAudit;
         JenisReg = jenisReg;
@@ -29,7 +30,7 @@ public record RegType : IRegKey
         TipeBarang = tipeBrg;
     }
 
-    public static RegType Default => new("-", new DateOnly(3000, 1, 1),
+    public static RegType Default => new("-", new DateOnly(3000, 1, 1), false,
         AuditInfoType.Default, AuditInfoType.Default, 0, "-",
         new PasienReff("-", "-", new DateOnly(3000, 1, 1), "-"), "-", 
         new TipeJaminanReff("-", "-"), new PolisReff("-", "-", "-"),
@@ -42,7 +43,7 @@ public record RegType : IRegKey
     public DateOnly RegDate { get; init; }
     public AuditInfoType RegMasukAudit { get; init; }
     public AuditInfoType RegKeluarAudit { get; init; }
-    public bool IsAktif => RegKeluarAudit == AuditInfoType.Default;
+    public bool IsAktif { get; init; }
     public int JenisReg { get; init; }
     public string JenisRegDesc { get; init; }
 

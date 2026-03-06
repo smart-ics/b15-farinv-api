@@ -134,7 +134,8 @@ public class tb_stok_dal : Itb_stok_dal
                aa.fs_kd_po, aa.fs_kd_do, aa.fd_tgl_ed, aa.fs_no_batch,
                aa.fn_qty_in, aa.fn_qty, aa.fn_hpp,
                aa.fd_tgl_do, aa.fs_jam_do, 
-               aa.fs_kd_mutasi, aa.fd_tgl_mutasi, aa.fs_jam_mutasi,
+               aa.fs_kd_mutasi, aa.fd_tgl_mutasi, aa.fs_jam_mutasi, 
+               aa.fs_kd_satuan,
                ISNULL(bb.fs_nm_barang, '') fs_nm_barang,
                ISNULL(cc.fs_nm_layanan, '') fs_nm_layanan
            FROM 

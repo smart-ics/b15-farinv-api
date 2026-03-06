@@ -11,4 +11,5 @@ public interface IAntrianRepo :
     IListData<AntrianHeaderView, DateOnly>,
     IListData<AntrianView, DateTime>
 {
+    AntrianModel LoadOrCreate(int servicePoint);
 }

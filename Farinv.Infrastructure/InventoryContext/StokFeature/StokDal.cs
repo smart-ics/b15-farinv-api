@@ -51,7 +51,8 @@ public class StokDal : IStokDal
                Qty = @Qty,
                Satuan = @Satuan
            WHERE
-               BrgId = @BrgId AND LayananId = @LayananId
+               BrgId = @BrgId 
+               AND LayananId = @LayananId
            """;
         var dp = new DynamicParameters();
         dp.AddParam("@BrgId", dto.BrgId, SqlDbType.VarChar);
@@ -68,7 +69,8 @@ public class StokDal : IStokDal
            DELETE FROM 
                 FARIN_Stok
            WHERE
-               BrgId = @BrgId AND LayananId = @LayananId
+               BrgId = @BrgId 
+               AND LayananId = @LayananId
            """;
         var dp = new DynamicParameters();
         dp.AddParam("@BrgId", key.BrgId, SqlDbType.VarChar);
@@ -81,10 +83,7 @@ public class StokDal : IStokDal
     {
         const string sql = """
            SELECT
-               aa.BrgId,
-               aa.LayananId,
-               aa.Qty,
-               aa.Satuan,
+               aa.BrgId, aa.LayananId, aa.Qty, aa.Satuan,
                ISNULL(bb.fs_nm_barang, '') BrgName,
                ISNULL(cc.fs_nm_layanan, '') LayananName
            FROM 
@@ -106,10 +105,7 @@ public class StokDal : IStokDal
     {
         const string sql = """
             SELECT
-                aa.BrgId,
-                aa.LayananId,
-                aa.Qty,
-                aa.Satuan,
+                aa.BrgId, aa.LayananId, aa.Qty, aa.Satuan,
                 ISNULL(bb.fs_nm_barang, '') BrgName,
                 ISNULL(cc.fs_nm_layanan, '') LayananName
             FROM 
