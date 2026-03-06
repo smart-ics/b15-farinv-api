@@ -28,15 +28,9 @@ public record SatuanType : ISatuanKey
     public string SatuanId { get; init; }
     public string SatuanName { get; init; }
     #endregion
-
-    #region BEHAVIOUR
-    public SatuanReff ToReff() => new(SatuanId, SatuanName);
-    #endregion
 }
 
 public interface ISatuanKey
 {
     string SatuanId { get; }
 }
-
-public record SatuanReff(string SatuanId, string SatuanName);

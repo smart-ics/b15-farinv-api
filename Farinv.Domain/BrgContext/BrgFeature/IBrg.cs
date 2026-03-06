@@ -18,7 +18,7 @@ public interface IBrgKey
     string BrgId { get; }
 }
 
-public record BrgReff(string BrgId, string BrgName);
+public record BrgReff(string BrgId, string BrgName) : IBrgKey;
 
 public record BrgSatuanType(SatuanType Satuan, int Konversi)
 {

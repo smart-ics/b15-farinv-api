@@ -31,12 +31,10 @@ public class SatuanDal : ISatuanDal
         const string sql = """
             INSERT INTO tb_satuan (
                 fs_kd_satuan,
-                fs_nm_satuan,
-                fb_satuan_racik
+                fs_nm_satuan
             ) VALUES (
                 @fs_kd_satuan,
-                @fs_nm_satuan,
-                @fb_satuan_racik
+                @fs_nm_satuan
             )
             """;
 
@@ -53,8 +51,7 @@ public class SatuanDal : ISatuanDal
         const string sql = """
             UPDATE tb_satuan
             SET
-                fs_nm_satuan = @fs_nm_satuan,
-                fb_satuan_racik = @fb_satuan_racik
+                fs_nm_satuan = @fs_nm_satuan
             WHERE
                 fs_kd_satuan = @fs_kd_satuan
             """;
@@ -86,8 +83,7 @@ public class SatuanDal : ISatuanDal
         const string sql = """
             SELECT
                 fs_kd_satuan,
-                fs_nm_satuan,
-                fb_satuan_racik
+                fs_nm_satuan
             FROM tb_satuan
             WHERE fs_kd_satuan = @fs_kd_satuan
             """;
@@ -104,8 +100,7 @@ public class SatuanDal : ISatuanDal
         const string sql = """
             SELECT
                 fs_kd_satuan,
-                fs_nm_satuan,
-                fb_satuan_racik
+                fs_nm_satuan
             FROM tb_satuan
             """;
 
