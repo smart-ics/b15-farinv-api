@@ -22,6 +22,7 @@ public class AuditTrailType
         Voided = new AuditInfoType(userId, timestamp);
         IsVoided = true;
     }
+    
     public void Modif(string userId, DateTime timestamp)
     {
         if (userId.Length == 0 || timestamp.Date == new DateTime(3000, 1, 1))
@@ -43,5 +44,6 @@ public record AuditInfoType(string UserId, DateTime Timestamp)
         this(userId, DateTime.ParseExact($"{tgl} {jam}", "yyyy-MM-dd HH:mm:ss", null))
     {
     }
+    
     public static AuditInfoType Default => new("", new DateTime(3000,1,1));
 };
