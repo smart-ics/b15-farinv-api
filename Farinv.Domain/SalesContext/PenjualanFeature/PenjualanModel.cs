@@ -1,14 +1,17 @@
 using Farinv.Domain.InventoryContext.StokFeature;
 using Farinv.Domain.SalesContext.AntrianFeature;
 using Farinv.Domain.SalesContext.ResepFeature;
+using Farinv.Domain.Shared.Helpers.CommonValueObjects;
 
 namespace Farinv.Domain.SalesContext.PenjualanFeature;
 
 public class PenjualanModel : IPenjualanKey
 {
+    private readonly List<PenjualanItemType> _listItem;
+    
     public PenjualanModel(string penjualanId, RegReff reg, DokterReff dokter, LayananReff layanan, decimal subtotal,
         decimal totalEmbalase, decimal totalTax, decimal totalDiskon, decimal diskonLain, decimal biayaLain,
-        decimal grandTotal)
+        decimal grandTotal, AuditTrailType auditTrail, IEnumerable<PenjualanItemType> listItem)
     {
         PenjualanId = penjualanId;
         Register = reg;
@@ -21,10 +24,13 @@ public class PenjualanModel : IPenjualanKey
         DiskonLain = diskonLain;
         BiayaLain = biayaLain;
         GrandTotal = grandTotal;
+        AuditTrail = auditTrail;
+        _listItem = listItem.ToList();
     }
 
     public static PenjualanModel Key(string id) => new(id, RegType.Default.ToReff(), DokterType.Default.ToReff(),
-        LayananType.Default.ToReff(), 0, 0, 0, 0, 0, 0, 0);
+        LayananType.Default.ToReff(), 0, 0, 0, 0, 0, 0, 0,
+        AuditTrailType.Default, new List<PenjualanItemType>());
 
     public string PenjualanId { get; private set; }
     public RegReff Register { get; private set; }
@@ -37,4 +43,6 @@ public class PenjualanModel : IPenjualanKey
     public decimal DiskonLain { get; private set; }
     public decimal BiayaLain { get; private set; }
     public decimal GrandTotal { get; private set; }
+    public AuditTrailType AuditTrail { get; private set; }
+    public IEnumerable<PenjualanItemType> ListItem => _listItem;
 }
