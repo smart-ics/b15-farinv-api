@@ -28,18 +28,23 @@ public class StokLayerDal : IStokLayerDal
         using var conn = new SqlConnection(ConnStringHelper.Get(_opt));
         using var bcp = new SqlBulkCopy(conn);
         conn.Open();
+        
         bcp.AddMap("StokLayerId", "StokLayerId");
         bcp.AddMap("BrgId", "BrgId");
         bcp.AddMap("LayananId", "LayananId");
-        bcp.AddMap("TrsReffInId", "TrsReffInId");
-        bcp.AddMap("TrsReffInDate", "TrsReffInDate");
+        
         bcp.AddMap("PurchaseId", "PurchaseId");
         bcp.AddMap("ReceiveId", "ReceiveId");
         bcp.AddMap("ExpDate", "ExpDate");
         bcp.AddMap("BatchNo", "BatchNo");
+        
         bcp.AddMap("QtyIn", "QtyIn");
         bcp.AddMap("QtySisa", "QtySisa");
         bcp.AddMap("Hpp", "Hpp");
+        
+        bcp.AddMap("TrsReffInId", "TrsReffInId");
+        bcp.AddMap("TrsReffInDate", "TrsReffInDate");
+
         var fetched = listModel.ToList();
         bcp.BatchSize = fetched.Count;
         bcp.DestinationTableName = "FARIN_StokLayer";
@@ -66,9 +71,9 @@ public class StokLayerDal : IStokLayerDal
         const string sql = """
             SELECT 
                 aa.StokLayerId, aa.BrgId, aa.LayananId,
-                aa.TrsReffInId, aa.TrsReffInDate,
                 aa.PurchaseId, aa.ReceiveId, aa.ExpDate, aa.BatchNo,
                 aa.QtyIn, aa.QtySisa, aa.Hpp,
+                aa.TrsReffInId, aa.TrsReffInDate,
                 ISNULL(bb.fs_nm_barang, '') BrgName,
                 ISNULL(cc.fs_nm_layanan, '') LayananName
             FROM 
@@ -76,7 +81,8 @@ public class StokLayerDal : IStokLayerDal
                 LEFT JOIN tb_barang bb ON aa.BrgId = bb.fs_kd_barang
                 LEFT JOIN ta_layanan cc ON aa.LayananId = cc.fs_kd_layanan
             WHERE
-                aa.BrgId = @BrgId AND aa.LayananId = @LayananId
+                aa.BrgId = @BrgId 
+                AND aa.LayananId = @LayananId
             """;
         var dp = new DynamicParameters();
         dp.AddParam("@BrgId", filter.BrgId, SqlDbType.VarChar);

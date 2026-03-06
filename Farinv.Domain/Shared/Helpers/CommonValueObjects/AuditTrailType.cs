@@ -22,6 +22,7 @@ public class AuditTrailType
         Voided = new AuditInfoType(userId, timestamp);
         IsVoided = true;
     }
+    
     public void Modif(string userId, DateTime timestamp)
     {
         if (userId.Length == 0 && timestamp.Date == new DateTime(3000, 1, 1))
